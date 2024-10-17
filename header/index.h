@@ -1,5 +1,10 @@
 #define LARGURA 800
 #define ALTURA 600
+#define MAXIMO_INIMIGOS 20
+
+#define TAMANHO_NAVE 10
+#define VELOCIDADE_INICAL 6
+#define VELOCIDADE_INIMIGA 4
 
 typedef struct
 {
@@ -13,6 +18,7 @@ typedef struct
 {
     int x,y;
     int dx,dy;
+    int size;
     arma arma;
     int upgrade;
     int vida;
@@ -24,16 +30,19 @@ typedef struct
     int x,y;
     int sizeX,sizeY;
     int vida;
-} abstaculos;
+} abstaculo;
 
 typedef struct
 {
     int x,y;
     int dx,dy;
+    int size;
     int vida;
     int tipo;
     int velocidade;
+    arma arma;
 } nave_inimiga;
 
 nave_player player;
 nave_inimiga *inimigos;
+arma arsenal[5];
