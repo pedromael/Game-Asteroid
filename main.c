@@ -1,12 +1,33 @@
-#include <SDL2/SDL.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-
 #include "header/index.h"
 
-void desenhar(){
-    
+bool control(){
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    SDL_Event evento;
+
+    while (SDL_PollEvent(&evento)) {
+        if (evento.type == SDL_QUIT) {
+            return false;
+        }
+    }       
+
+    if (state[SDL_SCANCODE_W]) {
+        player.dx = 0;
+        player.dy = -1;
+        player.y -= player.velocidade;
+    }if (state[SDL_SCANCODE_S]) {
+        player.dx = 0;
+        player.dy = 1;
+        player.y += player.velocidade;
+    }if (state[SDL_SCANCODE_A]) {
+        player.dy = 0;
+        player.dx = -1;
+        player.x -= player.velocidade;
+    }if (state[SDL_SCANCODE_D]) {
+        player.dy = 0;
+        player.dx = 1;
+        player.x += player.velocidade; 
+    }
+    return true;
 }
 
 void actualizar_naves(){
@@ -22,6 +43,7 @@ int main(){
     
     player.x = LARGURA/2;
     player.y = ALTURA/2;
+    player.size = TAMANHO_NAVE;
     player.dx = 0;
     player.dy = 0;
     player.arma = arsenal[0];
@@ -31,7 +53,16 @@ int main(){
     bool run = true;
     while (run)
     {
+        if(!control()) return 0;
+
+        desenhar_player(render);
+        for (size_t i = 0; i < numeros_inimigos; i++)
+            desenhar_inimigo(render,inimigos[i]);
+        
         actualizar_naves();
+        
+    SDL_RenderPresent(render);
+    SDL_Delay(16);
     }
     
 }

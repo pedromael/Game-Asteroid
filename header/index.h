@@ -1,3 +1,8 @@
+#include <SDL2/SDL.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+
 #define LARGURA 800
 #define ALTURA 600
 #define MAXIMO_INIMIGOS 20
@@ -44,5 +49,6 @@ typedef struct
 } nave_inimiga;
 
 nave_player player;
+int numeros_inimigos = 0;
 nave_inimiga *inimigos;
 arma arsenal[5];
