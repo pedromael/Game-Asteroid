@@ -18,7 +18,7 @@ bool colidiu_nas_bordas(int *x, int *y, int *size){
 int item_colidiu(int *x, int *y, int *size){
     if(colidiu_nas_bordas(x,y,size))
         return 1;
-    for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao entre naves inimigas
+    for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao com nave inimiga
     {
         bool colisaoHorizontal = (inimigos[j].x < *x + *size) && (inimigos[j].x + inimigos[j].size > *x);
         bool colisaoVertical = (inimigos[j].y < *y + *size) && (inimigos[j].y + inimigos[j].size > *y);
@@ -33,7 +33,7 @@ bool inimigo_colidiu(int i){
     if (res == 1)
         return true;
     
-    for (size_t j = 0; j < numero_inimigos; j++){ // verificar se a colisao entre naves inimigas
+    for (size_t j = 0; j < numero_inimigos; j++){ // verificar se ha colisao entre naves inimigas
         if (i != j){
             bool colisaoHorizontal = (inimigos[j].x < inimigos[i].x + inimigos[i].size) && (inimigos[j].x + inimigos[j].size > inimigos[i].x);
             bool colisaoVertical = (inimigos[j].y < inimigos[i].y + inimigos[i].size) && (inimigos[j].y + inimigos[j].size > inimigos[i].y);
