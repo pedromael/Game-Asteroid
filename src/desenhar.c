@@ -1,6 +1,6 @@
 #include "../header/desenhar.h"
 
-void desenhar_inimigo(SDL_Renderer *render,nave_inimiga *nave){
+void desenhar_inimigo(SDL_Renderer *render, nave_inimiga *nave){
     SDL_Rect *rect;
     rect->h = nave->size;
     rect->w = nave->size;
@@ -15,4 +15,7 @@ void desenhar_player(SDL_Renderer *render){
     rect->x = player.x;
     rect->y = player.y;
     SDL_RenderDrawRect(render, rect);
+}
+void desenhar_obstaculo(){
+    
 }

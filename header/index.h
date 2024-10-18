@@ -1,7 +1,11 @@
+#ifndef INDEX_H
+#define INDEX_H
+
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define LARGURA 800
 #define ALTURA 600
@@ -17,14 +21,14 @@ typedef struct
     int bps; // balas por segundo
     int x,y;
     int dx,dy;
-} arma;
+} armas;
 
 typedef struct
 {
     int x,y;
     int dx,dy;
     int size;
-    arma arma;
+    armas arma;
     int upgrade;
     int vida;
     int velocidade;
@@ -35,7 +39,7 @@ typedef struct
     int x,y;
     int sizeX,sizeY;
     int vida;
-} abstaculo;
+} obstaculo;
 
 typedef struct
 {
@@ -45,10 +49,7 @@ typedef struct
     int vida;
     int tipo;
     int velocidade;
-    arma arma;
+    armas arma;
 } nave_inimiga;
 
-nave_player player;
-int numeros_inimigos = 0;
-nave_inimiga *inimigos;
-arma arsenal[5];
+#endif
