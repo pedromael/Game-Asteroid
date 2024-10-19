@@ -19,9 +19,15 @@ typedef struct
 {
     int danos;
     int bps; // balas por segundo
+    int bala_size;
+} armas;
+
+typedef struct{
     int x,y;
     int dx,dy;
-} armas;
+    armas arma;
+    int inimigo;
+} tiro;
 
 typedef struct
 {
