@@ -18,6 +18,13 @@ bool colidiu_nas_bordas(int *x, int *y, int *size){
 int item_colidiu(int *x, int *y, int *size){
     if(colidiu_nas_bordas(x,y,size))
         return 1;
+    for (size_t j = 0; j < numero_obstaculos; j++) // verificar se a colisao com obstaculos
+    {
+        bool colisaoHorizontal = (obstaculos[j].x < *x + *size) && (obstaculos[j].x + obstaculos[j].sizeX > *x);
+        bool colisaoVertical = (obstaculos[j].y < *y + *size) && (obstaculos[j].y + obstaculos[j].sizeY > *y);
+        if (colisaoHorizontal && colisaoVertical)
+            return 1;
+    }
     for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao com nave inimiga
     {
         bool colisaoHorizontal = (inimigos[j].x < *x + *size) && (inimigos[j].x + inimigos[j].size > *x);
@@ -42,6 +49,14 @@ bool inimigo_colidiu(int i){
         }
     }
 
+    for (size_t j = 0; j < numero_obstaculos; j++) // verificar se a colisao com obstaculos
+    {
+        bool colisaoHorizontal = (obstaculos[j].x < inimigos[i].x + inimigos[i].size) && (obstaculos[j].x + obstaculos[j].sizeX > inimigos[i].x);
+        bool colisaoVertical = (obstaculos[j].y < inimigos[i].y + inimigos[i].size) && (obstaculos[j].y + obstaculos[j].sizeY > inimigos[i].y);
+        if (colisaoHorizontal && colisaoVertical)
+            return 1;
+    }
+
     bool colisaoHorizontal = (inimigos[i].x < player.x + player.size) && (inimigos[i].x + inimigos[i].size > player.x);
     bool colisaoVertical = (inimigos[i].y < player.y + player.size) && (inimigos[i].y + inimigos[i].size > player.y);
     if (colisaoHorizontal && colisaoVertical)
@@ -53,7 +68,6 @@ bool inimigo_colidiu(int i){
 bool criar_inimigo(nave_inimiga *inimigo, int nivel){
     int i,size = TAMANHO_NAVE;
     for (i = 0; i < 500; i++){
-        printf("%d\n", item_colidiu(&i,&i,&size));
         if(!item_colidiu(&i,&i,&size))
             break;
     }
@@ -61,7 +75,6 @@ bool criar_inimigo(nave_inimiga *inimigo, int nivel){
     if (i == 500)
         return false;
     
-
     inimigo->x = i;
     inimigo->y = i;
     inimigo->size = TAMANHO_NAVE;
@@ -96,63 +109,130 @@ bool disparar(nave_inimiga *inimigos){
         dy = inimigos->dy;
         arma = inimigos->arma;
     }
-    
 
-    if (calcular_probabilidade(50))
+    if (!arma.no_pente)
     {
-        if (numero_tiros >= capacidade_tiros){
-            capacidade_tiros += 5; 
-            tiros = realloc(tiros, capacidade_tiros * sizeof(tiro));
-        }
+        if(arma.inicio_carregamento != false){
+            if (quadros - arma.inicio_carregamento >= arma.tempo_carregamento*60){
+                arma.no_pente = arma.pente_max;
+                arma.inicio_carregamento = false;
+            }
+        }else
+            arma.inicio_carregamento = quadros;
 
-        numero_tiros += 1;
-        tiros[numero_tiros-1].x = x;
-        tiros[numero_tiros-1].y = y;
-        tiros[numero_tiros-1].dx = dx;
-        tiros[numero_tiros-1].dy = dy;
-        tiros[numero_tiros-1].arma = arma;
-        if (inimigos != NULL)
-            tiros[numero_tiros - 1].inimigo = 1;
-        else
-            tiros[numero_tiros - 1].inimigo = 0;
-        
-        return 1;
+        return false;
     }
-    return 1;
+
+    if(arma.ultimo_tiro != 0)
+        if (arma.ultimo_tiro + (60 / arma.bps) >= quadros)
+            return false;
+
+    if (numero_tiros >= capacidade_tiros){
+        capacidade_tiros += 5; 
+        tiros = realloc(tiros, capacidade_tiros * sizeof(tiro));
+    }
+
+    tiros[numero_tiros].x = x + TAMANHO_NAVE/2;
+    tiros[numero_tiros].y = y + TAMANHO_NAVE/2;
+    tiros[numero_tiros].dx = dx;
+    tiros[numero_tiros].dy = dy;
+    tiros[numero_tiros].arma = arma;
+    if (inimigos != NULL)
+        tiros[numero_tiros].inimigo = 1;
+    else
+        tiros[numero_tiros].inimigo = 0;
+    
+    numero_tiros++;
+    arma.no_pente--;
+    arma.ultimo_tiro = quadros; 
+
+    return true;
+}
+
+void retirar_tiro(int *i){
+    if (*i !=  --numero_tiros)
+        tiros[*i] = tiros[numero_tiros];
+}
+
+int area_de_impacto_mira(int *i){
+    int margen_de_erro = 30;
+    margen_de_erro = (rand() % margen_de_erro) - (rand() % margen_de_erro);
+
+    int x = inimigos[*i].x - (player.x + margen_de_erro);
+    int y = inimigos[*i].y - (player.y + margen_de_erro);
+    
+    bool dir = true;
+    if (abs(x) < abs(y))
+    {
+        if (abs(x) > 35)
+            dir = calcular_probabilidade(60);
+    }else{
+        if (abs(y) > 35)
+            dir = calcular_probabilidade(40);
+    }
+
+    if (*i % 2)
+       dir = abs(x) < abs(y);
+    
+    if (dir)
+    {
+        inimigos[*i].dy = 0;
+        if (x < 0)
+            inimigos[*i].dx = 1;
+        else
+            inimigos[*i].dx = -1;
+        return abs(x);
+    }else{
+        inimigos[*i].dx = 0;
+        if (y < 0)
+            inimigos[*i].dy = 1;
+        else
+            inimigos[*i].dy= -1;
+        return abs(y);
+    }
 }
 
 int actualiazar_inimigos(){
-    for (size_t i = 0; i < numero_inimigos; i++)
+    for (int i = 0; i < numero_inimigos; i++)
     {
-        if (disparar(&inimigos[i]))
-            return 0;
-        
-        if (calcular_probabilidade(50))
-        {
-            inimigos[i].dx = 1;
-            inimigos[i].dy = 0;
-            inimigos[i].x += VELOCIDADE_INIMIGA;
-            if (inimigo_colidiu(i))
+        if (area_de_impacto_mira(&i) < 30){
+            if (inimigos[i].dx)
             {
-                inimigos[i].x -= VELOCIDADE_INIMIGA*2;
-                if (inimigo_colidiu(i))
-                {
-                    inimigos[i].x += VELOCIDADE_INIMIGA;
-                    return true; 
-                }
+                inimigos[i].dx = 0;
+                if (inimigos[i].y - player.y > 0)
+                    inimigos[i].dy = -1;
+                else
+                    inimigos[i].dy = 1;
+                
+            }else{
+                inimigos[i].dy = 0;
+                if (inimigos[i].x - player.x > 0)
+                    inimigos[i].dx = -1;
+                else
+                    inimigos[i].dx = 1;
             }
             
-        }else{
-            inimigos[i].dx = 0;
-            inimigos[i].dy = 1;
-            inimigos[i].y += VELOCIDADE_INIMIGA;
-            if (inimigo_colidiu(i))
+            disparar(&inimigos[i]);
+        }
+
+        bool mover = true;
+        if (area_de_impacto_mira(&i) < 15)
+            mover = calcular_probabilidade(50);
+        
+
+        if(mover){
+            if (inimigos[i].dx)
             {
-                inimigos[i].y -= VELOCIDADE_INIMIGA*2;
+                inimigos[i].x += VELOCIDADE_INIMIGA * inimigos[i].dx;
+                if (inimigo_colidiu(i)){
+                    inimigos[i].x -= VELOCIDADE_INIMIGA * inimigos[i].dx;
+                }
+                
+            }else{
+                inimigos[i].y += VELOCIDADE_INIMIGA * inimigos[i].dy;
                 if (inimigo_colidiu(i))
                 {
-                    inimigos[i].y += VELOCIDADE_INIMIGA;
-                    return true; 
+                    inimigos[i].y -= VELOCIDADE_INIMIGA * inimigos[i].dy;
                 }
             }
         }
@@ -161,32 +241,55 @@ int actualiazar_inimigos(){
 }
 
 void actualizar_tiros(){
-    for (size_t i = 0; i < numero_tiros; i++)
-    {
+    for (int i = 0; i < numero_tiros; i++)
         if (!item_colidiu(&tiros[i].x,&tiros[i].y,&tiros[i].arma.bala_size))
         {
-            tiros[i].x += tiros[i].dx * tiros[i].arma.bps;
-            tiros[i].y += tiros[i].dy * tiros[i].arma.bps;
-        }
-    }
+            tiros[i].x += tiros[i].dx * tiros[i].arma.bala_velocidade;
+            tiros[i].y += tiros[i].dy * tiros[i].arma.bala_velocidade;
+        }else
+            retirar_tiro(&i);
 }
 
 void verificar_atingidos(){
-    for (size_t i = 0; i < numero_inimigos; i++)
+    for (int j = 0; j < numero_tiros; j++)
     {
-        for (size_t j = 0; j < numero_tiros; j++)
+        for (int i = 0; i < numero_inimigos; i++)
         {
-            bool colisaoHorizontal = (inimigos[i].x < tiros[j].x + tiros[j].arma.bala_size) && (inimigos[i].x + inimigos[i].size > tiros[j].x);
-            bool colisaoVertical = (inimigos[i].y < tiros[j].y + tiros[j].arma.bala_size) && (inimigos[i].y + inimigos[i].size > tiros[j].y);
-            if (colisaoHorizontal && colisaoVertical && !tiros[j].inimigo){
-                if (inimigos[i].vida - tiros[j].arma.danos > 0){
+            bool coliX = (inimigos[i].x < tiros[j].x + tiros[j].arma.bala_size) && (inimigos[i].x + inimigos[i].size > tiros[j].x);
+            bool coliY = (inimigos[i].y < tiros[j].y + tiros[j].arma.bala_size) && (inimigos[i].y + inimigos[i].size > tiros[j].y);
+            if (coliX && coliY && !tiros[j].inimigo){
+                retirar_tiro(&j);
+                if (inimigos[i].vida - tiros[j].arma.danos > 0)
                     inimigos[i].vida -= tiros[j].arma.danos;
-                }else{
-                    numero_inimigos--;
-                    if (i != numero_inimigos){
+                else
+                    if (i != --numero_inimigos)
                         inimigos[i] = inimigos[numero_inimigos];
-                    }
-                }
+                break;
+            }
+        }
+
+        bool coliX = (tiros[j].x < player.x + player.size) && (tiros[j].x + tiros[j].arma.bala_size > player.x);
+        bool coliy = (tiros[j].y < player.y + player.size) && (tiros[j].y + tiros[j].arma.bala_size > player.y);
+        if (coliX && coliy && tiros[j].inimigo){
+            retirar_tiro(&j);
+            if (player.vida - tiros[j].arma.danos > 0)
+                player.vida -= tiros[j].arma.danos;
+            else
+                player_status = false;
+        }
+
+        for (size_t i = 0; i < numero_obstaculos; i++)
+        {
+            bool coliX = (tiros[j].x < obstaculos[i].x + obstaculos[i].sizeX) && (tiros[j].x + tiros[j].arma.bala_size > obstaculos[i].x);
+            bool coliy = (tiros[j].y < obstaculos[i].y + obstaculos[i].sizeY) && (tiros[j].y + tiros[j].arma.bala_size > obstaculos[i].y);
+            if (coliX && coliy){
+                retirar_tiro(&j);
+                if (obstaculos[i].vida - tiros[j].arma.danos > 0)
+                    obstaculos[i].vida -= tiros[j].arma.danos;
+                else
+                    if (i != --numero_obstaculos)
+                        obstaculos[i] = obstaculos[numero_obstaculos];
+                break;
             }
         }
     }
@@ -194,6 +297,6 @@ void verificar_atingidos(){
 
 void actualizar_jogo(){
     actualiazar_inimigos();
-    actualizar_tiros();
     verificar_atingidos();
+    actualizar_tiros();
 }

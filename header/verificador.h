@@ -3,6 +3,7 @@
 
 #include "index.h"
 
+extern bool player_status;
 extern nave_player player;
 extern const int numero_armas;
 extern armas *arsenal;
@@ -11,6 +12,9 @@ extern nave_inimiga *inimigos;
 extern int numero_tiros;
 extern int capacidade_tiros;
 extern tiro *tiros;
+extern int numero_obstaculos;
+extern obstaculo *obstaculos;
+extern int segundos,quadros;
 
 void actualizar_jogo();
 

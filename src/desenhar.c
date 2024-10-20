@@ -27,6 +27,11 @@ void desenhar_tiro(SDL_Renderer *render, tiro *tiros){
     SDL_RenderDrawRect(render, &rect);
 }
 
-void desenhar_obstaculo(){
-    
+void desenhar_obstaculo(SDL_Renderer *render, obstaculo *obstacul){
+    SDL_Rect rect;
+    rect.h = obstacul->sizeY;
+    rect.w = obstacul->sizeX;
+    rect.x = obstacul->x;
+    rect.y = obstacul->y;
+    SDL_RenderDrawRect(render, &rect);
 }

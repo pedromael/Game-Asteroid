@@ -6,20 +6,27 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 
 #define LARGURA 800
 #define ALTURA 600
 #define MAXIMO_INIMIGOS 20
 
-#define TAMANHO_NAVE 10
-#define VELOCIDADE_INICAL 6
-#define VELOCIDADE_INIMIGA 4
+#define TAMANHO_NAVE 12
+#define VELOCIDADE_INICIAL 6
+#define VELOCIDADE_INIMIGA 3
 
 typedef struct
 {
     int danos;
     int bps; // balas por segundo
     int bala_size;
+    int no_pente;
+    int pente_max;
+    int tempo_carregamento;
+    int bala_velocidade;
+    int inicio_carregamento;
+    int ultimo_tiro;
 } armas;
 
 typedef struct{
@@ -53,7 +60,6 @@ typedef struct
     int dx,dy;
     int size;
     int vida;
-    int tipo;
     int velocidade;
     armas arma;
 } nave_inimiga;
