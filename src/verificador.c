@@ -83,6 +83,8 @@ bool criar_inimigo(nave_inimiga *inimigo, int nivel){
     inimigo->vida = 50;
     inimigo->velocidade = VELOCIDADE_INIMIGA;
     inimigo->arma = arsenal[0];
+    inimigo->ultima_ronda = 0;
+    inimigo->tempo_ronda = 4;
 
     return true;
 }
@@ -148,58 +150,72 @@ void retirar_tiro(int *i){
 }
 
 int area_de_impacto_mira(int *i){
-    int margen_de_erro = 30;
+    int margen_de_erro = 20;
     margen_de_erro = (rand() % margen_de_erro) - (rand() % margen_de_erro);
 
     int x = inimigos[*i].x - (player.x + margen_de_erro);
     int y = inimigos[*i].y - (player.y + margen_de_erro);
 
-    if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros)
+    if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros || inimigos[*i].ultima_ronda == 0)
     {
         inimigos[*i].ultima_ronda = quadros;
 
         if (abs(x) < abs(y))
         {
             inimigos[*i].dy = 0;
-            if (x < 0)
-                inimigos[*i].dx = 1;
-            else
-                inimigos[*i].dx = -1;
+            inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+            if(calcular_probabilidade(20)){
+                inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
+                inimigos[*i].dx = 0;
+                return abs(y);
+            }
             return abs(x);
         }else{
             inimigos[*i].dx = 0;
-            if (y < 0)
-                inimigos[*i].dy = 1;
-            else
-                inimigos[*i].dy= -1;
+            inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
+            if(calcular_probabilidade(20)){
+                inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+                inimigos[*i].dy = 0;
+                return abs(x);
+            }
+            return abs(y);
+        }
+    }else{
+        if (inimigos[*i].dx != 0)
+        {
+            inimigos[*i].dy = 0;
+            inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+            return abs(x);
+        }else{
+            inimigos[*i].dx = 0;
+            inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
             return abs(y);
         }
     }
 
-    return abs(abs(x) - abs(y));
+    return inimigos[*i].dx ? x : y;
 }
 
 int actualiazar_inimigos(){
     for (int i = 0; i < numero_inimigos; i++)
     {
         if (area_de_impacto_mira(&i) < 30){
-            if (inimigos[i].dx)
+            if (inimigos[i].dx != 0)
             {
+                int dx = inimigos[i].dx;
                 inimigos[i].dx = 0;
-                if (inimigos[i].y - player.y > 0)
-                    inimigos[i].dy = -1;
-                else
-                    inimigos[i].dy = 1;
-                
-            }else{
+                inimigos[i].dy = inimigos[i].y - player.y > 0 ? -1 : 1;
+                disparar(&inimigos[i]);
                 inimigos[i].dy = 0;
-                if (inimigos[i].x - player.x > 0)
-                    inimigos[i].dx = -1;
-                else
-                    inimigos[i].dx = 1;
+                inimigos[i].dx = dx;
+            }else{
+                int dy = inimigos[i].dy;
+                inimigos[i].dy = 0;
+                inimigos[i].dx = inimigos[i].x - player.x > 0 ? -1 : 1;
+                disparar(&inimigos[i]);
+                inimigos[i].dx = 0;
+                inimigos[i].dy = dy;
             }
-            
-            disparar(&inimigos[i]);
         }
 
         bool mover = true;
@@ -208,7 +224,7 @@ int actualiazar_inimigos(){
         
 
         if(mover){
-            if (inimigos[i].dx)
+            if (inimigos[i].dx != 0)
             {
                 inimigos[i].x += VELOCIDADE_INIMIGA * inimigos[i].dx;
                 if (inimigo_colidiu(i)){
