@@ -17,7 +17,7 @@ extern obstaculo *obstaculos;
 extern int segundos,quadros;
 
 void actualizar_jogo();
-
+bool calcular_probabilidade(int perc);
 bool colidiu_nas_bordas();
 int item_colidiu();
 bool disparar(nave_inimiga *inimigos);

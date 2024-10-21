@@ -1,6 +1,6 @@
 #include "../header/verificador.h"
 
-int calcular_probabilidade(int perc){
+bool calcular_probabilidade(int perc){
     if ((rand() % 100) <= perc)
         return 1;
     return 0;

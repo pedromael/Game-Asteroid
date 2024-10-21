@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
     player.size = TAMANHO_NAVE;
     player.dx = 0;
     player.dy = -1;
-    player.arma = arsenal[3];
+    player.arma = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
     player.vida = 200;
 
@@ -83,15 +83,47 @@ int main(int argc, char* argv[]){
             printf("nao conseguiu criar inimigo\n");
 
     int quadros_corrente;
-
+    int tentar_criar_inimigo = 0;
     bool run = true;
     while (run)
     {
         if (quadros_corrente >= 60){
             quadros_corrente = 0;
             segundos++;
+            tentar_criar_inimigo++;
         }
 
+        if(tentar_criar_inimigo >= 1){
+            if (numero_inimigos < 20)
+            {
+                if(numero_inimigos < 10){
+                    if(calcular_probabilidade(20)){
+                        if (numero_inimigos >= capacidade_inimigos++)
+                            inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
+                        
+                        criar_inimigo(&inimigos[numero_inimigos++],1);
+                    }
+                }else
+                    if(calcular_probabilidade(10)){
+                        if (numero_inimigos >= capacidade_inimigos++)
+                            inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
+                        
+                        criar_inimigo(&inimigos[numero_inimigos++],1);
+                    }
+                tentar_criar_inimigo = 0;
+            }else if(numero_inimigos == 0){
+                criar_inimigo(&inimigos[numero_inimigos++],1);
+            }else
+                if(calcular_probabilidade(5)){
+                    if (numero_inimigos >= capacidade_inimigos++)
+                        inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
+                        
+                    criar_inimigo(&inimigos[numero_inimigos++],1);
+                    tentar_criar_inimigo = 0;
+                }
+        }else if(numero_inimigos == 0)
+            criar_inimigo(&inimigos[numero_inimigos++],1);
+        
         SDL_SetRenderDrawColor(render,255,255,255,255);
         SDL_RenderClear(render);
 
