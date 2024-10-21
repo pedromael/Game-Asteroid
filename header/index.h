@@ -2,8 +2,10 @@
 #define INDEX_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
@@ -62,6 +64,8 @@ typedef struct
     int vida;
     int velocidade;
     armas arma;
+    int tempo_ronda;
+    int ultima_ronda;
 } nave_inimiga;
 
 #endif

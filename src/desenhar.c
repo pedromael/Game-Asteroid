@@ -35,3 +35,20 @@ void desenhar_obstaculo(SDL_Renderer *render, obstaculo *obstacul){
     rect.y = obstacul->y;
     SDL_RenderDrawRect(render, &rect);
 }
+
+void desenhar_status(SDL_Renderer *render, TTF_Font *font){
+    SDL_Color color = {0, 0, 0};
+
+    char buffer[10];
+    sprintf(buffer,"%d",player.arma.no_pente);
+    SDL_Surface* surface = TTF_RenderText_Solid(font, buffer, color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
+    SDL_Rect destRect = {LARGURA - surface->w - 17, ALTURA - surface->h - 9, surface->w, surface->h};
+    SDL_RenderCopy(render, texture, NULL, &destRect);
+
+    sprintf(buffer,"HP:%d",player.vida);
+    surface = TTF_RenderText_Solid(font, buffer, color);
+    texture = SDL_CreateTextureFromSurface(render, surface);
+    SDL_Rect Rect = {LARGURA - surface->w - 17, 0, surface->w, surface->h};
+    SDL_RenderCopy(render, texture, NULL, &Rect);
+}

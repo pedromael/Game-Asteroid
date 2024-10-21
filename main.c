@@ -3,7 +3,7 @@
 bool player_status = true;
 nave_player player;
 int numero_inimigos;
-int numero_inimigos_inicial = 0;
+int numero_inimigos_inicial = 10;
 int capacidade_inimigos = 10;
 nave_inimiga *inimigos;
 int numero_obstaculos = 2;
@@ -22,8 +22,10 @@ int segundos,quadros;
 int main(int argc, char* argv[]){
     srand(time(NULL));
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     SDL_Window *window = SDL_CreateWindow("Asteroid v0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, SDL_WINDOW_SHOWN);
     SDL_Renderer *render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    TTF_Font* font = TTF_OpenFont("files/Roboto-Light.ttf", 14);
 
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
     arsenal = malloc(numero_armas * sizeof(armas));
@@ -31,11 +33,11 @@ int main(int argc, char* argv[]){
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     
     int conf_armas[5][6] = {
-        { 5,  5, 12, 30,  2,  2},
-        {10,  23, 10, 25,  44,  2},
-        {15,  6, 12, 20,  5,  3},
-        {45,  2,  8, 30, 10,  4},
-        {35, 25,  9, 35,  3, 40}
+        { 5,  10, 12, 30,  2,  2},
+        {10,  10, 10, 25,  1,  2},
+        {15,  6, 12, 20,  3,  3},
+        {50,  2,  8, 10, 5,  6},
+        {35, 25,  9, 35,  3, 4}
     };
 //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
     for (size_t j = 0; j < numero_armas; j++){
@@ -55,22 +57,22 @@ int main(int argc, char* argv[]){
     obstaculos[0].sizeY = 330;
     obstaculos[0].x = 500;
     obstaculos[0].y = 30;
-    obstaculos[0].vida = 2300;
+    obstaculos[0].vida = 3300;
 
     obstaculos[1].sizeX = 205;
     obstaculos[1].sizeY = 10;
     obstaculos[1].x = 28;
     obstaculos[1].y = 300;
-    obstaculos[1].vida = 1890;
+    obstaculos[1].vida = 2890;
 
     player.x = LARGURA/2;
     player.y = ALTURA/2;
     player.size = TAMANHO_NAVE;
     player.dx = 0;
     player.dy = -1;
-    player.arma = arsenal[1];
+    player.arma = arsenal[3];
     player.velocidade = VELOCIDADE_INICIAL;
-    player.vida = 1000000;
+    player.vida = 200;
 
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
 
@@ -88,7 +90,6 @@ int main(int argc, char* argv[]){
         if (quadros_corrente >= 60){
             quadros_corrente = 0;
             segundos++;
-            printf("%d\n", segundos);
         }
 
         SDL_SetRenderDrawColor(render,255,255,255,255);
@@ -108,7 +109,9 @@ int main(int argc, char* argv[]){
 
         for (size_t i = 0; i < numero_tiros; i++)
             desenhar_tiro(render, &tiros[i]);
-        
+
+        desenhar_status(render,font);
+
         SDL_RenderPresent(render);
         SDL_Delay(16);
 

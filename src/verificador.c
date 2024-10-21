@@ -88,43 +88,36 @@ bool criar_inimigo(nave_inimiga *inimigo, int nivel){
 }
 
 bool disparar(nave_inimiga *inimigos){
-    
-    int x;
-    int y;
-    int dx;
-    int dy;
-    armas arma;
-    
-    if (inimigos == NULL) // nave player a disparar.
-    {
-        x = player.x;
-        y = player.y;
-        dx = player.dx;
-        dy = player.dy;
-        arma = player.arma;
-    }else{
+
+        int x = player.x;
+        int y = player.y;
+        int dx = player.dx;
+        int dy = player.dy;
+        armas *arma = &player.arma;
+
+    if(inimigos != NULL){
         x = inimigos->x;
         y = inimigos->y;
         dx = inimigos->dx;
         dy = inimigos->dy;
-        arma = inimigos->arma;
+        arma = &inimigos->arma;
     }
 
-    if (!arma.no_pente)
+    if (!arma->no_pente)
     {
-        if(arma.inicio_carregamento != false){
-            if (quadros - arma.inicio_carregamento >= arma.tempo_carregamento*60){
-                arma.no_pente = arma.pente_max;
-                arma.inicio_carregamento = false;
+        if(arma->inicio_carregamento){
+            if (quadros - arma->inicio_carregamento >= arma->tempo_carregamento*60){
+                arma->no_pente = arma->pente_max;
+                arma->inicio_carregamento = false;
             }
         }else
-            arma.inicio_carregamento = quadros;
+            arma->inicio_carregamento = quadros;
 
         return false;
     }
 
-    if(arma.ultimo_tiro != 0)
-        if (arma.ultimo_tiro + (60 / arma.bps) >= quadros)
+    if(arma->ultimo_tiro != 0)
+        if (arma->ultimo_tiro + (60 / arma->bps) >= quadros)
             return false;
 
     if (numero_tiros >= capacidade_tiros){
@@ -136,15 +129,15 @@ bool disparar(nave_inimiga *inimigos){
     tiros[numero_tiros].y = y + TAMANHO_NAVE/2;
     tiros[numero_tiros].dx = dx;
     tiros[numero_tiros].dy = dy;
-    tiros[numero_tiros].arma = arma;
+    tiros[numero_tiros].arma = *arma;
     if (inimigos != NULL)
         tiros[numero_tiros].inimigo = 1;
     else
         tiros[numero_tiros].inimigo = 0;
     
     numero_tiros++;
-    arma.no_pente--;
-    arma.ultimo_tiro = quadros; 
+    arma->no_pente--;
+    arma->ultimo_tiro = quadros; 
 
     return true;
 }
@@ -160,20 +153,30 @@ int area_de_impacto_mira(int *i){
 
     int x = inimigos[*i].x - (player.x + margen_de_erro);
     int y = inimigos[*i].y - (player.y + margen_de_erro);
-    
+
     bool dir = true;
     if (abs(x) < abs(y))
     {
-        if (abs(x) > 35)
-            dir = calcular_probabilidade(60);
+        if (abs(x) > 35){
+            dir = calcular_probabilidade(75);
+        }
     }else{
-        if (abs(y) > 35)
-            dir = calcular_probabilidade(40);
+        if (abs(y) > 35){
+            dir = calcular_probabilidade(25);
+        }
     }
 
-    if (*i % 2)
-       dir = abs(x) < abs(y);
-    
+    if (*i % 2){
+        dir = abs(x) < abs(y); 
+    }
+
+    if(dir){
+        if (item_colidiu(&inimigos[*i].x + inimigos[*i].velocidade,&inimigos[*i].y,&inimigos[*i].size))
+            dir = false;
+    }else
+        if (item_colidiu(&inimigos[*i].x,&inimigos[*i].y + inimigos[*i].velocidade,&inimigos[*i].size))
+            dir = true;
+
     if (dir)
     {
         inimigos[*i].dy = 0;
