@@ -154,45 +154,29 @@ int area_de_impacto_mira(int *i){
     int x = inimigos[*i].x - (player.x + margen_de_erro);
     int y = inimigos[*i].y - (player.y + margen_de_erro);
 
-    bool dir = true;
-    if (abs(x) < abs(y))
+    if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros)
     {
-        if (abs(x) > 35){
-            dir = calcular_probabilidade(75);
+        inimigos[*i].ultima_ronda = quadros;
+
+        if (abs(x) < abs(y))
+        {
+            inimigos[*i].dy = 0;
+            if (x < 0)
+                inimigos[*i].dx = 1;
+            else
+                inimigos[*i].dx = -1;
+            return abs(x);
+        }else{
+            inimigos[*i].dx = 0;
+            if (y < 0)
+                inimigos[*i].dy = 1;
+            else
+                inimigos[*i].dy= -1;
+            return abs(y);
         }
-    }else{
-        if (abs(y) > 35){
-            dir = calcular_probabilidade(25);
-        }
     }
 
-    if (*i % 2){
-        dir = abs(x) < abs(y); 
-    }
-
-    if(dir){
-        if (item_colidiu(&inimigos[*i].x + inimigos[*i].velocidade,&inimigos[*i].y,&inimigos[*i].size))
-            dir = false;
-    }else
-        if (item_colidiu(&inimigos[*i].x,&inimigos[*i].y + inimigos[*i].velocidade,&inimigos[*i].size))
-            dir = true;
-
-    if (dir)
-    {
-        inimigos[*i].dy = 0;
-        if (x < 0)
-            inimigos[*i].dx = 1;
-        else
-            inimigos[*i].dx = -1;
-        return abs(x);
-    }else{
-        inimigos[*i].dx = 0;
-        if (y < 0)
-            inimigos[*i].dy = 1;
-        else
-            inimigos[*i].dy= -1;
-        return abs(y);
-    }
+    return abs(abs(x) - abs(y));
 }
 
 int actualiazar_inimigos(){
