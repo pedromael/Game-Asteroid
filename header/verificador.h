@@ -21,6 +21,6 @@ bool calcular_probabilidade(int perc);
 bool colidiu_nas_bordas();
 int item_colidiu();
 bool disparar(nave_inimiga *inimigos);
-bool criar_inimigo(nave_inimiga *inimigo, int nivel);
+bool criar_inimigo(SDL_Renderer *render, nave_inimiga *inimigo, int nivel);
 
 #endif

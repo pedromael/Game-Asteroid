@@ -27,8 +27,8 @@ int item_colidiu(int *x, int *y, int *size){
     }
     for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao com nave inimiga
     {
-        bool colisaoHorizontal = (inimigos[j].x < *x + *size) && (inimigos[j].x + inimigos[j].size > *x);
-        bool colisaoVertical = (inimigos[j].y < *y + *size) && (inimigos[j].y + inimigos[j].size > *y);
+        bool colisaoHorizontal = (inimigos[j].Rect.x < *x + *size) && (inimigos[j].Rect.x + inimigos[j].Rect.w > *x);
+        bool colisaoVertical = (inimigos[j].Rect.y < *y + *size) && (inimigos[j].Rect.y + inimigos[j].Rect.h > *y);
         if (colisaoHorizontal && colisaoVertical)
             return 2;
     }
@@ -36,14 +36,14 @@ int item_colidiu(int *x, int *y, int *size){
 }
 
 bool inimigo_colidiu(int i){
-    int res = colidiu_nas_bordas(&inimigos[i].x, &inimigos[i].y, &inimigos[i].size);
+    int res = colidiu_nas_bordas(&inimigos[i].Rect.x, &inimigos[i].Rect.y, &inimigos[i].Rect.w);
     if (res)
         return true;
     
     for (size_t j = 0; j < numero_inimigos; j++){ // verificar se ha colisao entre naves inimigas
         if (i != j){
-            bool colisaoHorizontal = (inimigos[j].x < inimigos[i].x + inimigos[i].size) && (inimigos[j].x + inimigos[j].size > inimigos[i].x);
-            bool colisaoVertical = (inimigos[j].y < inimigos[i].y + inimigos[i].size) && (inimigos[j].y + inimigos[j].size > inimigos[i].y);
+            bool colisaoHorizontal = (inimigos[j].Rect.x < inimigos[i].Rect.x + inimigos[i].Rect.w) && (inimigos[j].Rect.x + inimigos[j].Rect.w > inimigos[i].Rect.x);
+            bool colisaoVertical = (inimigos[j].Rect.y < inimigos[i].Rect.y + inimigos[i].Rect.h) && (inimigos[j].Rect.y + inimigos[j].Rect.h > inimigos[i].Rect.y);
             if (colisaoHorizontal && colisaoVertical)
                 return true;
         }
@@ -51,21 +51,21 @@ bool inimigo_colidiu(int i){
 
     for (size_t j = 0; j < numero_obstaculos; j++) // verificar se a colisao com obstaculos
     {
-        bool colisaoHorizontal = (obstaculos[j].x < inimigos[i].x + inimigos[i].size) && (obstaculos[j].x + obstaculos[j].sizeX > inimigos[i].x);
-        bool colisaoVertical = (obstaculos[j].y < inimigos[i].y + inimigos[i].size) && (obstaculos[j].y + obstaculos[j].sizeY > inimigos[i].y);
+        bool colisaoHorizontal = (obstaculos[j].x < inimigos[i].Rect.x + inimigos[i].Rect.w) && (obstaculos[j].x + obstaculos[j].sizeX > inimigos[i].Rect.x);
+        bool colisaoVertical = (obstaculos[j].y < inimigos[i].Rect.y + inimigos[i].Rect.h) && (obstaculos[j].y + obstaculos[j].sizeY > inimigos[i].Rect.y);
         if (colisaoHorizontal && colisaoVertical)
             return 1;
     }
 
-    bool colisaoHorizontal = (inimigos[i].x < player.x + player.size) && (inimigos[i].x + inimigos[i].size > player.x);
-    bool colisaoVertical = (inimigos[i].y < player.y + player.size) && (inimigos[i].y + inimigos[i].size > player.y);
+    bool colisaoHorizontal = (inimigos[i].Rect.x < player.x + player.size) && (inimigos[i].Rect.x + inimigos[i].Rect.w > player.x);
+    bool colisaoVertical = (inimigos[i].Rect.y < player.y + player.size) && (inimigos[i].Rect.y + inimigos[i].Rect.h > player.y);
     if (colisaoHorizontal && colisaoVertical)
         return true;
 
     return false;
 }
 
-bool criar_inimigo(nave_inimiga *inimigo, int nivel){
+bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     int i,size = TAMANHO_NAVE;
     for (i = 0; i < 500; i++){
         if(!item_colidiu(&i,&i,&size))
@@ -74,15 +74,37 @@ bool criar_inimigo(nave_inimiga *inimigo, int nivel){
 
     if (i == 500)
         return false;
+
+    nivel = (rand() % 3) + 1;
+
+    if (nivel == 1){
+        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave1.png"));
+        inimigo->arma = arsenal[0];
+    }
+    else if (nivel == 2){
+        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave2.png"));
+        inimigo->arma = arsenal[1];
+    }
+    else if (nivel == 3){
+        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave3.png"));
+        inimigo->arma = arsenal[2];
+    }
+
+    if (!inimigo->textura)
+    {
+        numero_inimigos--;
+        return false;;
+    }
     
-    inimigo->x = i;
-    inimigo->y = i;
-    inimigo->size = TAMANHO_NAVE;
+
+    inimigo->Rect.x = i;
+    inimigo->Rect.y = i;
+    inimigo->Rect.h = TAMANHO_NAVE;
+    inimigo->Rect.w = TAMANHO_NAVE;
     inimigo->dx = 1;
     inimigo->dy = 0;
-    inimigo->vida = 50;
+    inimigo->vida = 50*nivel;
     inimigo->velocidade = VELOCIDADE_INIMIGA;
-    inimigo->arma = arsenal[0];
     inimigo->ultima_ronda = 0;
     inimigo->tempo_ronda = 4;
 
@@ -98,8 +120,8 @@ bool disparar(nave_inimiga *inimigos){
         armas *arma = &player.arma;
 
     if(inimigos != NULL){
-        x = inimigos->x;
-        y = inimigos->y;
+        x = inimigos->Rect.x;
+        y = inimigos->Rect.y;
         dx = inimigos->dx;
         dy = inimigos->dy;
         arma = &inimigos->arma;
@@ -127,8 +149,8 @@ bool disparar(nave_inimiga *inimigos){
         tiros = realloc(tiros, capacidade_tiros * sizeof(tiro));
     }
 
-    tiros[numero_tiros].x = x + TAMANHO_NAVE/2;
-    tiros[numero_tiros].y = y + TAMANHO_NAVE/2;
+    tiros[numero_tiros].x = x + TAMANHO_NAVE/2 - arma->bala_size/2;
+    tiros[numero_tiros].y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
     tiros[numero_tiros].dx = dx;
     tiros[numero_tiros].dy = dy;
     tiros[numero_tiros].arma = *arma;
@@ -153,8 +175,8 @@ int area_de_impacto_mira(int *i){
     int margen_de_erro = 20;
     margen_de_erro = (rand() % margen_de_erro) - (rand() % margen_de_erro);
 
-    int x = inimigos[*i].x - (player.x + margen_de_erro);
-    int y = inimigos[*i].y - (player.y + margen_de_erro);
+    int x = inimigos[*i].Rect.x - (player.x + margen_de_erro);
+    int y = inimigos[*i].Rect.y - (player.y + margen_de_erro);
 
     if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros || inimigos[*i].ultima_ronda == 0)
     {
@@ -163,18 +185,18 @@ int area_de_impacto_mira(int *i){
         if (abs(x) < abs(y))
         {
             inimigos[*i].dy = 0;
-            inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+            inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
             if(calcular_probabilidade(20)){
-                inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
+                inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
                 inimigos[*i].dx = 0;
                 return abs(y);
             }
             return abs(x);
         }else{
             inimigos[*i].dx = 0;
-            inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
+            inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
             if(calcular_probabilidade(20)){
-                inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+                inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
                 inimigos[*i].dy = 0;
                 return abs(x);
             }
@@ -184,11 +206,11 @@ int area_de_impacto_mira(int *i){
         if (inimigos[*i].dx != 0)
         {
             inimigos[*i].dy = 0;
-            inimigos[*i].dx = inimigos[*i].x - player.x > 0 ? -1 : 1;
+            inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
             return abs(x);
         }else{
             inimigos[*i].dx = 0;
-            inimigos[*i].dy = inimigos[*i].y - player.y > 0 ? -1 : 1;
+            inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
             return abs(y);
         }
     }
@@ -199,22 +221,22 @@ int area_de_impacto_mira(int *i){
 int actualiazar_inimigos(){
     for (int i = 0; i < numero_inimigos; i++)
     {
-        if (area_de_impacto_mira(&i) < 30){
+        if (area_de_impacto_mira(&i) < 150){
             if (inimigos[i].dx != 0)
             {
-                int dx = inimigos[i].dx;
+                int buffer_dx = inimigos[i].dx;
                 inimigos[i].dx = 0;
-                inimigos[i].dy = inimigos[i].y - player.y > 0 ? -1 : 1;
+                inimigos[i].dy = inimigos[i].Rect.y - player.y > 0 ? -1 : 1;
                 disparar(&inimigos[i]);
                 inimigos[i].dy = 0;
-                inimigos[i].dx = dx;
+                inimigos[i].dx = buffer_dx;
             }else{
-                int dy = inimigos[i].dy;
+                int buffer_dy = inimigos[i].dy;
                 inimigos[i].dy = 0;
-                inimigos[i].dx = inimigos[i].x - player.x > 0 ? -1 : 1;
+                inimigos[i].dx = inimigos[i].Rect.x - player.x > 0 ? -1 : 1;
                 disparar(&inimigos[i]);
                 inimigos[i].dx = 0;
-                inimigos[i].dy = dy;
+                inimigos[i].dy = buffer_dy;
             }
         }
 
@@ -226,16 +248,16 @@ int actualiazar_inimigos(){
         if(mover){
             if (inimigos[i].dx != 0)
             {
-                inimigos[i].x += VELOCIDADE_INIMIGA * inimigos[i].dx;
+                inimigos[i].Rect.x += VELOCIDADE_INIMIGA * inimigos[i].dx;
                 if (inimigo_colidiu(i)){
-                    inimigos[i].x -= VELOCIDADE_INIMIGA * inimigos[i].dx;
+                    inimigos[i].Rect.x -= VELOCIDADE_INIMIGA * inimigos[i].dx;
                 }
                 
             }else{
-                inimigos[i].y += VELOCIDADE_INIMIGA * inimigos[i].dy;
+                inimigos[i].Rect.y += VELOCIDADE_INIMIGA * inimigos[i].dy;
                 if (inimigo_colidiu(i))
                 {
-                    inimigos[i].y -= VELOCIDADE_INIMIGA * inimigos[i].dy;
+                    inimigos[i].Rect.y -= VELOCIDADE_INIMIGA * inimigos[i].dy;
                 }
             }
         }
@@ -258,8 +280,8 @@ void verificar_atingidos(){
     {
         for (int i = 0; i < numero_inimigos; i++)
         {
-            bool coliX = (inimigos[i].x < tiros[j].x + tiros[j].arma.bala_size) && (inimigos[i].x + inimigos[i].size > tiros[j].x);
-            bool coliY = (inimigos[i].y < tiros[j].y + tiros[j].arma.bala_size) && (inimigos[i].y + inimigos[i].size > tiros[j].y);
+            bool coliX = (inimigos[i].Rect.x < tiros[j].x + tiros[j].arma.bala_size) && (inimigos[i].Rect.x + inimigos[i].Rect.w > tiros[j].x);
+            bool coliY = (inimigos[i].Rect.y < tiros[j].y + tiros[j].arma.bala_size) && (inimigos[i].Rect.y + inimigos[i].Rect.h > tiros[j].y);
             if (coliX && coliY && !tiros[j].inimigo){
                 retirar_tiro(&j);
                 if (inimigos[i].vida - tiros[j].arma.danos > 0)

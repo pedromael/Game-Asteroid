@@ -22,8 +22,10 @@ int segundos,quadros;
 int main(int argc, char* argv[]){
     srand(time(NULL));
     SDL_Init(SDL_INIT_VIDEO);
+    IMG_Init(SDL_INIT_VIDEO);
     TTF_Init();
-    SDL_Window *window = SDL_CreateWindow("Asteroid v0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, SDL_WINDOW_SHOWN);
+
+    SDL_Window *window = SDL_CreateWindow("Asteroid V0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, SDL_WINDOW_SHOWN);
     SDL_Renderer *render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Font* font = TTF_OpenFont("files/Roboto-Light.ttf", 14);
 
@@ -33,13 +35,14 @@ int main(int argc, char* argv[]){
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     
     int conf_armas[5][6] = {
-        { 5,  10, 12, 30,  2,  2},
-        {10,  10, 10, 25,  1,  2},
-        {15,  6, 12, 20,  3,  3},
-        {50,  2,  8, 10, 5,  6},
-        {35, 25,  9, 35,  3, 4}
+        { 5,  10, 13, 30,  2,  3},
+        {10,  10, 11, 25,  1,  3},
+        {15,  6, 13, 20,  3,  4},
+        {50,  2,  9, 10, 5,  7},
+        {35, 25,  10, 35,  1, 5}
     };
 //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
+    SDL_Surface* bala_surface = IMG_Load("files/img/bala0.png");
     for (size_t j = 0; j < numero_armas; j++){
         arsenal[j].danos =              conf_armas[j][0];
         arsenal[j].bps =                conf_armas[j][1];
@@ -50,21 +53,24 @@ int main(int argc, char* argv[]){
         arsenal[j].no_pente =           arsenal[j].pente_max;  // Corrigido para usar o próprio j
         arsenal[j].inicio_carregamento = false;
         arsenal[j].ultimo_tiro = false;
+        arsenal[j].textura = SDL_CreateTextureFromSurface(render, bala_surface);
     }
 
 
     obstaculos[0].sizeX = 12;
-    obstaculos[0].sizeY = 330;
-    obstaculos[0].x = 500;
+    obstaculos[0].sizeY = 730;
+    obstaculos[0].x = 640;
     obstaculos[0].y = 30;
     obstaculos[0].vida = 3300;
 
     obstaculos[1].sizeX = 205;
     obstaculos[1].sizeY = 10;
-    obstaculos[1].x = 28;
+    obstaculos[1].x = 68;
     obstaculos[1].y = 300;
     obstaculos[1].vida = 2890;
 
+    SDL_Surface* surface = IMG_Load("files/img/navePlayer.png");
+    player.textura = SDL_CreateTextureFromSurface(render,surface);
     player.x = LARGURA/2;
     player.y = ALTURA/2;
     player.size = TAMANHO_NAVE;
@@ -76,11 +82,10 @@ int main(int argc, char* argv[]){
 
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
 
-    for (size_t i = 0; i < numero_inimigos_inicial; i++)
-        if(criar_inimigo(&inimigos[i],1))
-            numero_inimigos++;
-        else
-            printf("nao conseguiu criar inimigo\n");
+    for (size_t i = 0; i < numero_inimigos_inicial; i++){
+        criar_inimigo(render,&inimigos[i],1);
+        numero_inimigos++;
+    }
 
     int quadros_corrente;
     int tentar_criar_inimigo = 0;
@@ -101,28 +106,26 @@ int main(int argc, char* argv[]){
                         if (numero_inimigos >= capacidade_inimigos++)
                             inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
                         
-                        criar_inimigo(&inimigos[numero_inimigos++],1);
+                        criar_inimigo(render,&inimigos[numero_inimigos++],1);
                     }
                 }else
                     if(calcular_probabilidade(10)){
                         if (numero_inimigos >= capacidade_inimigos++)
                             inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
                         
-                        criar_inimigo(&inimigos[numero_inimigos++],1);
+                        criar_inimigo(render,&inimigos[numero_inimigos++],1);
                     }
                 tentar_criar_inimigo = 0;
-            }else if(numero_inimigos == 0){
-                criar_inimigo(&inimigos[numero_inimigos++],1);
             }else
                 if(calcular_probabilidade(5)){
                     if (numero_inimigos >= capacidade_inimigos++)
                         inimigos = realloc(inimigos, ++capacidade_inimigos * sizeof(nave_inimiga));
                         
-                    criar_inimigo(&inimigos[numero_inimigos++],1);
+                    criar_inimigo(render,&inimigos[numero_inimigos++],1);
                     tentar_criar_inimigo = 0;
                 }
         }else if(numero_inimigos == 0)
-            criar_inimigo(&inimigos[numero_inimigos++],1);
+            criar_inimigo(render,&inimigos[numero_inimigos++],1);
         
         SDL_SetRenderDrawColor(render,255,255,255,255);
         SDL_RenderClear(render);

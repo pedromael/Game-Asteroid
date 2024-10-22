@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Defina a biblioteca SDL
-LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf
+LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf -lmingw32 -lSDL2main -lSDL2_image
 
 # Nome do executável
 TARGET = Asteroid

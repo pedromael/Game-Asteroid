@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,11 +11,13 @@
 #include <time.h>
 #include <math.h>
 
-#define LARGURA 800
-#define ALTURA 600
+#define PI 3.141592653589793
+
+#define LARGURA 1300
+#define ALTURA 900
 #define MAXIMO_INIMIGOS 20
 
-#define TAMANHO_NAVE 12
+#define TAMANHO_NAVE 50
 #define VELOCIDADE_INICIAL 6
 #define VELOCIDADE_INIMIGA 3
 
@@ -25,6 +28,7 @@ typedef struct
     int bala_size;
     int no_pente;
     int pente_max;
+    SDL_Texture *textura;
     int tempo_carregamento;
     int bala_velocidade;
     int inicio_carregamento;
@@ -47,6 +51,7 @@ typedef struct
     int upgrade;
     int vida;
     int velocidade;
+    SDL_Texture *textura;
 } nave_player;
 
 typedef struct
@@ -58,10 +63,11 @@ typedef struct
 
 typedef struct
 {
-    int x,y;
+    SDL_Rect Rect;
     int dx,dy;
-    int size;
+    //int nivel;
     int vida;
+    SDL_Texture *textura;
     int velocidade;
     armas arma;
     int tempo_ronda;
