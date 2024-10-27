@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,11 +14,17 @@
 
 #define PI 3.141592653589793
 
-#define LARGURA 1300
-#define ALTURA 900
+#define LARGURA 1900
+#define ALTURA 1000
+
+#define MAXIMO_PACOTES 5
 #define MAXIMO_INIMIGOS 20
+#define MAXIMO_SCUDO 2000
 
 #define TAMANHO_NAVE 50
+#define TAMANHO_PACOTE 10
+#define TEMPO_PARA_APAGAR_METEORO 3
+
 #define VELOCIDADE_INICIAL 6
 #define VELOCIDADE_INIMIGA 3
 
@@ -33,10 +40,11 @@ typedef struct
     int bala_velocidade;
     int inicio_carregamento;
     int ultimo_tiro;
+    Mix_Chunk *som;
 } armas;
 
 typedef struct{
-    int x,y;
+    SDL_Rect rect;
     int dx,dy;
     armas arma;
     int inimigo;
@@ -44,22 +52,43 @@ typedef struct{
 
 typedef struct
 {
-    int x,y;
+    SDL_Texture *textura;
+    SDL_Rect rect;
+    int vida;
+    bool ativo;
+} scudo;
+
+typedef struct
+{
     int dx,dy;
-    int size;
-    armas arma;
+    int numero_armas;
+    int arma_select;
+    armas *arma;
     int upgrade;
     int vida;
     int velocidade;
+    SDL_Rect rect;
     SDL_Texture *textura;
+    scudo scudo;
 } nave_player;
 
 typedef struct
 {
-    int x,y;
-    int sizeX,sizeY;
+    SDL_Rect rect;
     int vida;
 } obstaculo;
+
+typedef struct
+{
+    SDL_Rect rect;
+    SDL_Texture *textura;
+    int dx, dy;
+    int danos;
+    int vida;
+    int velocidade;
+    bool status;
+    int tempo_partiu;
+} meteoro;
 
 typedef struct
 {
@@ -73,5 +102,35 @@ typedef struct
     int tempo_ronda;
     int ultima_ronda;
 } nave_inimiga;
+
+typedef struct
+{
+    SDL_Rect rect;
+    SDL_Texture *textura;
+    int tipo; // tipo de item no pacote
+    int valor; // valor no caso de vida 
+} pacote;
+
+extern bool player_status;
+extern nave_player player;
+extern const int numero_armas;
+extern armas *arsenal;
+extern int numero_inimigos;
+extern int capacidade_inimigos;
+extern nave_inimiga *inimigos;
+extern int numero_tiros;
+extern int capacidade_tiros;
+extern tiro *tiros;
+extern int numero_obstaculos;
+extern obstaculo *obstaculos;
+extern int segundos,quadros;
+extern int numero_meteoros;
+extern int capacidade_meteoros;
+extern meteoro *meteoros;
+extern int numero_pacotes;
+extern pacote *pacotes;
+
+extern SDL_Renderer *render;
+extern int segundos;
 
 #endif

@@ -5,13 +5,16 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Defina a biblioteca SDL
-LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf -lmingw32 -lSDL2main -lSDL2_image
+LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf -lSDL2main -lSDL2_image -lSDL2_mixer
 
 # Nome do executável
 TARGET = Asteroid
 
+#header
+HEADERS =  
+
 # Arquivos fontes
-SRCS = main.c src/desenhar.c src/control.c src/verificador.c
+SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c
 
 # Arquivos objetos
 OBJS = $(SRCS:.c=.o)

@@ -1,7 +1,7 @@
 #include "../header/verificador.h"
 
 bool calcular_probabilidade(int perc){
-    if ((rand() % 100) <= perc)
+    if ((rand() % 101) <= perc)
         return 1;
     return 0;
 }
@@ -15,23 +15,64 @@ bool colidiu_nas_bordas(int *x, int *y, int *size){
     return false;
 }
 
-int item_colidiu(int *x, int *y, int *size){
-    if(colidiu_nas_bordas(x,y,size))
-        return 1;
+bool meteoro_colidio_nas_borda(int *x, int *y, int *size){
+    if (*x < -(*size + 2) || *y < -(*size + 2))
+        return true;
+    
+    if (*x > LARGURA + 2 || *y > ALTURA + 2)
+        return true;
+    return false;
+}
+
+int colidiram(SDL_Rect *rect1, SDL_Rect *rect2){
+    bool coliX = (rect1->x < rect2->x + rect2->w) && (rect1->x + rect1->w > rect2->x);
+    bool coliY = (rect1->y < rect2->y + rect2->h) && (rect1->y + rect1->h > rect2->y);
+    if (coliX && coliY)
+        return true;
+    return false;
+}
+
+int item_colidiu(int *x, int *y, int *size, char *item){
+    if (strcmp(item, "meteoro") != 0){
+        if(colidiu_nas_bordas(x,y,size))
+            return 1;
+    }else
+        if(meteoro_colidio_nas_borda(x,y,size))
+            return 1;
+
     for (size_t j = 0; j < numero_obstaculos; j++) // verificar se a colisao com obstaculos
     {
-        bool colisaoHorizontal = (obstaculos[j].x < *x + *size) && (obstaculos[j].x + obstaculos[j].sizeX > *x);
-        bool colisaoVertical = (obstaculos[j].y < *y + *size) && (obstaculos[j].y + obstaculos[j].sizeY > *y);
+        bool colisaoHorizontal = (obstaculos[j].rect.x < *x + *size) && (obstaculos[j].rect.x + obstaculos[j].rect.w > *x);
+        bool colisaoVertical = (obstaculos[j].rect.y < *y + *size) && (obstaculos[j].rect.y + obstaculos[j].rect.h > *y);
         if (colisaoHorizontal && colisaoVertical)
             return 1;
     }
-    for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao com nave inimiga
+    if (strcmp(item, "bala") != 0)
+        for (size_t j = 0; j < numero_inimigos; j++) // verificar se a colisao com nave inimiga
+        {
+            bool colisaoHorizontal = (inimigos[j].Rect.x < *x + *size) && (inimigos[j].Rect.x + inimigos[j].Rect.w > *x);
+            bool colisaoVertical = (inimigos[j].Rect.y < *y + *size) && (inimigos[j].Rect.y + inimigos[j].Rect.h > *y);
+            if (colisaoHorizontal && colisaoVertical)
+                return 2;
+        }
+    if (strcmp(item, "meteoro") != 0)
+        for (size_t j = 0; j < numero_meteoros; j++)
+        {
+            bool colisaoHorizontal = (meteoros[j].rect.x < *x + *size) && (meteoros[j].rect.x + meteoros[j].rect.w > *x);
+            bool colisaoVertical = (meteoros[j].rect.y < *y + *size) && (meteoros[j].rect.y + meteoros[j].rect.h > *y);
+            if (colisaoHorizontal && colisaoVertical)
+                return 1;
+        }
+    
+    if (strcmp(item, "player") != 0)
     {
-        bool colisaoHorizontal = (inimigos[j].Rect.x < *x + *size) && (inimigos[j].Rect.x + inimigos[j].Rect.w > *x);
-        bool colisaoVertical = (inimigos[j].Rect.y < *y + *size) && (inimigos[j].Rect.y + inimigos[j].Rect.h > *y);
+        bool colisaoHorizontal = (player.scudo.rect.x < *x + *size) && (player.scudo.rect.x + player.scudo.rect.w > *x);
+        bool colisaoVertical = (player.scudo.rect.y < *y + *size) && (player.scudo.rect.y + player.scudo.rect.h > *y);
         if (colisaoHorizontal && colisaoVertical)
-            return 2;
+            return 1;
     }
+    
+
     return 0;
 }
 
@@ -40,84 +81,29 @@ bool inimigo_colidiu(int i){
     if (res)
         return true;
     
-    for (size_t j = 0; j < numero_inimigos; j++){ // verificar se ha colisao entre naves inimigas
+    for (size_t j = 0; j < numero_inimigos; j++) // verificar se ha colisao entre naves inimigas
         if (i != j){
-            bool colisaoHorizontal = (inimigos[j].Rect.x < inimigos[i].Rect.x + inimigos[i].Rect.w) && (inimigos[j].Rect.x + inimigos[j].Rect.w > inimigos[i].Rect.x);
-            bool colisaoVertical = (inimigos[j].Rect.y < inimigos[i].Rect.y + inimigos[i].Rect.h) && (inimigos[j].Rect.y + inimigos[j].Rect.h > inimigos[i].Rect.y);
-            if (colisaoHorizontal && colisaoVertical)
+            if (colidiram(&inimigos[i].Rect,&inimigos[j].Rect))
                 return true;
         }
-    }
 
     for (size_t j = 0; j < numero_obstaculos; j++) // verificar se a colisao com obstaculos
-    {
-        bool colisaoHorizontal = (obstaculos[j].x < inimigos[i].Rect.x + inimigos[i].Rect.w) && (obstaculos[j].x + obstaculos[j].sizeX > inimigos[i].Rect.x);
-        bool colisaoVertical = (obstaculos[j].y < inimigos[i].Rect.y + inimigos[i].Rect.h) && (obstaculos[j].y + obstaculos[j].sizeY > inimigos[i].Rect.y);
-        if (colisaoHorizontal && colisaoVertical)
+        if (colidiram(&obstaculos[j].rect, &inimigos[i].Rect))
             return 1;
-    }
 
-    bool colisaoHorizontal = (inimigos[i].Rect.x < player.x + player.size) && (inimigos[i].Rect.x + inimigos[i].Rect.w > player.x);
-    bool colisaoVertical = (inimigos[i].Rect.y < player.y + player.size) && (inimigos[i].Rect.y + inimigos[i].Rect.h > player.y);
-    if (colisaoHorizontal && colisaoVertical)
+    if (colidiram(&inimigos[i].Rect, &player.rect))
         return true;
 
     return false;
 }
 
-bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
-    int i,size = TAMANHO_NAVE;
-    for (i = 0; i < 500; i++){
-        if(!item_colidiu(&i,&i,&size))
-            break;
-    }
-
-    if (i == 500)
-        return false;
-
-    nivel = (rand() % 3) + 1;
-
-    if (nivel == 1){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave1.png"));
-        inimigo->arma = arsenal[0];
-    }
-    else if (nivel == 2){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave2.png"));
-        inimigo->arma = arsenal[1];
-    }
-    else if (nivel == 3){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave3.png"));
-        inimigo->arma = arsenal[2];
-    }
-
-    if (!inimigo->textura)
-    {
-        numero_inimigos--;
-        return false;;
-    }
-    
-
-    inimigo->Rect.x = i;
-    inimigo->Rect.y = i;
-    inimigo->Rect.h = TAMANHO_NAVE;
-    inimigo->Rect.w = TAMANHO_NAVE;
-    inimigo->dx = 1;
-    inimigo->dy = 0;
-    inimigo->vida = 50*nivel;
-    inimigo->velocidade = VELOCIDADE_INIMIGA;
-    inimigo->ultima_ronda = 0;
-    inimigo->tempo_ronda = 4;
-
-    return true;
-}
-
 bool disparar(nave_inimiga *inimigos){
 
-        int x = player.x;
-        int y = player.y;
+        int x = player.rect.x;
+        int y = player.rect.y;
         int dx = player.dx;
         int dy = player.dy;
-        armas *arma = &player.arma;
+        armas *arma = &player.arma[player.arma_select];
 
     if(inimigos != NULL){
         x = inimigos->Rect.x;
@@ -149,10 +135,13 @@ bool disparar(nave_inimiga *inimigos){
         tiros = realloc(tiros, capacidade_tiros * sizeof(tiro));
     }
 
-    tiros[numero_tiros].x = x + TAMANHO_NAVE/2 - arma->bala_size/2;
-    tiros[numero_tiros].y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
-    tiros[numero_tiros].dx = dx;
-    tiros[numero_tiros].dy = dy;
+    tiros[numero_tiros].rect.x = x + TAMANHO_NAVE/2 - arma->bala_size/2;
+    tiros[numero_tiros].rect.y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
+    tiros[numero_tiros].rect.w = arma->bala_size;
+    tiros[numero_tiros].rect.h = arma->bala_size;
+        tiros[numero_tiros].dx = dx;
+        tiros[numero_tiros].dy = dy;
+
     tiros[numero_tiros].arma = *arma;
     if (inimigos != NULL)
         tiros[numero_tiros].inimigo = 1;
@@ -163,7 +152,27 @@ bool disparar(nave_inimiga *inimigos){
     arma->no_pente--;
     arma->ultimo_tiro = quadros; 
 
+    Mix_PlayChannel(-1, tiros[numero_tiros-1].arma.som, 0);
     return true;
+}
+
+void ativar_scudo(){
+    if (!player.scudo.ativo)
+        if(player.scudo.vida <= 0)
+            return;
+    player.scudo.ativo = true;
+
+    int size = 20;
+
+    player.scudo.rect.x = player.rect.x - size;
+    player.scudo.rect.y = player.rect.y - size;
+    player.scudo.rect.w = TAMANHO_NAVE + size * 2;
+    player.scudo.rect.h = TAMANHO_NAVE + size * 2;
+}
+
+void desativar_scudo(){
+    if (player.scudo.ativo)
+        player.scudo.ativo = false;
 }
 
 void retirar_tiro(int *i){
@@ -175,8 +184,8 @@ int area_de_impacto_mira(int *i){
     int margen_de_erro = 20;
     margen_de_erro = (rand() % margen_de_erro) - (rand() % margen_de_erro);
 
-    int x = inimigos[*i].Rect.x - (player.x + margen_de_erro);
-    int y = inimigos[*i].Rect.y - (player.y + margen_de_erro);
+    int x = inimigos[*i].Rect.x - (player.rect.x + margen_de_erro);
+    int y = inimigos[*i].Rect.y - (player.rect.y + margen_de_erro);
 
     if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros || inimigos[*i].ultima_ronda == 0)
     {
@@ -185,18 +194,18 @@ int area_de_impacto_mira(int *i){
         if (abs(x) < abs(y))
         {
             inimigos[*i].dy = 0;
-            inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
+            inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
             if(calcular_probabilidade(20)){
-                inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
+                inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
                 inimigos[*i].dx = 0;
                 return abs(y);
             }
             return abs(x);
         }else{
             inimigos[*i].dx = 0;
-            inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
+            inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
             if(calcular_probabilidade(20)){
-                inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
+                inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
                 inimigos[*i].dy = 0;
                 return abs(x);
             }
@@ -206,16 +215,14 @@ int area_de_impacto_mira(int *i){
         if (inimigos[*i].dx != 0)
         {
             inimigos[*i].dy = 0;
-            inimigos[*i].dx = inimigos[*i].Rect.x - player.x > 0 ? -1 : 1;
+            inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
             return abs(x);
         }else{
             inimigos[*i].dx = 0;
-            inimigos[*i].dy = inimigos[*i].Rect.y - player.y > 0 ? -1 : 1;
+            inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
             return abs(y);
         }
     }
-
-    return inimigos[*i].dx ? x : y;
 }
 
 int actualiazar_inimigos(){
@@ -226,17 +233,17 @@ int actualiazar_inimigos(){
             {
                 int buffer_dx = inimigos[i].dx;
                 inimigos[i].dx = 0;
-                inimigos[i].dy = inimigos[i].Rect.y - player.y > 0 ? -1 : 1;
+                inimigos[i].dy = inimigos[i].Rect.y - player.rect.y > 0 ? -1 : 1;
                 disparar(&inimigos[i]);
                 inimigos[i].dy = 0;
                 inimigos[i].dx = buffer_dx;
             }else{
                 int buffer_dy = inimigos[i].dy;
                 inimigos[i].dy = 0;
-                inimigos[i].dx = inimigos[i].Rect.x - player.x > 0 ? -1 : 1;
+                inimigos[i].dx = inimigos[i].Rect.x - player.rect.x > 0 ? -1 : 1;
                 disparar(&inimigos[i]);
                 inimigos[i].dx = 0;
-                inimigos[i].dy = buffer_dy;
+                inimigos[i].dy = buffer_dy; 
             }
         }
 
@@ -252,7 +259,7 @@ int actualiazar_inimigos(){
                 if (inimigo_colidiu(i)){
                     inimigos[i].Rect.x -= VELOCIDADE_INIMIGA * inimigos[i].dx;
                 }
-                
+
             }else{
                 inimigos[i].Rect.y += VELOCIDADE_INIMIGA * inimigos[i].dy;
                 if (inimigo_colidiu(i))
@@ -267,12 +274,23 @@ int actualiazar_inimigos(){
 
 void actualizar_tiros(){
     for (int i = 0; i < numero_tiros; i++)
-        if (!item_colidiu(&tiros[i].x,&tiros[i].y,&tiros[i].arma.bala_size))
+        if (!item_colidiu(&tiros[i].rect.x,&tiros[i].rect.y,&tiros[i].arma.bala_size,"bala"))
         {
-            tiros[i].x += tiros[i].dx * tiros[i].arma.bala_velocidade;
-            tiros[i].y += tiros[i].dy * tiros[i].arma.bala_velocidade;
+            tiros[i].rect.x += tiros[i].dx * tiros[i].arma.bala_velocidade;
+            tiros[i].rect.y += tiros[i].dy * tiros[i].arma.bala_velocidade;
         }else
             retirar_tiro(&i);
+}
+
+void destroir_meteoro(int *i)
+{
+    if (meteoros[*i].status)
+    {
+        meteoros[*i].status = false;
+        meteoros[*i].tempo_partiu = segundos;
+        meteoros[*i].velocidade = 1;
+        meteoros[*i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/meteoro/castanho_d1.png"));
+    }
 }
 
 void verificar_atingidos(){
@@ -280,9 +298,7 @@ void verificar_atingidos(){
     {
         for (int i = 0; i < numero_inimigos; i++)
         {
-            bool coliX = (inimigos[i].Rect.x < tiros[j].x + tiros[j].arma.bala_size) && (inimigos[i].Rect.x + inimigos[i].Rect.w > tiros[j].x);
-            bool coliY = (inimigos[i].Rect.y < tiros[j].y + tiros[j].arma.bala_size) && (inimigos[i].Rect.y + inimigos[i].Rect.h > tiros[j].y);
-            if (coliX && coliY && !tiros[j].inimigo){
+            if (colidiram(&tiros[j].rect, &inimigos[i].Rect) && !tiros[j].inimigo){
                 retirar_tiro(&j);
                 if (inimigos[i].vida - tiros[j].arma.danos > 0)
                     inimigos[i].vida -= tiros[j].arma.danos;
@@ -293,21 +309,19 @@ void verificar_atingidos(){
             }
         }
 
-        bool coliX = (tiros[j].x < player.x + player.size) && (tiros[j].x + tiros[j].arma.bala_size > player.x);
-        bool coliy = (tiros[j].y < player.y + player.size) && (tiros[j].y + tiros[j].arma.bala_size > player.y);
-        if (coliX && coliy && tiros[j].inimigo){
+        if (colidiram(&tiros[j].rect, &player.rect) && tiros[j].inimigo){
             retirar_tiro(&j);
             if (player.vida - tiros[j].arma.danos > 0)
                 player.vida -= tiros[j].arma.danos;
-            else
+            else{
                 player_status = false;
+                player.vida = 0;
+            }
         }
 
         for (size_t i = 0; i < numero_obstaculos; i++)
         {
-            bool coliX = (tiros[j].x < obstaculos[i].x + obstaculos[i].sizeX) && (tiros[j].x + tiros[j].arma.bala_size > obstaculos[i].x);
-            bool coliy = (tiros[j].y < obstaculos[i].y + obstaculos[i].sizeY) && (tiros[j].y + tiros[j].arma.bala_size > obstaculos[i].y);
-            if (coliX && coliy){
+            if (colidiram(&tiros[j].rect, &obstaculos[j].rect)){
                 retirar_tiro(&j);
                 if (obstaculos[i].vida - tiros[j].arma.danos > 0)
                     obstaculos[i].vida -= tiros[j].arma.danos;
@@ -317,6 +331,112 @@ void verificar_atingidos(){
                 break;
             }
         }
+        for (int i = 0; i < numero_meteoros; i++)
+        {
+            if (colidiram(&tiros[j].rect, &meteoros[i].rect)){
+                retirar_tiro(&j);
+                if (meteoros[i].vida - tiros[j].arma.danos > 0)
+                    meteoros[i].vida -= tiros[j].arma.danos;
+                else
+                    destroir_meteoro(&i);
+                break;
+            }
+        }
+        
+    }
+
+    for (int j = 0; j < numero_meteoros; j++)
+    {
+        if (meteoros[j].status)
+        {
+            for (int i = 0; i < numero_inimigos; i++)
+            {
+                if (colidiram(&inimigos[i].Rect, &meteoros[j].rect) && meteoros[j].status){
+                    destroir_meteoro(&j);
+                    if (inimigos[i].vida - meteoros[j].danos > 0)
+                        inimigos[i].vida -= meteoros[j].danos;
+                    else
+                        if (i != --numero_inimigos)
+                            inimigos[i] = inimigos[numero_inimigos];
+                    break;
+                }
+            }
+
+            if (colidiram(&meteoros[j].rect, &player.rect) && meteoros[j].status){
+                destroir_meteoro(&j);
+                if (player.vida - meteoros[j].danos > 0)
+                    player.vida -= meteoros[j].danos;
+                else{
+                    player_status = false;
+                    player.vida = 0;
+                }
+            }
+
+            for (size_t i = 0; i < numero_obstaculos; i++)
+            {
+                if (colidiram(&obstaculos[i].rect, &meteoros[j].rect) && meteoros[i].status){
+                    destroir_meteoro(&j);
+                    if (obstaculos[i].vida - meteoros[j].danos > 0)
+                        obstaculos[i].vida -= meteoros[j].danos;
+                    else
+                        if (i != --numero_obstaculos)
+                            obstaculos[i] = obstaculos[numero_obstaculos];
+                    break;
+                }
+            }
+        }    
+    }
+}
+
+void actualizar_meteoros()
+{
+    for (int i = 0; i < numero_meteoros; i++)
+    {
+        meteoros[i].rect.x += meteoros[i].dx * meteoros[i].velocidade;
+        meteoros[i].rect.y += meteoros[i].dy * meteoros[i].velocidade;
+        if (item_colidiu(&meteoros[i].rect.x,&meteoros[i].rect.y,&meteoros[i].rect.w,"meteoro"))
+        {
+            meteoros[i].rect.x -= meteoros[i].dx * meteoros[i].velocidade;
+            meteoros[i].rect.y -= meteoros[i].dy * meteoros[i].velocidade;
+            if(meteoros[i].status)
+                destroir_meteoro(&i);
+        }
+        if(!meteoros[i].status){
+            if (meteoros[i].tempo_partiu + TEMPO_PARA_APAGAR_METEORO <= segundos)
+            {
+                if(i != numero_meteoros--){
+                    if (calcular_probabilidade(0))
+                        criar_pacote(&meteoros[i]);
+                    
+                    meteoros[i] = meteoros[numero_meteoros];
+                }
+            }
+        }
+    }
+}
+
+void remover_pacote(int *i)
+{
+    numero_pacotes--;
+    if (*i != numero_pacotes)
+        pacotes[*i] = pacotes[numero_pacotes];
+    
+}
+
+void obter_pacote(int *i)
+{
+    //codigo para obter pacote
+    remover_pacote(i);
+}
+
+void actualizar_pacotes(){
+    for (int i = 0; i < numero_pacotes; i++)
+    {
+        if (colidiram(&pacotes[i].rect, &player.rect))
+        {
+            obter_pacote(&i);
+            break;        
+        }
     }
 }
 
@@ -324,4 +444,6 @@ void actualizar_jogo(){
     actualiazar_inimigos();
     verificar_atingidos();
     actualizar_tiros();
+    actualizar_meteoros();
+    actualizar_pacotes();
 }
