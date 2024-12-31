@@ -38,7 +38,7 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     }
 
     if (!inimigo->textura)
-        return false;
+        return false; // nao foi possivel carregar a textura.
     
 
     inimigo->Rect.x = i;

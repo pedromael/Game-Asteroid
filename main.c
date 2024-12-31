@@ -4,7 +4,7 @@ bool player_status = true;
 nave_player player;
 int numero_inimigos = 0;
 int numero_inimigos_inicial = 5;
-int capacidade_inimigos = 6;
+int capacidade_inimigos = 10;
 nave_inimiga *inimigos;
 int numero_obstaculos = 2;
 obstaculo *obstaculos;
@@ -115,8 +115,11 @@ int main(int argc, char* argv[]){
     player.scudo.vida = 2000;
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 
-    for (size_t i = 0; i < numero_inimigos_inicial; i++)
-        criar_inimigo(render,&inimigos[i],1);
+    for (size_t i = 0; i <= numero_inimigos_inicial; i++){
+        if(!criar_inimigo(render,&inimigos[i],1)){
+            i--;
+        }
+    }
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
