@@ -98,12 +98,8 @@ bool inimigo_colidiu(int i){
 }
 
 bool disparar(nave_inimiga *inimigos){
-
-        int x = player.rect.x;
-        int y = player.rect.y;
-        int dx = player.dx;
-        int dy = player.dy;
-        armas *arma = &player.arma[player.arma_select];
+    int x,y,dx,dy;
+    armas *arma;
 
     if(inimigos != NULL){
         x = inimigos->Rect.x;
@@ -111,6 +107,12 @@ bool disparar(nave_inimiga *inimigos){
         dx = inimigos->dx;
         dy = inimigos->dy;
         arma = &inimigos->arma;
+    }else{
+        x = player.rect.x;
+        y = player.rect.y;
+        dx = player.dx;
+        dy = player.dy;
+        arma = &player.arma[player.arma_select];
     }
 
     if (!arma->no_pente)

@@ -51,6 +51,7 @@ int main(int argc, char* argv[]){
 
     printf("step 1\n");
 
+    //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
     int conf_armas[5][6] = {
         { 5,  10, 13, 30,  2,  3},
         {10,  10, 11, 25,  1,  3},
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]){
         {50,   2,  9, 10,  5,  7},
         {35,  25, 10, 35,  1,  5}
     };
-//danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
+
     char img_som_armas[5][2][12] = {
         {"bala0.png", "shoot1.wav"},
         {"bala0.png", "shoot2.wav"},
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]){
         arsenal[j].pente_max =          conf_armas[j][3];
         arsenal[j].tempo_carregamento = conf_armas[j][4];
         arsenal[j].bala_size =          conf_armas[j][5];
-        arsenal[j].no_pente =           arsenal[j].pente_max;  // Corrigido para usar o próprio j
+        arsenal[j].no_pente =           arsenal[j].pente_max;
         arsenal[j].inicio_carregamento = false;
         arsenal[j].ultimo_tiro = false;
         char buffer[25];
@@ -221,6 +222,7 @@ int main(int argc, char* argv[]){
                     
                     if (evento.type == SDL_KEYDOWN)
                         if (evento.key.keysym.sym == SDLK_SPACE){
+                            player_status = true;
                             player.vida = 200;
                             break;
                         }
