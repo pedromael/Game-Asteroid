@@ -6,7 +6,7 @@ bool calcular_probabilidade(int perc){
     return 0;
 }
 
-bool colidiu_nas_bordas(int *x, int *y, int *size){
+bool colidiu_nas_bordas(int *x, int *y, int *size){ 
     if (*x < 0 || *y < 0)
         return true;
     
@@ -177,7 +177,15 @@ void desativar_scudo(){
         player.scudo.ativo = false;
 }
 
-void retirar_tiro(int *i){
+void retirar_tiro(int *i, bool explosao){
+    if (explosao)
+    {
+        tiros[*i].rect.w += 4;
+        tiros[*i].rect.h += 4;
+
+        criar_explosao(render, 1, tiros[*i].rect);
+    }
+
     if (*i !=  --numero_tiros)
         tiros[*i] = tiros[numero_tiros];
 }
@@ -281,7 +289,7 @@ void actualizar_tiros(){
             tiros[i].rect.x += tiros[i].dx * tiros[i].arma.bala_velocidade;
             tiros[i].rect.y += tiros[i].dy * tiros[i].arma.bala_velocidade;
         }else
-            retirar_tiro(&i);
+            retirar_tiro(&i, false);
 }
 
 void destroir_meteoro(int *i)
@@ -301,18 +309,20 @@ void verificar_atingidos(){
         for (int i = 0; i < numero_inimigos; i++)
         {
             if (colidiram(&tiros[j].rect, &inimigos[i].Rect) && !tiros[j].inimigo){
-                retirar_tiro(&j);
+                retirar_tiro(&j, true);
                 if (inimigos[i].vida - tiros[j].arma.danos > 0)
                     inimigos[i].vida -= tiros[j].arma.danos;
                 else
-                    if (i != --numero_inimigos)
+                    if (i != --numero_inimigos){
+                        criar_explosao(render, 3, inimigos[i].Rect);
                         inimigos[i] = inimigos[numero_inimigos];
+                    }
                 break;
             }
         }
 
         if (colidiram(&tiros[j].rect, &player.rect) && tiros[j].inimigo){
-            retirar_tiro(&j);
+            retirar_tiro(&j, true);
             if (player.vida - tiros[j].arma.danos > 0)
                 player.vida -= tiros[j].arma.danos;
             else{
@@ -324,19 +334,21 @@ void verificar_atingidos(){
         for (size_t i = 0; i < numero_obstaculos; i++)
         {
             if (colidiram(&tiros[j].rect, &obstaculos[j].rect)){
-                retirar_tiro(&j);
+                retirar_tiro(&j, true);
                 if (obstaculos[i].vida - tiros[j].arma.danos > 0)
                     obstaculos[i].vida -= tiros[j].arma.danos;
                 else
-                    if (i != --numero_obstaculos)
+                    if (i != --numero_obstaculos){
+                        criar_explosao(render, 2, obstaculos[i].rect);
                         obstaculos[i] = obstaculos[numero_obstaculos];
+                    }
                 break;
             }
         }
         for (int i = 0; i < numero_meteoros; i++)
         {
             if (colidiram(&tiros[j].rect, &meteoros[i].rect)){
-                retirar_tiro(&j);
+                retirar_tiro(&j, true);
                 if (meteoros[i].vida - tiros[j].arma.danos > 0)
                     meteoros[i].vida -= tiros[j].arma.danos;
                 else
@@ -358,8 +370,10 @@ void verificar_atingidos(){
                     if (inimigos[i].vida - meteoros[j].danos > 0)
                         inimigos[i].vida -= meteoros[j].danos;
                     else
-                        if (i != --numero_inimigos)
+                        if (i != --numero_inimigos){
+                            criar_explosao(render, 3, inimigos[i].Rect);
                             inimigos[i] = inimigos[numero_inimigos];
+                        }
                     break;
                 }
             }
@@ -442,10 +456,20 @@ void actualizar_pacotes(){
     }
 }
 
+void actualizar_explosoes(){
+    for (size_t i = 0; i < numero_explosoes; i++)
+        if (explosoes[i].primeiro_quadro <= 0)
+            explosoes[i].primeiro_quadro = quadros;
+        else
+            if ((explosoes[i].tempo * 60 - (quadros - explosoes[i].primeiro_quadro)) <= 0)
+                explosoes[i] = explosoes[--numero_explosoes]; 
+}
+
 void actualizar_jogo(){
     actualiazar_inimigos();
     verificar_atingidos();
     actualizar_tiros();
     actualizar_meteoros();
     actualizar_pacotes();
+    actualizar_explosoes();
 }

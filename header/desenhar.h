@@ -9,6 +9,7 @@ void desenhar_player(SDL_Renderer *render);
 void desenhar_obstaculo(SDL_Renderer *render, obstaculo *obstacul);
 void desenhar_status(SDL_Renderer *render, TTF_Font *font);
 void desenhar_meteoro(SDL_Renderer *render, meteoro *meteoro);
+void desenhar_explosao(SDL_Renderer *render, explosao *eps);
 void desenhar_scudo();
 
 #endif

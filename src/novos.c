@@ -126,6 +126,29 @@ bool criar_meteoro(SDL_Renderer *render)
     return true;
 }
 
+bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
+    int i = numero_explosoes;
+    explosoes[i].rect = rect;
+
+    if (tipo == 1) // para um tiro
+    {
+        explosoes[i].tempo = 1;
+        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+    }else if(tipo == 2){ // para um e parede
+        explosoes[i].tempo = 3;
+        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+    }else if(tipo == 3){ // para um inimigo
+        explosoes[i].tempo = 2;
+        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+    }
+
+    if (!explosoes[i].textura && tipo != 1)
+        criar_explosao(render, tipo, rect);
+    
+    numero_explosoes++;
+    return true;
+}
+
 bool criar_pacote(meteoro *met){
     pacotes[numero_pacotes].rect.x = met->rect.x + (met->rect.w/2) - (TAMANHO_PACOTE/2);
     pacotes[numero_pacotes].rect.y = met->rect.y + (met->rect.h/2) - (TAMANHO_PACOTE/2);

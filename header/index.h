@@ -14,14 +14,14 @@
 
 #define PI 3.141592653589793
 
-#define LARGURA 1900
-#define ALTURA 1000
+#define LARGURA 1300
+#define ALTURA 850
 
 #define MAXIMO_PACOTES 5
 #define MAXIMO_INIMIGOS 20
 #define MAXIMO_SCUDO 2000
 
-#define TAMANHO_NAVE 50
+#define TAMANHO_NAVE 25
 #define TAMANHO_PACOTE 10
 #define TEMPO_PARA_APAGAR_METEORO 3
 
@@ -111,6 +111,14 @@ typedef struct
     int valor; // valor no caso de vida 
 } pacote;
 
+typedef struct
+{
+    SDL_Rect rect;
+    int tempo; //em segundo
+    int primeiro_quadro;
+    SDL_Texture *textura;
+} explosao;
+
 extern bool player_status;
 extern nave_player player;
 extern const int numero_armas;
@@ -129,6 +137,9 @@ extern int capacidade_meteoros;
 extern meteoro *meteoros;
 extern int numero_pacotes;
 extern pacote *pacotes;
+extern int numero_explosoes;
+extern int capacidades_explosoes;
+extern explosao *explosoes;
 
 extern SDL_Renderer *render;
 extern int segundos;

@@ -14,6 +14,10 @@ void desenhar_player(SDL_Renderer *render){
     SDL_RenderCopyEx(render, player.textura, NULL, &player.rect, angulo, &centro, SDL_FLIP_NONE);
 }
 
+void desenhar_explosao(SDL_Renderer *render, explosao *item){
+    SDL_RenderCopy(render, SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png")), NULL, &item->rect);
+}
+
 void desenhar_tiro(SDL_Renderer *render, tiro *tiros){
     SDL_RenderCopy(render, tiros->arma.textura, NULL, &tiros->rect);
 }

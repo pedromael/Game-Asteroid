@@ -18,6 +18,9 @@ int capacidade_meteoros = 10;
 meteoro *meteoros;
 int numero_pacotes = 0;
 pacote *pacotes;
+int numero_explosoes = 0;
+int capacidades_explosoes = 100;
+explosao *explosoes;
 
 SDL_Renderer *render;
 int segundos,quadros;
@@ -39,8 +42,6 @@ int main(int argc, char* argv[]){
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Font* font = TTF_OpenFont("files/Roboto-Light.ttf", 14);
 
-    printf("step 0\n");
-
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
     arsenal = malloc(numero_armas * sizeof(armas));
@@ -48,8 +49,7 @@ int main(int argc, char* argv[]){
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     meteoros = malloc(capacidade_meteoros * sizeof(meteoro));
     pacotes = malloc(MAXIMO_PACOTES * sizeof(pacote));
-
-    printf("step 1\n");
+    explosoes = malloc(capacidades_explosoes * sizeof(meteoro));
 
     //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
     int conf_armas[5][6] = {
@@ -85,19 +85,17 @@ int main(int argc, char* argv[]){
         arsenal[j].textura = SDL_CreateTextureFromSurface(render, IMG_Load(buffer));
     }
 
-    printf("step 2\n");
-
     obstaculos[0].rect.w = 20;
-    obstaculos[0].rect.h = 730;
+    obstaculos[0].rect.h = 330;
     obstaculos[0].rect.x = 640;
     obstaculos[0].rect.y = 87;
-    obstaculos[0].vida = 6300;
+    obstaculos[0].vida = 7500;
 
     obstaculos[1].rect.w = 205;
     obstaculos[1].rect.h = 16;
     obstaculos[1].rect.x = 68;
     obstaculos[1].rect.y = 300;
-    obstaculos[1].vida = 2890;
+    obstaculos[1].vida = 5890;
 
     SDL_Surface* surface = IMG_Load("files/img/navePlayer.png");
     player.textura = SDL_CreateTextureFromSurface(render,surface);
@@ -112,15 +110,14 @@ int main(int argc, char* argv[]){
     player.arma = malloc(player.numero_armas * sizeof(armas));
     player.arma[0] = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
-    player.vida = 200;
+    player.vida = 20000;
     player.scudo.vida = 2000;
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 
-    for (size_t i = 0; i <= numero_inimigos_inicial; i++){
+    for (size_t i = 0; i <= numero_inimigos_inicial; i++)
         if(!criar_inimigo(render,&inimigos[i],1)){
             i--;
         }
-    }
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
@@ -129,7 +126,8 @@ int main(int argc, char* argv[]){
     int tentar_criar_inimigo = 0;
     int tentar_criar_meteoro = 0;
     bool run = true;
-    printf("step 3: inicio do loop\n");
+
+    printf("step 1: inicio do loop\n");
     while (run)
     {
         if (quadros_corrente >= 60){
@@ -193,6 +191,9 @@ int main(int argc, char* argv[]){
 
         for (size_t i = 0; i < numero_tiros; i++)
             desenhar_tiro(render, &tiros[i]);
+
+        for (size_t i = 0; i < numero_explosoes; i++)
+            desenhar_explosao(render, &explosoes[i]);
 
         for (size_t i = 0; i < numero_meteoros; i++)
             desenhar_meteoro(render,&meteoros[i]);
