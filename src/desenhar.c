@@ -1,7 +1,10 @@
 #include "../header/desenhar.h"
 
 void desenhar_inimigo(SDL_Renderer *render, nave_inimiga *nave){
-    SDL_RenderCopy(render, nave->textura, NULL, &nave->Rect);
+    float angulo = atan2(nave->dy, nave->dx) * 180 / PI;
+    angulo += 90;
+    SDL_Point centro = { nave->Rect.w / 2, nave->Rect.h / 2 };
+    SDL_RenderCopyEx(render, nave->textura, NULL, &nave->Rect, angulo, &centro, SDL_FLIP_NONE);
 }
 
 void desenhar_player(SDL_Renderer *render){
@@ -15,7 +18,7 @@ void desenhar_player(SDL_Renderer *render){
 }
 
 void desenhar_explosao(SDL_Renderer *render, explosao *item){
-    SDL_RenderCopy(render, SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png")), NULL, &item->rect);
+    SDL_RenderCopy(render, item->textura, NULL, &item->rect);
 }
 
 void desenhar_tiro(SDL_Renderer *render, tiro *tiros){

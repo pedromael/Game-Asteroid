@@ -235,7 +235,7 @@ int area_de_impacto_mira(int *i){
     }
 }
 
-int actualiazar_inimigos(){
+int actualizar_inimigos(){
     for (int i = 0; i < numero_inimigos; i++)
     {
         if (area_de_impacto_mira(&i) < 150){
@@ -458,18 +458,16 @@ void actualizar_pacotes(){
 
 void actualizar_explosoes(){
     for (size_t i = 0; i < numero_explosoes; i++)
-        if (explosoes[i].primeiro_quadro <= 0)
-            explosoes[i].primeiro_quadro = SDL_GetTicks();
-        else
-            if ((explosoes[i].tempo * 1000 - (SDL_GetTicks() - explosoes[i].primeiro_quadro)) <= 0)
-                explosoes[i] = explosoes[--numero_explosoes]; 
+        if ((explosoes[i].tempo - (SDL_GetTicks() - explosoes[i].milissegundo_inicio)) <= 0)
+            if (i != --numero_explosoes)    
+                explosoes[i] = explosoes[numero_explosoes]; 
 }
 
 void actualizar_jogo(){
-    actualiazar_inimigos();
-    verificar_atingidos();
     actualizar_tiros();
+    verificar_atingidos();
+    actualizar_inimigos();
     actualizar_meteoros();
-    actualizar_pacotes();
     actualizar_explosoes();
+    actualizar_pacotes();
 }

@@ -22,6 +22,23 @@ int numero_explosoes = 0;
 int capacidades_explosoes = 100;
 explosao *explosoes;
 
+SDL_Texture *textura_explosao_tiro = NULL;
+SDL_Texture *textura_explosao_parede = NULL;
+SDL_Texture *textura_explosao_inimigo = NULL;
+
+bool inicializar_texturas(SDL_Renderer *render) {
+    textura_explosao_tiro = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    if (!textura_explosao_tiro) return false;
+
+    textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    if (!textura_explosao_parede) return false;
+
+    textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    if (!textura_explosao_inimigo) return false;
+
+    return true;
+}
+
 SDL_Renderer *render;
 int segundos,quadros;
 
@@ -126,8 +143,7 @@ int main(int argc, char* argv[]){
     int tentar_criar_inimigo = 0;
     int tentar_criar_meteoro = 0;
     bool run = true;
-
-    printf("step 1: inicio do loop\n");
+    inicializar_texturas(render);
     while (run)
     {
         segundos = SDL_GetTicks() / 1000;

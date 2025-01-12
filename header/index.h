@@ -114,8 +114,8 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
-    int tempo; //em segundo
-    int primeiro_quadro;
+    int tempo; // milisegundo
+    int milissegundo_inicio;
     SDL_Texture *textura;
 } explosao;
 
@@ -143,5 +143,9 @@ extern explosao *explosoes;
 
 extern SDL_Renderer *render;
 extern int segundos;
+
+extern SDL_Texture *textura_explosao_tiro;
+extern SDL_Texture *textura_explosao_parede;
+extern SDL_Texture *textura_explosao_inimigo;
 
 #endif

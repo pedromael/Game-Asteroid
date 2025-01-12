@@ -125,22 +125,26 @@ bool criar_meteoro(SDL_Renderer *render)
 
 bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     int i = numero_explosoes;
+
+    if(numero_explosoes >= capacidades_explosoes){
+        capacidades_explosoes += 5;
+        explosoes = realloc(explosoes, capacidades_explosoes * sizeof(explosao));
+    }
+    
     explosoes[i].rect = rect;
+    explosoes[i].milissegundo_inicio = SDL_GetTicks();
 
     if (tipo == 1) // para um tiro
     {
-        explosoes[i].tempo = 1;
-        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+        explosoes[i].tempo = 800;
+        explosoes[i].textura = textura_explosao_tiro;
     }else if(tipo == 2){ // para um e parede
-        explosoes[i].tempo = 3;
-        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+        explosoes[i].tempo = 3*1000;
+        explosoes[i].textura = textura_explosao_parede;
     }else if(tipo == 3){ // para um inimigo
-        explosoes[i].tempo = 2;
-        explosoes[i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/explosao0.png"));
+        explosoes[i].tempo = 2*1000;
+        explosoes[i].textura = textura_explosao_inimigo;
     }
-
-    if (!explosoes[i].textura && tipo != 1)
-        criar_explosao(render, tipo, rect);
     
     numero_explosoes++;
     return true;
