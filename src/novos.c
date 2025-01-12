@@ -118,9 +118,6 @@ bool criar_meteoro(SDL_Renderer *render)
         meteoros[numero_meteoros].dx = 0;
         meteoros[numero_meteoros].dy = -1;
     }    
-    
-    // meteoros[numero_meteoros].dx = 0;
-    // meteoros[numero_meteoros].dy = 0;
 
     numero_meteoros++;
     return true;

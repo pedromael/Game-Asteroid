@@ -122,7 +122,7 @@ int main(int argc, char* argv[]){
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
 
-    int quadros_corrente;
+    int segundos_corrente;
     int tentar_criar_inimigo = 0;
     int tentar_criar_meteoro = 0;
     bool run = true;
@@ -130,9 +130,10 @@ int main(int argc, char* argv[]){
     printf("step 1: inicio do loop\n");
     while (run)
     {
-        if (quadros_corrente >= 60){
-            quadros_corrente = 0;
-            segundos++;
+        segundos = SDL_GetTicks() / 1000;
+
+        if (segundos_corrente + 1 <= segundos){
+            segundos_corrente = segundos;
             tentar_criar_inimigo++;
             tentar_criar_meteoro++;
 
@@ -207,9 +208,6 @@ int main(int argc, char* argv[]){
 
         SDL_RenderPresent(render);
         SDL_Delay(16);
-
-        quadros++;
-        quadros_corrente++;
 
         if (!player_status)
         {

@@ -118,18 +118,18 @@ bool disparar(nave_inimiga *inimigos){
     if (!arma->no_pente)
     {
         if(arma->inicio_carregamento){
-            if (quadros - arma->inicio_carregamento >= arma->tempo_carregamento*60){
+            if (SDL_GetTicks() - arma->inicio_carregamento >= arma->tempo_carregamento*1000){
                 arma->no_pente = arma->pente_max;
                 arma->inicio_carregamento = false;
             }
         }else
-            arma->inicio_carregamento = quadros;
+            arma->inicio_carregamento = SDL_GetTicks();
 
         return false;
     }
 
     if(arma->ultimo_tiro != 0)
-        if (arma->ultimo_tiro + (60 / arma->bps) >= quadros)
+        if (arma->ultimo_tiro + (1000 / arma->bps) >= SDL_GetTicks())
             return false;
 
     if (numero_tiros >= capacidade_tiros){
@@ -152,7 +152,7 @@ bool disparar(nave_inimiga *inimigos){
     
     numero_tiros++;
     arma->no_pente--;
-    arma->ultimo_tiro = quadros; 
+    arma->ultimo_tiro = SDL_GetTicks(); 
 
     Mix_PlayChannel(-1, tiros[numero_tiros-1].arma.som, 0);
     return true;
@@ -197,9 +197,9 @@ int area_de_impacto_mira(int *i){
     int x = inimigos[*i].Rect.x - (player.rect.x + margen_de_erro);
     int y = inimigos[*i].Rect.y - (player.rect.y + margen_de_erro);
 
-    if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*60 <= quadros || inimigos[*i].ultima_ronda == 0)
+    if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*1000 <= SDL_GetTicks() || inimigos[*i].ultima_ronda == 0)
     {
-        inimigos[*i].ultima_ronda = quadros;
+        inimigos[*i].ultima_ronda = SDL_GetTicks();
 
         if (abs(x) < abs(y))
         {
@@ -459,9 +459,9 @@ void actualizar_pacotes(){
 void actualizar_explosoes(){
     for (size_t i = 0; i < numero_explosoes; i++)
         if (explosoes[i].primeiro_quadro <= 0)
-            explosoes[i].primeiro_quadro = quadros;
+            explosoes[i].primeiro_quadro = SDL_GetTicks();
         else
-            if ((explosoes[i].tempo * 60 - (quadros - explosoes[i].primeiro_quadro)) <= 0)
+            if ((explosoes[i].tempo * 1000 - (SDL_GetTicks() - explosoes[i].primeiro_quadro)) <= 0)
                 explosoes[i] = explosoes[--numero_explosoes]; 
 }
 

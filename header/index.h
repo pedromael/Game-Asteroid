@@ -131,7 +131,7 @@ extern int capacidade_tiros;
 extern tiro *tiros;
 extern int numero_obstaculos;
 extern obstaculo *obstaculos;
-extern int segundos,quadros;
+extern int segundos;
 extern int numero_meteoros;
 extern int capacidade_meteoros;
 extern meteoro *meteoros;
