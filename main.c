@@ -108,36 +108,9 @@ int main(int argc, char* argv[]){
 
         if(!control()) return false;
 
-        //printf("step 4: a actualizar\n");
-
-        actualizar_jogo();
-
-        //printf("step 5: actualizado\n");
-
-        SDL_SetRenderDrawColor(render,0,0,0,255);
-        desenhar_player(render);
-
-        for (size_t i = 0; i < numero_inimigos; i++)
-            desenhar_inimigo(render,&inimigos[i]);
-
-        for (size_t i = 0; i < numero_obstaculos; i++)
-            desenhar_obstaculo(render,&obstaculos[i]);
-
-        for (size_t i = 0; i < numero_balas; i++)
-            desenhar_bala(render, &balas[i]);
-
-        for (size_t i = 0; i < numero_explosoes; i++)
-            desenhar_explosao(render, &explosoes[i]);
-
-        for (size_t i = 0; i < numero_meteoros; i++)
-            desenhar_meteoro(render,&meteoros[i]);
-        
-        if (player.scudo.ativo)
-            desenhar_scudo();
-
-        desenhar_status(render,font);
-
-        //printf("step 6: desenhos feitos\n");
+        actualizar_jogo(); // actualizar jogo 
+        SDL_SetRenderDrawColor(render,0,0,0,255); // reinicia a cor do render
+        desenhar(font); // desenhar jogo
 
         SDL_RenderPresent(render);
         SDL_Delay(16);

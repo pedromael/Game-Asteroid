@@ -60,3 +60,27 @@ void desenhar_status(SDL_Renderer *render, TTF_Font *font){
     SDL_Rect Rect1 = {10, 5, surface->w, surface->h};
     SDL_RenderCopy(render, texture, NULL, &Rect1);
 }
+
+void desenhar(TTF_Font* font){
+    desenhar_player(render);
+
+    for (size_t i = 0; i < numero_inimigos; i++)
+        desenhar_inimigo(render,&inimigos[i]);
+
+    for (size_t i = 0; i < numero_obstaculos; i++)
+        desenhar_obstaculo(render,&obstaculos[i]);
+
+    for (size_t i = 0; i < numero_balas; i++)
+        desenhar_bala(render, &balas[i]);
+
+    for (size_t i = 0; i < numero_explosoes; i++)
+        desenhar_explosao(render, &explosoes[i]);
+
+    for (size_t i = 0; i < numero_meteoros; i++)
+        desenhar_meteoro(render,&meteoros[i]);
+    
+    if (player.scudo.ativo)
+        desenhar_scudo();
+
+    desenhar_status(render,font);
+}
