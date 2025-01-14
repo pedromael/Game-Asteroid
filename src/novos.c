@@ -1,8 +1,9 @@
 #include "../header/novos.h"
 
 bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
-     if(numero_inimigos >= MAXIMO_INIMIGOS)
-        return false;
+    //return false;
+    if(numero_inimigos >= MAXIMO_INIMIGOS)
+    return false;
     
     int i,size = TAMANHO_NAVE;
     for (i = 0; i < 500; i++){

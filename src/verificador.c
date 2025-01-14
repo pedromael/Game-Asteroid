@@ -141,8 +141,9 @@ bool disparar(nave_inimiga *inimigos){
     balas[numero_balas].rect.y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
     balas[numero_balas].rect.w = arma->bala_size;
     balas[numero_balas].rect.h = arma->bala_size;
-        balas[numero_balas].dx = dx;
-        balas[numero_balas].dy = dy;
+    balas[numero_balas].distancia_percorrida = 0;
+    balas[numero_balas].dx = dx;
+    balas[numero_balas].dy = dy;
 
     balas[numero_balas].arma = *arma;
     if (inimigos != NULL)
@@ -286,8 +287,12 @@ void actualizar_balas(){
     for (int i = 0; i < numero_balas; i++)
         if (!item_colidiu(&balas[i].rect.x,&balas[i].rect.y,&balas[i].arma.bala_size,"bala"))
         {
-            balas[i].rect.x += balas[i].dx * balas[i].arma.bala_velocidade;
-            balas[i].rect.y += balas[i].dy * balas[i].arma.bala_velocidade;
+            if(balas[i].distancia_percorrida + balas[i].arma.bala_velocidade <= balas[i].arma.alcance){
+                balas[i].rect.x += balas[i].dx * balas[i].arma.bala_velocidade;
+                balas[i].rect.y += balas[i].dy * balas[i].arma.bala_velocidade;
+                balas[i].distancia_percorrida += balas[i].arma.bala_velocidade; // distancia percorrida pela bala
+            }else
+                retirar_bala(&i, false);    
         }else
             retirar_bala(&i, false);
 }
