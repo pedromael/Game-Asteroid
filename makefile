@@ -14,7 +14,7 @@ TARGET = Asteroid
 HEADERS =  
 
 # Arquivos fontes
-SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c
+SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c src/inicializador.c
 
 # Arquivos objetos
 OBJS = $(SRCS:.c=.o)
