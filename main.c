@@ -10,9 +10,9 @@ int numero_obstaculos = 2;
 obstaculo *obstaculos;
 const int numero_armas = 5;
 armas *arsenal;
-int numero_tiros;
-int capacidade_tiros = 50;
-tiro *tiros;
+int numero_balas;
+int capacidade_balas = 50;
+bala *balas;
 int numero_meteoros = 0;
 int capacidade_meteoros = 10;
 meteoro *meteoros;
@@ -22,13 +22,13 @@ int numero_explosoes = 0;
 int capacidades_explosoes = 100;
 explosao *explosoes;
 
-SDL_Texture *textura_explosao_tiro = NULL;
+SDL_Texture *textura_explosao_bala = NULL;
 SDL_Texture *textura_explosao_parede = NULL;
 SDL_Texture *textura_explosao_inimigo = NULL;
 
 bool inicializar_texturas(SDL_Renderer *render) {
-    textura_explosao_tiro = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
-    if (!textura_explosao_tiro) return false;
+    textura_explosao_bala = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    if (!textura_explosao_bala) return false;
 
     textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
     if (!textura_explosao_parede) return false;
@@ -62,19 +62,20 @@ int main(int argc, char* argv[]){
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
     arsenal = malloc(numero_armas * sizeof(armas));
-    tiros = malloc(capacidade_tiros * sizeof(tiro));
+    balas = malloc(capacidade_balas * sizeof(bala));
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     meteoros = malloc(capacidade_meteoros * sizeof(meteoro));
     pacotes = malloc(MAXIMO_PACOTES * sizeof(pacote));
     explosoes = malloc(capacidades_explosoes * sizeof(meteoro));
 
-    //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size
+    //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size - alcance
+
     int conf_armas[5][6] = {
-        { 5,  10, 13, 30,  2,  3},
-        {10,  10, 11, 25,  1,  3},
-        {15,   6, 13, 20,  3,  4},
-        {50,   2,  9, 10,  5,  7},
-        {35,  25, 10, 35,  1,  5}
+        { 5,  10, 13, 30,  2,  3, 200},
+        {10,  10, 11, 25,  1,  3, 160},
+        {15,   6, 13, 20,  3,  4, 160},
+        {50,   2,  9, 10,  5,  7, 130},
+        {35,  25, 10, 35,  1,  5, 150}
     };
 
     char img_som_armas[5][2][12] = {
@@ -92,9 +93,10 @@ int main(int argc, char* argv[]){
         arsenal[j].pente_max =          conf_armas[j][3];
         arsenal[j].tempo_carregamento = conf_armas[j][4];
         arsenal[j].bala_size =          conf_armas[j][5];
+        arsenal[j].alcance =            conf_armas[j][6];
         arsenal[j].no_pente =           arsenal[j].pente_max;
         arsenal[j].inicio_carregamento = false;
-        arsenal[j].ultimo_tiro = false;
+        arsenal[j].ultimo_bala = false;
         char buffer[25];
         sprintf(buffer, "files/audio/%s", img_som_armas[j][1]);
         arsenal[j].som =  Mix_LoadWAV(buffer);
@@ -206,8 +208,8 @@ int main(int argc, char* argv[]){
         for (size_t i = 0; i < numero_obstaculos; i++)
             desenhar_obstaculo(render,&obstaculos[i]);
 
-        for (size_t i = 0; i < numero_tiros; i++)
-            desenhar_tiro(render, &tiros[i]);
+        for (size_t i = 0; i < numero_balas; i++)
+            desenhar_bala(render, &balas[i]);
 
         for (size_t i = 0; i < numero_explosoes; i++)
             desenhar_explosao(render, &explosoes[i]);

@@ -134,10 +134,10 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     explosoes[i].rect = rect;
     explosoes[i].milissegundo_inicio = SDL_GetTicks();
 
-    if (tipo == 1) // para um tiro
+    if (tipo == 1) // para um bala
     {
         explosoes[i].tempo = 800;
-        explosoes[i].textura = textura_explosao_tiro;
+        explosoes[i].textura = textura_explosao_bala;
     }else if(tipo == 2){ // para um e parede
         explosoes[i].tempo = 3*1000;
         explosoes[i].textura = textura_explosao_parede;

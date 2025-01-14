@@ -37,9 +37,10 @@ typedef struct
     int pente_max;
     SDL_Texture *textura;
     int tempo_carregamento;
+    int alcance;
     int bala_velocidade;
     int inicio_carregamento;
-    int ultimo_tiro;
+    int ultimo_bala;
     Mix_Chunk *som;
 } armas;
 
@@ -48,7 +49,7 @@ typedef struct{
     int dx,dy;
     armas arma;
     int inimigo;
-} tiro;
+} bala;
 
 typedef struct
 {
@@ -126,9 +127,9 @@ extern armas *arsenal;
 extern int numero_inimigos;
 extern int capacidade_inimigos;
 extern nave_inimiga *inimigos;
-extern int numero_tiros;
-extern int capacidade_tiros;
-extern tiro *tiros;
+extern int numero_balas;
+extern int capacidade_balas;
+extern bala *balas;
 extern int numero_obstaculos;
 extern obstaculo *obstaculos;
 extern int segundos;
@@ -144,7 +145,7 @@ extern explosao *explosoes;
 extern SDL_Renderer *render;
 extern int segundos;
 
-extern SDL_Texture *textura_explosao_tiro;
+extern SDL_Texture *textura_explosao_bala;
 extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
 

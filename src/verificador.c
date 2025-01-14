@@ -128,33 +128,33 @@ bool disparar(nave_inimiga *inimigos){
         return false;
     }
 
-    if(arma->ultimo_tiro != 0)
-        if (arma->ultimo_tiro + (1000 / arma->bps) >= SDL_GetTicks())
+    if(arma->ultimo_bala != 0)
+        if (arma->ultimo_bala + (1000 / arma->bps) >= SDL_GetTicks())
             return false;
 
-    if (numero_tiros >= capacidade_tiros){
-        capacidade_tiros += 5; 
-        tiros = realloc(tiros, capacidade_tiros * sizeof(tiro));
+    if (numero_balas >= capacidade_balas){
+        capacidade_balas += 5; 
+        balas = realloc(balas, capacidade_balas * sizeof(bala));
     }
 
-    tiros[numero_tiros].rect.x = x + TAMANHO_NAVE/2 - arma->bala_size/2;
-    tiros[numero_tiros].rect.y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
-    tiros[numero_tiros].rect.w = arma->bala_size;
-    tiros[numero_tiros].rect.h = arma->bala_size;
-        tiros[numero_tiros].dx = dx;
-        tiros[numero_tiros].dy = dy;
+    balas[numero_balas].rect.x = x + TAMANHO_NAVE/2 - arma->bala_size/2;
+    balas[numero_balas].rect.y = y + TAMANHO_NAVE/2 - arma->bala_size/2;
+    balas[numero_balas].rect.w = arma->bala_size;
+    balas[numero_balas].rect.h = arma->bala_size;
+        balas[numero_balas].dx = dx;
+        balas[numero_balas].dy = dy;
 
-    tiros[numero_tiros].arma = *arma;
+    balas[numero_balas].arma = *arma;
     if (inimigos != NULL)
-        tiros[numero_tiros].inimigo = 1;
+        balas[numero_balas].inimigo = 1;
     else
-        tiros[numero_tiros].inimigo = 0;
+        balas[numero_balas].inimigo = 0;
     
-    numero_tiros++;
+    numero_balas++;
     arma->no_pente--;
-    arma->ultimo_tiro = SDL_GetTicks(); 
+    arma->ultimo_bala = SDL_GetTicks(); 
 
-    Mix_PlayChannel(-1, tiros[numero_tiros-1].arma.som, 0);
+    Mix_PlayChannel(-1, balas[numero_balas-1].arma.som, 0);
     return true;
 }
 
@@ -177,17 +177,17 @@ void desativar_scudo(){
         player.scudo.ativo = false;
 }
 
-void retirar_tiro(int *i, bool explosao){
+void retirar_bala(int *i, bool explosao){
     if (explosao)
     {
-        tiros[*i].rect.w += 4;
-        tiros[*i].rect.h += 4;
+        balas[*i].rect.w += 4;
+        balas[*i].rect.h += 4;
 
-        criar_explosao(render, 1, tiros[*i].rect);
+        criar_explosao(render, 1, balas[*i].rect);
     }
 
-    if (*i !=  --numero_tiros)
-        tiros[*i] = tiros[numero_tiros];
+    if (*i !=  --numero_balas)
+        balas[*i] = balas[numero_balas];
 }
 
 int area_de_impacto_mira(int *i){
@@ -282,14 +282,14 @@ int actualizar_inimigos(){
     return 1;
 }
 
-void actualizar_tiros(){
-    for (int i = 0; i < numero_tiros; i++)
-        if (!item_colidiu(&tiros[i].rect.x,&tiros[i].rect.y,&tiros[i].arma.bala_size,"bala"))
+void actualizar_balas(){
+    for (int i = 0; i < numero_balas; i++)
+        if (!item_colidiu(&balas[i].rect.x,&balas[i].rect.y,&balas[i].arma.bala_size,"bala"))
         {
-            tiros[i].rect.x += tiros[i].dx * tiros[i].arma.bala_velocidade;
-            tiros[i].rect.y += tiros[i].dy * tiros[i].arma.bala_velocidade;
+            balas[i].rect.x += balas[i].dx * balas[i].arma.bala_velocidade;
+            balas[i].rect.y += balas[i].dy * balas[i].arma.bala_velocidade;
         }else
-            retirar_tiro(&i, false);
+            retirar_bala(&i, false);
 }
 
 void destroir_meteoro(int *i)
@@ -304,14 +304,14 @@ void destroir_meteoro(int *i)
 }
 
 void verificar_atingidos(){
-    for (int j = 0; j < numero_tiros; j++)
+    for (int j = 0; j < numero_balas; j++)
     {
         for (int i = 0; i < numero_inimigos; i++)
         {
-            if (colidiram(&tiros[j].rect, &inimigos[i].Rect) && !tiros[j].inimigo){
-                retirar_tiro(&j, true);
-                if (inimigos[i].vida - tiros[j].arma.danos > 0)
-                    inimigos[i].vida -= tiros[j].arma.danos;
+            if (colidiram(&balas[j].rect, &inimigos[i].Rect) && !balas[j].inimigo){
+                retirar_bala(&j, true);
+                if (inimigos[i].vida - balas[j].arma.danos > 0)
+                    inimigos[i].vida -= balas[j].arma.danos;
                 else
                     if (i != --numero_inimigos){
                         criar_explosao(render, 3, inimigos[i].Rect);
@@ -321,10 +321,10 @@ void verificar_atingidos(){
             }
         }
 
-        if (colidiram(&tiros[j].rect, &player.rect) && tiros[j].inimigo){
-            retirar_tiro(&j, true);
-            if (player.vida - tiros[j].arma.danos > 0)
-                player.vida -= tiros[j].arma.danos;
+        if (colidiram(&balas[j].rect, &player.rect) && balas[j].inimigo){
+            retirar_bala(&j, true);
+            if (player.vida - balas[j].arma.danos > 0)
+                player.vida -= balas[j].arma.danos;
             else{
                 player_status = false;
                 player.vida = 0;
@@ -333,10 +333,10 @@ void verificar_atingidos(){
 
         for (size_t i = 0; i < numero_obstaculos; i++)
         {
-            if (colidiram(&tiros[j].rect, &obstaculos[j].rect)){
-                retirar_tiro(&j, true);
-                if (obstaculos[i].vida - tiros[j].arma.danos > 0)
-                    obstaculos[i].vida -= tiros[j].arma.danos;
+            if (colidiram(&balas[j].rect, &obstaculos[j].rect)){
+                retirar_bala(&j, true);
+                if (obstaculos[i].vida - balas[j].arma.danos > 0)
+                    obstaculos[i].vida -= balas[j].arma.danos;
                 else
                     if (i != --numero_obstaculos){
                         criar_explosao(render, 2, obstaculos[i].rect);
@@ -347,10 +347,10 @@ void verificar_atingidos(){
         }
         for (int i = 0; i < numero_meteoros; i++)
         {
-            if (colidiram(&tiros[j].rect, &meteoros[i].rect)){
-                retirar_tiro(&j, true);
-                if (meteoros[i].vida - tiros[j].arma.danos > 0)
-                    meteoros[i].vida -= tiros[j].arma.danos;
+            if (colidiram(&balas[j].rect, &meteoros[i].rect)){
+                retirar_bala(&j, true);
+                if (meteoros[i].vida - balas[j].arma.danos > 0)
+                    meteoros[i].vida -= balas[j].arma.danos;
                 else
                     destroir_meteoro(&i);
                 break;
@@ -464,7 +464,7 @@ void actualizar_explosoes(){
 }
 
 void actualizar_jogo(){
-    actualizar_tiros();
+    actualizar_balas();
     verificar_atingidos();
     actualizar_inimigos();
     actualizar_meteoros();
