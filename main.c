@@ -71,10 +71,10 @@ int main(int argc, char* argv[]){
             tentar_criar_meteoro++;
 
             if (player.scudo.vida < MAXIMO_SCUDO)
-                player.scudo.vida = (player.scudo.vida + 5 < MAXIMO_SCUDO)? 5: 1;
+                player.scudo.vida = (player.scudo.vida + 2 < MAXIMO_SCUDO)? 2: 1;
         }
 
-        if (tentar_criar_meteoro >= 3)
+        if (tentar_criar_meteoro >= 1)
             if (calcular_probabilidade(80))
             {
                 criar_meteoro(render);

@@ -294,7 +294,7 @@ void actualizar_balas(){
             }else
                 retirar_bala(&i, false);    
         }else
-            retirar_bala(&i, false);
+            retirar_bala(&i, true);
 }
 
 void destroir_meteoro(int *i)
