@@ -103,36 +103,18 @@ int main(int argc, char* argv[]){
         }else if(numero_inimigos == 0)
             criar_inimigo(render,&inimigos[numero_inimigos],1);
 
-        SDL_RenderClear(render);
-        SDL_RenderCopy(render, fundo, NULL, &rect_fundo);
-
         if(!control()) return false;
 
         actualizar_jogo(); // actualizar jogo 
-        SDL_SetRenderDrawColor(render,0,0,0,255); // reinicia a cor do render
-        desenhar(font); // desenhar jogo
+        desenhar(font,fundo,rect_fundo); // desenhar jogo
 
         SDL_RenderPresent(render);
-        SDL_Delay(16);
+        SDL_Delay(15); // 16 e o mais proximo de 60fps
 
         if (!player_status)
         {
             printf("vc perdeu, aperte SPACO para reiniciar jogo\n");
-            while (1)
-            {
-                SDL_Event evento;
-                while (SDL_PollEvent(&evento)){
-                    if (evento.type == SDL_QUIT)
-                        return 0;
-                    
-                    if (evento.type == SDL_KEYDOWN)
-                        if (evento.key.keysym.sym == SDLK_SPACE){
-                            player_status = true;
-                            player.vida = 200;
-                            break;
-                        }
-                }
-            }
+            if(!control_perdeu()) return false;
         }
     }
 

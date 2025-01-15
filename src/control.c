@@ -45,3 +45,21 @@ bool control(){
     
     return true;
 }
+
+bool control_perdeu(){
+    while (1)
+    {
+        SDL_Event evento;
+        while (SDL_PollEvent(&evento)){
+            if (evento.type == SDL_QUIT)
+                return 0;
+            
+            if (evento.type == SDL_KEYDOWN)
+                if (evento.key.keysym.sym == SDLK_SPACE){
+                    player_status = true;
+                    player.vida = 200;
+                    break;
+                }
+        }
+    }
+}

@@ -463,7 +463,7 @@ void actualizar_pacotes(){
 
 void actualizar_explosoes(){
     for (size_t i = 0; i < numero_explosoes; i++)
-        if ((explosoes[i].tempo - (SDL_GetTicks() - explosoes[i].milissegundo_inicio)) <= 0)
+        if ((SDL_GetTicks() - explosoes[i].milissegundo_inicio) > explosoes[i].tempo)
             if (i != --numero_explosoes)    
                 explosoes[i] = explosoes[numero_explosoes]; 
 }

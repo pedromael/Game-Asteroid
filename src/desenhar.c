@@ -61,7 +61,10 @@ void desenhar_status(SDL_Renderer *render, TTF_Font *font){
     SDL_RenderCopy(render, texture, NULL, &Rect1);
 }
 
-void desenhar(TTF_Font* font){
+void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
+    SDL_RenderClear(render);
+    SDL_RenderCopy(render, fundo, NULL, &rect_fundo);
+
     desenhar_player(render);
 
     for (size_t i = 0; i < numero_inimigos; i++)

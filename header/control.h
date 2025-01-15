@@ -7,5 +7,6 @@
 extern nave_player player;
 
 bool control();
+bool control_perdeu();
 
 #endif
