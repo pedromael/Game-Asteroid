@@ -28,6 +28,9 @@
 #define VELOCIDADE_INICIAL 6
 #define VELOCIDADE_INIMIGA 3
 
+#define NUMERO_DE_ARMAS 5
+#define TIPOS_DE_INIMIGOS 3
+
 typedef struct
 {
     int danos;
@@ -149,5 +152,7 @@ extern int segundos;
 extern SDL_Texture *textura_explosao_bala;
 extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
+
+extern SDL_Texture *textura_inimigos;
 
 #endif

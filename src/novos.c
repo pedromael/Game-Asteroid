@@ -24,17 +24,14 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     }
 
     nivel = (rand() % 3) + 1;
-
+    inimigo->textura = textura_inimigos[nivel-1];
     if (nivel == 1){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave0.png"));
         inimigo->arma = arsenal[0];
     }
     else if (nivel == 2){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave1.png"));
         inimigo->arma = arsenal[1];
     }
     else if (nivel == 3){
-        inimigo->textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/nave2.png"));
         inimigo->arma = arsenal[4];
     }
 
@@ -154,6 +151,8 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
 bool criar_pacote(meteoro *met){
     pacotes[numero_pacotes].rect.x = met->rect.x + (met->rect.w/2) - (TAMANHO_PACOTE/2);
     pacotes[numero_pacotes].rect.y = met->rect.y + (met->rect.h/2) - (TAMANHO_PACOTE/2);
+    pacotes[numero_pacotes].rect.w = TAMANHO_PACOTE;
+    pacotes[numero_pacotes].rect.h = TAMANHO_PACOTE;
 
     pacotes[numero_pacotes].tipo = rand()%3;
 

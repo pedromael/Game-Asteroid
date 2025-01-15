@@ -34,6 +34,11 @@ void desenhar_obstaculo(SDL_Renderer *render, obstaculo *obstacul){
     SDL_RenderDrawRect(render, &obstacul->rect);
 }
 
+void desenhar_pacote(SDL_Renderer *render, pacote *pacote){
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    SDL_RenderDrawRect(render, &pacote->rect);
+}
+
 void desenhar_scudo(){
     SDL_RenderDrawRect(render, &player.scudo.rect);
 }
@@ -81,6 +86,9 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
 
     for (size_t i = 0; i < numero_meteoros; i++)
         desenhar_meteoro(render,&meteoros[i]);
+
+    for (size_t i = 0; i < numero_pacotes; i++)
+        desenhar_pacote(render,&pacotes[i]);
     
     if (player.scudo.ativo)
         desenhar_scudo();

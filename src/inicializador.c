@@ -29,6 +29,13 @@ bool inicializar_texturas(SDL_Renderer *render) {
     textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
     if (!textura_explosao_inimigo) return false;
 
+    for (size_t i = 0; i < 5; i++){
+        char buffer[25];
+        sprintf(buffer, "files/img/nave%d.png", (int)i);
+        textura_inimigos[i] = SDL_CreateTextureFromSurface(render, IMG_Load(buffer));
+        if (!textura_inimigos[i]) return false;
+    }
+
     return true;
 }
 
@@ -46,15 +53,15 @@ void inicializar_variaveis_globais(){
 void inicializar_arsenal(){
     //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size - alcance
 
-    int conf_armas[5][7] = {
-        { 5,  10, 13, 30,  2,  3, 480},
-        {10,  10, 11, 25,  1,  3, 370},
-        {15,   6, 13, 20,  3,  4, 370},
-        {50,   2,  9, 10,  5,  7, 350},
-        {35,  25, 10, 35,  1,  5, 380}
+    int conf_armas[NUMERO_DE_ARMAS][7] = {
+        { 5,  10, 13, 30,  2,  3, 580},
+        {10,  10, 11, 25,  1,  3, 470},
+        {15,   6, 13, 20,  3,  4, 470},
+        {50,   2,  9, 10,  5,  7, 450},
+        {35,  25, 10, 35,  1,  5, 500}
     };
 
-    char img_som_armas[5][2][12] = {
+    char img_som_armas[NUMERO_DE_ARMAS][2][12] = {
         {"bala0.png", "shoot1.wav"},
         {"bala0.png", "shoot2.wav"},
         {"bala1.png", ""},

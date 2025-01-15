@@ -22,9 +22,10 @@ int numero_explosoes = 0;
 int capacidades_explosoes = 100;
 explosao *explosoes;
 
-SDL_Texture *textura_explosao_bala = NULL;
-SDL_Texture *textura_explosao_parede = NULL;
-SDL_Texture *textura_explosao_inimigo = NULL;
+SDL_Texture *textura_explosao_bala;
+SDL_Texture *textura_explosao_parede;
+SDL_Texture *textura_explosao_inimigo;
+SDL_Texture textura_inimigos[TIPOS_DE_INIMIGOS];
 
 SDL_Renderer *render;
 int segundos,quadros;
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]){
     SDL_Window *window = SDL_CreateWindow("Asteroid V0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, SDL_WINDOW_SHOWN);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Font* font = TTF_OpenFont("files/Roboto-Light.ttf", 14); 
-
+    
     inicializar(); // inicializar jogo
 
     for (size_t i = 0; i <= numero_inimigos_inicial; i++)
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]){
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
 
-    int segundos_corrente;
+    int segundos_corrente = 0;
     int tentar_criar_inimigo = 0;
     int tentar_criar_meteoro = 0;
     bool run = true;
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]){
                 player.scudo.vida = (player.scudo.vida + 2 < MAXIMO_SCUDO)? 2: 1;
         }
 
-        if (tentar_criar_meteoro >= 1)
+        if (tentar_criar_meteoro >= 3)
             if (calcular_probabilidade(80))
             {
                 criar_meteoro(render);

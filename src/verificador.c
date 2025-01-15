@@ -58,10 +58,12 @@ int item_colidiu(int *x, int *y, int *size, char *item){
     if (strcmp(item, "meteoro") != 0)
         for (size_t j = 0; j < numero_meteoros; j++)
         {
-            bool colisaoHorizontal = (meteoros[j].rect.x < *x + *size) && (meteoros[j].rect.x + meteoros[j].rect.w > *x);
-            bool colisaoVertical = (meteoros[j].rect.y < *y + *size) && (meteoros[j].rect.y + meteoros[j].rect.h > *y);
-            if (colisaoHorizontal && colisaoVertical)
-                return 1;
+            if(meteoros[j].status){
+                bool colisaoHorizontal = (meteoros[j].rect.x < *x + *size) && (meteoros[j].rect.x + meteoros[j].rect.w > *x);
+                bool colisaoVertical = (meteoros[j].rect.y < *y + *size) && (meteoros[j].rect.y + meteoros[j].rect.h > *y);
+                if (colisaoHorizontal && colisaoVertical)
+                    return 1;
+            }
         }
     
     if (strcmp(item, "player") != 0)
@@ -299,6 +301,9 @@ void actualizar_balas(){
 
 void destroir_meteoro(int *i)
 {
+    if (calcular_probabilidade(100))
+        criar_pacote(&meteoros[*i]);
+    
     if (meteoros[*i].status)
     {
         meteoros[*i].status = false;
@@ -352,7 +357,7 @@ void verificar_atingidos(){
         }
         for (int i = 0; i < numero_meteoros; i++)
         {
-            if (colidiram(&balas[j].rect, &meteoros[i].rect)){
+            if (colidiram(&balas[j].rect, &meteoros[i].rect) && meteoros[i].status){
                 retirar_bala(&j, true);
                 if (meteoros[i].vida - balas[j].arma.danos > 0)
                     meteoros[i].vida -= balas[j].arma.danos;
@@ -424,14 +429,8 @@ void actualizar_meteoros()
         }
         if(!meteoros[i].status){
             if (meteoros[i].tempo_partiu + TEMPO_PARA_APAGAR_METEORO <= segundos)
-            {
-                if(i != numero_meteoros--){
-                    if (calcular_probabilidade(0))
-                        criar_pacote(&meteoros[i]);
-                    
+                if(i != --numero_meteoros)            
                     meteoros[i] = meteoros[numero_meteoros];
-                }
-            }
         }
     }
 }
