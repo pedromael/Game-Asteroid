@@ -7,7 +7,7 @@
 
 void actualizar_jogo();
 bool calcular_probabilidade(int perc);
-bool colidiu_nas_bordas();
+bool colidiu_nas_bordas(int *x, int *y, int *size);
 int item_colidiu(int *x, int *y, int *size, char *item);
 bool disparar(nave_inimiga *inimigos);
 void ativar_scudo();

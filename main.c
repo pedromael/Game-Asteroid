@@ -8,10 +8,9 @@ int capacidade_inimigos = 10;
 nave_inimiga *inimigos;
 int numero_obstaculos = 2;
 obstaculo *obstaculos;
-const int numero_armas = 5;
 armas *arsenal;
 int numero_balas;
-int capacidade_balas = 50;
+int capacidade_balas = 25;
 bala *balas;
 int numero_meteoros = 0;
 int capacidade_meteoros = 10;
@@ -19,13 +18,14 @@ meteoro *meteoros;
 int numero_pacotes = 0;
 pacote *pacotes;
 int numero_explosoes = 0;
-int capacidades_explosoes = 100;
+int capacidades_explosoes = 25;
 explosao *explosoes;
 
 SDL_Texture *textura_explosao_bala;
 SDL_Texture *textura_explosao_parede;
 SDL_Texture *textura_explosao_inimigo;
-SDL_Texture textura_inimigos[TIPOS_DE_INIMIGOS];
+SDL_Texture *textura_meteoro;
+SDL_Texture **textura_inimigos;
 
 SDL_Renderer *render;
 int segundos,quadros;

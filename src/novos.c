@@ -97,7 +97,7 @@ bool criar_meteoro(SDL_Renderer *render)
     meteoros[numero_meteoros].velocidade = (rand() % 6) + 2;
     meteoros[numero_meteoros].status = true;
 
-    meteoros[numero_meteoros].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/meteoro/castanho1.png"));
+    meteoros[numero_meteoros].textura = textura_meteoro;
 
     if(!meteoros[numero_meteoros].textura){
         return false;
@@ -149,10 +149,17 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
 }
 
 bool criar_pacote(meteoro *met){
+    if (numero_pacotes >= MAXIMO_PACOTES)
+       return false;
+    
     pacotes[numero_pacotes].rect.x = met->rect.x + (met->rect.w/2) - (TAMANHO_PACOTE/2);
     pacotes[numero_pacotes].rect.y = met->rect.y + (met->rect.h/2) - (TAMANHO_PACOTE/2);
     pacotes[numero_pacotes].rect.w = TAMANHO_PACOTE;
     pacotes[numero_pacotes].rect.h = TAMANHO_PACOTE;
+
+    if (colidiu_nas_bordas(&pacotes[numero_pacotes].rect.x, &pacotes[numero_pacotes].rect.y, &pacotes[numero_pacotes].rect.w))
+        return false;
+    
 
     pacotes[numero_pacotes].tipo = rand()%3;
 
@@ -160,7 +167,7 @@ bool criar_pacote(meteoro *met){
         pacotes[numero_pacotes].valor = (rand()%70) + 20;
     }
     if(pacotes[numero_pacotes].tipo == 1){
-        pacotes[numero_pacotes].valor = (rand()%(numero_armas-1)) + 1;
+        pacotes[numero_pacotes].valor = (rand()%(NUMERO_DE_ARMAS-1)) + 1;
     }
     if(pacotes[numero_pacotes].tipo == 2){
         pacotes[numero_pacotes].valor = (rand()%200) + 100;

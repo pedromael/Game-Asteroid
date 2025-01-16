@@ -29,7 +29,10 @@ bool inicializar_texturas(SDL_Renderer *render) {
     textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
     if (!textura_explosao_inimigo) return false;
 
-    for (size_t i = 0; i < 5; i++){
+    textura_meteoro = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/meteoro/castanho1.png"));
+    if (!textura_meteoro) return false;
+
+    for (size_t i = 0; i < TIPOS_DE_INIMIGOS; i++){
         char buffer[25];
         sprintf(buffer, "files/img/nave%d.png", (int)i);
         textura_inimigos[i] = SDL_CreateTextureFromSurface(render, IMG_Load(buffer));
@@ -40,11 +43,12 @@ bool inicializar_texturas(SDL_Renderer *render) {
 }
 
 void inicializar_variaveis_globais(){
+    textura_inimigos = malloc(TIPOS_DE_INIMIGOS * sizeof(SDL_Texture*));
+
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
-    arsenal = malloc(numero_armas * sizeof(armas));
+    arsenal = malloc(NUMERO_DE_ARMAS * sizeof(armas));
     balas = malloc(capacidade_balas * sizeof(bala));
-    inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     meteoros = malloc(capacidade_meteoros * sizeof(meteoro));
     pacotes = malloc(MAXIMO_PACOTES * sizeof(pacote));
     explosoes = malloc(capacidades_explosoes * sizeof(meteoro));
@@ -69,7 +73,7 @@ void inicializar_arsenal(){
         {"bala1.png", "shoot3.wav"}
     };
 
-    for (size_t j = 0; j < numero_armas; j++){
+    for (size_t j = 0; j < NUMERO_DE_ARMAS; j++){
         arsenal[j].danos =              conf_armas[j][0];
         arsenal[j].bps =                conf_armas[j][1];
         arsenal[j].bala_velocidade =    conf_armas[j][2];

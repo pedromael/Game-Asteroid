@@ -18,11 +18,11 @@
 #define ALTURA 850
 
 #define MAXIMO_PACOTES 5
-#define MAXIMO_INIMIGOS 20
+#define MAXIMO_INIMIGOS 40
 #define MAXIMO_SCUDO 2000
 
 #define TAMANHO_NAVE 25
-#define TAMANHO_PACOTE 10
+#define TAMANHO_PACOTE 15
 #define TEMPO_PARA_APAGAR_METEORO 3
 
 #define VELOCIDADE_INICIAL 6
@@ -126,7 +126,6 @@ typedef struct
 
 extern bool player_status;
 extern nave_player player;
-extern const int numero_armas;
 extern armas *arsenal;
 extern int numero_inimigos;
 extern int capacidade_inimigos;
@@ -152,7 +151,7 @@ extern int segundos;
 extern SDL_Texture *textura_explosao_bala;
 extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
-
-extern SDL_Texture *textura_inimigos;
+extern SDL_Texture *textura_meteoro;
+extern SDL_Texture **textura_inimigos;
 
 #endif
