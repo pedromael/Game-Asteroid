@@ -159,7 +159,6 @@ bool criar_pacote(meteoro *met){
 
     if (colidiu_nas_bordas(&pacotes[numero_pacotes].rect.x, &pacotes[numero_pacotes].rect.y, &pacotes[numero_pacotes].rect.w))
         return false;
-    
 
     pacotes[numero_pacotes].tipo = rand()%3;
 
