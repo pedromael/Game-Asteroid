@@ -73,14 +73,14 @@ int main(int argc, char* argv[]){
         actualizar_jogo(); // actualizar jogo 
         desenhar(font,fundo,rect_fundo); // desenhar jogo
 
-        SDL_RenderPresent(render);
-        SDL_Delay(15); // 16 e o mais proximo de 60fps
-
         if (!player_status)
         {
             printf("vc perdeu, aperte SPACO para reiniciar jogo\n");
             if(!control_perdeu()) return false;
         }
+
+        SDL_RenderPresent(render);
+        SDL_Delay(15); // 16 e o mais proximo de 60fps
     }
 
     SDL_DestroyRenderer(render);
