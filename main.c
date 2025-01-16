@@ -33,6 +33,11 @@ int segundos,quadros;
 #include "header/inicializador.h"
 #include "header/desenhar.h"
 #include "header/control.h"
+
+int segundos_corrente = 0;
+int tentar_criar_inimigo = 0;
+int tentar_criar_meteoro = 0;
+
 #include "header/verificador.h"
 #include "header/novos.h"
 
@@ -58,51 +63,10 @@ int main(int argc, char* argv[]){
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
 
-    int segundos_corrente = 0;
-    int tentar_criar_inimigo = 0;
-    int tentar_criar_meteoro = 0;
     bool run = true;
     while (run)
     {
         segundos = SDL_GetTicks() / 1000;
-
-        if (segundos_corrente + 1 <= segundos){
-            segundos_corrente = segundos;
-            tentar_criar_inimigo++;
-            tentar_criar_meteoro++;
-
-            if (player.scudo.vida < MAXIMO_SCUDO)
-                player.scudo.vida = (player.scudo.vida + 2 < MAXIMO_SCUDO)? 2: 1;
-        }
-
-        if (tentar_criar_meteoro >= 3)
-            if (calcular_probabilidade(80))
-            {
-                criar_meteoro(render);
-                tentar_criar_meteoro = 0;
-            }
-
-        if(tentar_criar_inimigo > 0){
-            if (numero_inimigos < 20)
-            {
-                if(numero_inimigos < 10){
-                    if(calcular_probabilidade(25)){
-                        criar_inimigo(render,&inimigos[numero_inimigos],1);
-                    }
-                }else
-                    if(calcular_probabilidade(10)){
-                        
-                        criar_inimigo(render,&inimigos[numero_inimigos],1);
-                    }
-                tentar_criar_inimigo = 0;
-            }else
-                if(calcular_probabilidade(5)){
-                        
-                    criar_inimigo(render,&inimigos[numero_inimigos],1);
-                    tentar_criar_inimigo = 0;
-                }
-        }else if(numero_inimigos == 0)
-            criar_inimigo(render,&inimigos[numero_inimigos],1);
 
         if(!control()) return false;
 

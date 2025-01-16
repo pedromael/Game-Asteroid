@@ -301,7 +301,7 @@ void actualizar_balas(){
 
 void destroir_meteoro(int *i)
 {
-    if (calcular_probabilidade(100))
+    if (calcular_probabilidade(25))
         criar_pacote(&meteoros[*i]);
     
     if (meteoros[*i].status)
@@ -468,6 +468,43 @@ void actualizar_explosoes(){
 }
 
 void actualizar_jogo(){
+    if (segundos_corrente + 1 <= segundos){
+        segundos_corrente = segundos;
+        tentar_criar_inimigo++;
+        tentar_criar_meteoro++;
+
+        if (player.scudo.vida < MAXIMO_SCUDO)
+            player.scudo.vida = (player.scudo.vida + 2 < MAXIMO_SCUDO)? 2: 1;
+    }
+
+    if (tentar_criar_meteoro >= 3)
+        if (calcular_probabilidade(80))
+        {
+            criar_meteoro(render);
+            tentar_criar_meteoro = 0;
+        }
+
+    if(tentar_criar_inimigo > 0){
+        if (numero_inimigos < 20)
+        {
+            if(numero_inimigos < 10){
+                if(calcular_probabilidade(30)){
+                    criar_inimigo(render,&inimigos[numero_inimigos],1);
+                }
+            }else
+                if(calcular_probabilidade(20)){
+                    criar_inimigo(render,&inimigos[numero_inimigos],1);
+                }
+            tentar_criar_inimigo = 0;
+        }else
+            if(calcular_probabilidade(10)){
+                    
+                criar_inimigo(render,&inimigos[numero_inimigos],1);
+                tentar_criar_inimigo = 0;
+            }
+    }else if(numero_inimigos == 0)
+        criar_inimigo(render,&inimigos[numero_inimigos],1);
+
     actualizar_balas();
     verificar_atingidos();
     actualizar_inimigos();
