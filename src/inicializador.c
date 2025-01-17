@@ -75,7 +75,7 @@ void inicializar_arsenal(){
 
     for (size_t j = 0; j < NUMERO_DE_ARMAS; j++){
         arsenal[j].indice =             j;
-        arsenal[j].danos =              0;//conf_armas[j][0];
+        arsenal[j].danos =              conf_armas[j][0];
         arsenal[j].bps =                conf_armas[j][1];
         arsenal[j].bala_velocidade =    conf_armas[j][2];
         arsenal[j].pente_max =          conf_armas[j][3];
