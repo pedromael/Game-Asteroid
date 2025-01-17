@@ -162,13 +162,13 @@ bool criar_pacote(meteoro *met){
 
     pacotes[numero_pacotes].tipo = rand()%3;
 
-    if(pacotes[numero_pacotes].tipo == 0){
+    if(pacotes[numero_pacotes].tipo == 0){ // para vida
         pacotes[numero_pacotes].valor = (rand()%70) + 20;
     }
-    if(pacotes[numero_pacotes].tipo == 1){
+    if(pacotes[numero_pacotes].tipo == 1){ // para armas
         pacotes[numero_pacotes].valor = (rand()%(NUMERO_DE_ARMAS-1)) + 1;
     }
-    if(pacotes[numero_pacotes].tipo == 2){
+    if(pacotes[numero_pacotes].tipo == 2){ // para scudo
         pacotes[numero_pacotes].valor = (rand()%200) + 100;
     }
     numero_pacotes++;

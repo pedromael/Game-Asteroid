@@ -14,7 +14,7 @@ void Inicializar_player(){
     player.arma = malloc(player.numero_armas * sizeof(armas));
     player.arma[0] = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
-    player.vida = 20000;
+    player.vida = 200;
     player.scudo.vida = 2000;
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 }
@@ -58,11 +58,11 @@ void inicializar_arsenal(){
     //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size - alcance
 
     int conf_armas[NUMERO_DE_ARMAS][7] = {
-        { 5,  10, 13, 30,  2,  3, 580},
-        {10,  10, 11, 25,  1,  3, 470},
-        {15,   6, 13, 20,  3,  4, 470},
-        {50,   2,  9, 10,  5,  7, 450},
-        {35,  25, 10, 35,  1,  5, 500}
+        { 3,  8, 13, 30,  3,  3, 580},
+        {7,  8, 11, 20,  1,  3, 470},
+        {12,   5, 13, 15,  3,  4, 470},
+        {40,   2,  9, 8,  5,  7, 450},
+        {25,  18, 10, 30,  1,  5, 500}
     };
 
     char img_som_armas[NUMERO_DE_ARMAS][2][12] = {
@@ -74,7 +74,8 @@ void inicializar_arsenal(){
     };
 
     for (size_t j = 0; j < NUMERO_DE_ARMAS; j++){
-        arsenal[j].danos =              conf_armas[j][0];
+        arsenal[j].indice =             j;
+        arsenal[j].danos =              0;//conf_armas[j][0];
         arsenal[j].bps =                conf_armas[j][1];
         arsenal[j].bala_velocidade =    conf_armas[j][2];
         arsenal[j].pente_max =          conf_armas[j][3];

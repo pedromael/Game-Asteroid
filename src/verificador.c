@@ -301,7 +301,7 @@ void actualizar_balas(){
 
 void destroir_meteoro(int *i)
 {
-    if (calcular_probabilidade(25))
+    if (calcular_probabilidade(10))
         criar_pacote(&meteoros[*i]);
     
     if (meteoros[*i].status)
@@ -317,7 +317,6 @@ void verificar_atingidos(){
     for (int j = 0; j < numero_balas; j++)
     {
         for (int i = 0; i < numero_inimigos; i++)
-        {
             if (colidiram(&balas[j].rect, &inimigos[i].Rect) && !balas[j].inimigo){
                 retirar_bala(&j, true);
                 if (inimigos[i].vida - balas[j].arma.danos > 0)
@@ -329,7 +328,6 @@ void verificar_atingidos(){
                     }
                 break;
             }
-        }
 
         if (colidiram(&balas[j].rect, &player.rect) && balas[j].inimigo){
             retirar_bala(&j, true);
@@ -342,7 +340,6 @@ void verificar_atingidos(){
         }
 
         for (size_t i = 0; i < numero_obstaculos; i++)
-        {
             if (colidiram(&balas[j].rect, &obstaculos[j].rect)){
                 retirar_bala(&j, true);
                 if (obstaculos[i].vida - balas[j].arma.danos > 0)
@@ -354,9 +351,8 @@ void verificar_atingidos(){
                     }
                 break;
             }
-        }
+
         for (int i = 0; i < numero_meteoros; i++)
-        {
             if (colidiram(&balas[j].rect, &meteoros[i].rect) && meteoros[i].status){
                 retirar_bala(&j, true);
                 if (meteoros[i].vida - balas[j].arma.danos > 0)
@@ -365,8 +361,6 @@ void verificar_atingidos(){
                     destroir_meteoro(&i);
                 break;
             }
-        }
-        
     }
 
     for (int j = 0; j < numero_meteoros; j++)
@@ -374,7 +368,6 @@ void verificar_atingidos(){
         if (meteoros[j].status)
         {
             for (int i = 0; i < numero_inimigos; i++)
-            {
                 if (colidiram(&inimigos[i].Rect, &meteoros[j].rect) && meteoros[j].status){
                     destroir_meteoro(&j);
                     if (inimigos[i].vida - meteoros[j].danos > 0)
@@ -386,7 +379,6 @@ void verificar_atingidos(){
                         }
                     break;
                 }
-            }
 
             if (colidiram(&meteoros[j].rect, &player.rect) && meteoros[j].status){
                 destroir_meteoro(&j);
@@ -399,7 +391,6 @@ void verificar_atingidos(){
             }
 
             for (size_t i = 0; i < numero_obstaculos; i++)
-            {
                 if (colidiram(&obstaculos[i].rect, &meteoros[j].rect) && meteoros[i].status){
                     destroir_meteoro(&j);
                     if (obstaculos[i].vida - meteoros[j].danos > 0)
@@ -409,7 +400,6 @@ void verificar_atingidos(){
                             obstaculos[i] = obstaculos[numero_obstaculos];
                     break;
                 }
-            }
         }    
     }
 }
@@ -445,7 +435,28 @@ void remover_pacote(int *i)
 
 void obter_pacote(int *i)
 {
-    //codigo para obter pacote
+    if (pacotes[*i].tipo == 0)       // para vida 
+    {
+        player.vida += pacotes[*i].valor;
+    }else if(pacotes[*i].tipo == 1){ // para armas
+        int ja_tem = false;
+        for (size_t j = 0; j < player.numero_armas; j++)
+            if (player.arma[j].indice == arsenal[pacotes[*i].valor].indice)
+                ja_tem = true;
+
+        if (!ja_tem)
+        {
+            if (player.numero_armas <= 1){
+                player.arma = realloc(player.arma, ++player.numero_armas * sizeof(armas));
+                player.arma_select = 1;
+            }
+            player.arma[player.arma_select] = arsenal[pacotes[*i].valor];
+        }
+        
+    }else if(pacotes[*i].tipo == 2){ // para scudos
+        player.scudo.vida += pacotes[*i].valor;
+    }
+    
     remover_pacote(i);
 }
 

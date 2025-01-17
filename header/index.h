@@ -33,6 +33,7 @@
 
 typedef struct
 {
+    int indice;
     int danos;
     int bps; // balas por segundo
     int bala_size;
