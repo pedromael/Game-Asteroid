@@ -37,7 +37,10 @@ bool control(){
     }if (state[SDL_SCANCODE_SPACE]){
         disparar(NULL);
     }
-
+    
+    if (state[SDL_SCANCODE_V])
+        criar_parede_defensiva();
+    
     if (state[SDL_SCANCODE_C])
         ativar_scudo(); 
     else

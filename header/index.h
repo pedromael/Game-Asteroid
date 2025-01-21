@@ -21,12 +21,18 @@
 #define MAXIMO_INIMIGOS 40
 #define MAXIMO_SCUDO 2000
 
-#define TAMANHO_NAVE 25
-#define TAMANHO_PACOTE 15
-#define TEMPO_PARA_APAGAR_METEORO 3
+#define TAMANHO_NAVE 25 // pixel
+#define TAMANHO_PACOTE 15 // pixel
+#define TEMPO_PARA_APAGAR_METEORO 3 // segundo
 
-#define VELOCIDADE_INICIAL 6
-#define VELOCIDADE_INIMIGA 3
+#define TEMPO_DE_PAREDE_DEFENSIVA 15 // segundo 
+#define DISTANCIA_PAREDE_PLAYER 30 // pixel
+#define VIDA_PAREDE 350
+#define PAREDE_W 35
+#define PAREDE_H 8
+
+#define VELOCIDADE_INICIAL 6 // pixel por quadro
+#define VELOCIDADE_INIMIGA 3 // pixel por quadro
 
 #define NUMERO_DE_ARMAS 5
 #define TIPOS_DE_INIMIGOS 3
@@ -63,6 +69,14 @@ typedef struct
     int vida;
     bool ativo;
 } scudo;
+
+typedef struct
+{
+    SDL_Rect rect;
+    int vida;
+    int tipo;
+    int tempo_posto;
+} parede_defensiva;
 
 typedef struct
 {
@@ -145,6 +159,9 @@ extern pacote *pacotes;
 extern int numero_explosoes;
 extern int capacidades_explosoes;
 extern explosao *explosoes;
+extern int numero_paredes_defensivas;
+extern int capacidade_paredes_defensivas;
+extern parede_defensiva *paredes_defensiva;
 
 extern SDL_Renderer *render;
 extern int segundos;

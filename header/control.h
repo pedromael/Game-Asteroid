@@ -3,6 +3,7 @@
 
 #include "index.h"
 #include "verificador.h"
+#include "novos.h"
 
 extern nave_player player;
 

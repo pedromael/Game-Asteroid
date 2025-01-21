@@ -46,6 +46,7 @@ void inicializar_variaveis_globais(){
     textura_inimigos = malloc(TIPOS_DE_INIMIGOS * sizeof(SDL_Texture*));
 
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
+    paredes_defensiva = malloc(capacidade_paredes_defensivas * sizeof(parede_defensiva));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
     arsenal = malloc(NUMERO_DE_ARMAS * sizeof(armas));
     balas = malloc(capacidade_balas * sizeof(bala));

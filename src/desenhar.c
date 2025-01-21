@@ -34,6 +34,11 @@ void desenhar_obstaculo(SDL_Renderer *render, obstaculo *obstacul){
     SDL_RenderDrawRect(render, &obstacul->rect);
 }
 
+void desenhar_parede_defensiva(SDL_Renderer *render, parede_defensiva *parede){
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    SDL_RenderDrawRect(render, &parede->rect);
+}
+
 void desenhar_pacote(SDL_Renderer *render, pacote *pacote){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderDrawRect(render, &pacote->rect);
@@ -77,6 +82,9 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
 
     for (size_t i = 0; i < numero_obstaculos; i++)
         desenhar_obstaculo(render,&obstaculos[i]);
+
+    for (size_t i = 0; i < numero_paredes_defensivas; i++)
+        desenhar_parede_defensiva(render, &paredes_defensiva[i]);   
 
     for (size_t i = 0; i < numero_balas; i++)
         desenhar_bala(render, &balas[i]);

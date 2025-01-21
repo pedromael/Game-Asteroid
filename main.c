@@ -20,6 +20,9 @@ pacote *pacotes;
 int numero_explosoes = 0;
 int capacidades_explosoes = 25;
 explosao *explosoes;
+int numero_paredes_defensivas = 0;
+int capacidade_paredes_defensivas = 15;
+parede_defensiva *paredes_defensiva;
 
 SDL_Texture *textura_explosao_bala;
 SDL_Texture *textura_explosao_parede;
