@@ -59,9 +59,7 @@ int main(int argc, char* argv[]){
     inicializar(); // inicializar jogo
 
     for (size_t i = 0; i <= numero_inimigos_inicial; i++)
-        if(!criar_inimigo(render,&inimigos[i],1)){
-            i--;
-        }
+        criar_inimigo(render,&inimigos[i],1);
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};

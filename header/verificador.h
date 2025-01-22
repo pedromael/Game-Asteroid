@@ -3,12 +3,12 @@
 
 #include "index.h"
 #include "novos.h"
-//#include "desenhar.h"
+//#include "quadTree.h"
 
 void actualizar_jogo();
 bool calcular_probabilidade(int perc);
-bool colidiu_nas_bordas(int *x, int *y, int *size);
-int item_colidiu(int *x, int *y, int *size, char *item);
+bool colidiu_nas_bordas(SDL_Rect rect);
+int item_colidiu(SDL_Rect rect, char *item);
 bool disparar(nave_inimiga *inimigos);
 void ativar_scudo();
 void desativar_scudo();

@@ -14,25 +14,25 @@ bool control(){
         player.dx = 0;
         player.dy = -1;
         player.rect.y -= player.velocidade;
-        if(item_colidiu(&player.rect.x, &player.rect.y, &player.rect.w,"player"))
+        if(item_colidiu(player.rect, "player"))
             player.rect.y += player.velocidade;
     }if (state[SDL_SCANCODE_DOWN]) {
         player.dx = 0;
         player.dy = 1;
         player.rect.y += player.velocidade;
-        if(item_colidiu(&player.rect.x, &player.rect.y, &player.rect.w,"player"))
+        if(item_colidiu(player.rect, "player"))
             player.rect.y -= player.velocidade;
     }if (state[SDL_SCANCODE_LEFT]) {
         player.dy = 0;
         player.dx = -1;
         player.rect.x -= player.velocidade;
-        if(item_colidiu(&player.rect.x, &player.rect.y, &player.rect.w,"player"))
+        if(item_colidiu(player.rect, "player"))
             player.rect.x += player.velocidade;
     }if (state[SDL_SCANCODE_RIGHT]) {
         player.dy = 0;
         player.dx = 1;
         player.rect.x += player.velocidade; 
-        if(item_colidiu(&player.rect.x, &player.rect.y, &player.rect.w,"player"))
+        if(item_colidiu(player.rect, "player"))
             player.rect.x -= player.velocidade;
     }if (state[SDL_SCANCODE_SPACE]){
         disparar(NULL);

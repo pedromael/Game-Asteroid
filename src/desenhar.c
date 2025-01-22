@@ -22,7 +22,7 @@ void desenhar_explosao(SDL_Renderer *render, explosao *item){
 }
 
 void desenhar_bala(SDL_Renderer *render, bala *balas){
-    SDL_RenderCopy(render, balas->arma.textura, NULL, &balas->rect);
+    SDL_RenderCopy(render, balas->arma->textura, NULL, &balas->rect);
 }
 
 void desenhar_meteoro(SDL_Renderer *render, meteoro *meteoro){

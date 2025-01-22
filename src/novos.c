@@ -7,7 +7,8 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     
     int i,size = TAMANHO_NAVE;
     for (i = 0; i < 500; i++){
-        if(!item_colidiu(&i,&i,&size,"inimigo"))
+        SDL_Rect rect = {i,i,size,size};
+        if(!item_colidiu(rect,"inimigo"))
             break;
     }
 
@@ -157,7 +158,7 @@ bool criar_pacote(meteoro *met){
     pacotes[numero_pacotes].rect.w = TAMANHO_PACOTE;
     pacotes[numero_pacotes].rect.h = TAMANHO_PACOTE;
 
-    if (colidiu_nas_bordas(&pacotes[numero_pacotes].rect.x, &pacotes[numero_pacotes].rect.y, &pacotes[numero_pacotes].rect.w))
+    if (colidiu_nas_bordas(pacotes[numero_pacotes].rect))
         return false;
 
     pacotes[numero_pacotes].tipo = rand()%3;

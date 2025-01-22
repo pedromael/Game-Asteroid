@@ -58,7 +58,7 @@ typedef struct{
     SDL_Rect rect;
     int dx,dy;
     int distancia_percorrida;
-    armas arma;
+    armas *arma;
     int inimigo;
 } bala;
 
