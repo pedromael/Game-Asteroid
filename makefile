@@ -1,28 +1,19 @@
-# Defina o compilador
 CC = gcc
 
-# Defina as flags do compilador
 CFLAGS = -Wall -g
 
-# Defina a biblioteca SDL
 LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf -lSDL2main -lSDL2_image -lSDL2_mixer
 
-# Nome do executável
 TARGET = Asteroid
 
-#header
 HEADERS =  
 
-# Arquivos fontes
 SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c src/inicializador.c
 
-# Arquivos objetos
 OBJS = $(SRCS:.c=.o)
 
-# Regra padrão
 all: $(TARGET)
 
-# Regra para construir o executável
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
 
