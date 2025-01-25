@@ -60,13 +60,12 @@
                 }
             }
         
-        if (strcmp(item, "player") != 0)
-        {
-            if (colidiram(&player.rect ,&rect))
-                return 1;
-        }
+        // if (strcmp(item, "player") != 0)
+        // {   
+        //     if (colidiram(&player.rect ,&rect))
+        //         return 1;
+        // }
         
-
         return 0;
     }
 
@@ -141,9 +140,9 @@
 
         balas[numero_balas].arma = arma;
         if (inimigos != NULL)
-            balas[numero_balas].inimigo = 1;
+            balas[numero_balas].inimigo = true;
         else
-            balas[numero_balas].inimigo = 0;
+            balas[numero_balas].inimigo = false;
         
         numero_balas++;
         arma->no_pente--;
@@ -227,6 +226,13 @@
                 inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
                 return abs(y);
             }
+        }
+    }
+
+    void remover_inimigo(int i){
+        if (i != --numero_inimigos){
+            criar_explosao(render, 3, inimigos[i].Rect);
+            inimigos[i] = inimigos[numero_inimigos];
         }
     }
 
@@ -314,10 +320,7 @@
                     if (inimigos[i].vida - balas[j].arma->danos > 0)
                         inimigos[i].vida -= balas[j].arma->danos;
                     else
-                        if (i != --numero_inimigos){
-                            criar_explosao(render, 3, inimigos[i].Rect);
-                            inimigos[i] = inimigos[numero_inimigos];
-                        }
+                        remover_inimigo(i);
                     break;
                 }
 
@@ -365,10 +368,7 @@
                         if (inimigos[i].vida - meteoros[j].danos > 0)
                             inimigos[i].vida -= meteoros[j].danos;
                         else
-                            if (i != --numero_inimigos){
-                                criar_explosao(render, 3, inimigos[i].Rect);
-                                inimigos[i] = inimigos[numero_inimigos];
-                            }
+                            remover_inimigo(i);
                         break;
                     }
 
