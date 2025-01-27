@@ -65,14 +65,12 @@
             if (colidiram(&player.rect ,&rect))
                 return 1;
         }
-        
 
         return 0;
     }
 
     bool inimigo_colidiu(int i){
-        int res = colidiu_nas_bordas(inimigos[i].Rect);
-        if (res)
+        if (colidiu_nas_bordas(inimigos[i].Rect))
             return true;
         
         for (int j = numero_inimigos - 1; j >= 0; j--) // verificar se ha colisao entre naves inimigas
