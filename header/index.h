@@ -18,7 +18,7 @@
 #define ALTURA 850
 
 #define MAXIMO_PACOTES 5
-#define MAXIMO_INIMIGOS 40
+#define MAXIMO_INIMIGOS 5
 #define MAXIMO_SCUDO 2000
 
 #define TAMANHO_NAVE 25 // pixel
@@ -33,6 +33,7 @@
 
 #define VELOCIDADE_INICIAL 6 // pixel por quadro
 #define VELOCIDADE_INIMIGA 3 // pixel por quadro
+#define TEMPO_REFLEXO_INIMIGO 2
 
 #define NUMERO_DE_ARMAS 5
 #define TIPOS_DE_INIMIGOS 3

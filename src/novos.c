@@ -48,8 +48,8 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     inimigo->dy = 0;
     inimigo->vida = 50*nivel;
     inimigo->velocidade = VELOCIDADE_INIMIGA;
-    inimigo->ultima_ronda = 0;
-    inimigo->tempo_ronda = 4;
+    inimigo->ultima_ronda = false;
+    inimigo->tempo_ronda = TEMPO_REFLEXO_INIMIGO;
 
     numero_inimigos++;
     return true;
