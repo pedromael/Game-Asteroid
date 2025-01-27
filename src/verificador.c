@@ -60,11 +60,11 @@
                 }
             }
         
-        if (strcmp(item, "player") != 0)
-        {
-            if (colidiram(&player.rect ,&rect))
-                return 1;
-        }
+        // if (strcmp(item, "player") != 0)
+        // {
+        //     if (colidiram(&player.rect ,&rect))
+        //         return 1;
+        // }
 
         return 0;
     }
@@ -157,12 +157,10 @@
                 return;
         player.scudo.ativo = true;
 
-        int size = 20;
-
-        player.scudo.rect.x = player.rect.x - size;
-        player.scudo.rect.y = player.rect.y - size;
-        player.scudo.rect.w = TAMANHO_NAVE + size * 2;
-        player.scudo.rect.h = TAMANHO_NAVE + size * 2;
+        player.scudo.rect.x = player.rect.x - TAMANHO_ESCUDO;
+        player.scudo.rect.y = player.rect.y - TAMANHO_ESCUDO;
+        player.scudo.rect.w = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
+        player.scudo.rect.h = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
     }
 
     void desativar_scudo(){
@@ -391,6 +389,15 @@
                                 obstaculos[i] = obstaculos[numero_obstaculos];
                         break;
                     }
+
+                for (int i = numero_meteoros - 1; i >= 0; i--)
+                    if (colidiram(&meteoros[i].rect, &meteoros[j].rect) && meteoros[i].status){
+                        if (meteoros[i].vida - meteoros[j].danos <= 0)
+                            destroir_meteoro(&i);
+                        else if (meteoros[j].vida - meteoros[i].danos <= 0)
+                            destroir_meteoro(&j);
+                        break;
+                    }
             }    
         }
     }
@@ -495,7 +502,7 @@
         }
 
         if (tentar_criar_meteoro >= 3)
-            if (calcular_probabilidade(80))
+            if (calcular_probabilidade(100))
             {
                 criar_meteoro(render);
                 tentar_criar_meteoro = 0;

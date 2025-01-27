@@ -26,7 +26,8 @@
 #define TEMPO_PARA_APAGAR_METEORO 3 // segundo
 
 #define TEMPO_DE_PAREDE_DEFENSIVA 15 // segundo 
-#define DISTANCIA_PAREDE_PLAYER 30 // pixel
+#define DISTANCIA_PAREDE_PLAYER 30 // 
+#define TAMANHO_ESCUDO 20 // pixel
 #define VIDA_PAREDE 350
 #define PAREDE_W 35
 #define PAREDE_H 8
