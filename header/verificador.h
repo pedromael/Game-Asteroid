@@ -13,6 +13,8 @@ bool disparar(nave_inimiga *inimigos);
 void ativar_scudo();
 void desativar_scudo();
 
+void destroir_parede_defensiva(int i);
+
 extern int segundos_corrente;
 extern int tentar_criar_inimigo;
 extern int tentar_criar_meteoro;

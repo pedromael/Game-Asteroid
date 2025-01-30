@@ -60,6 +60,11 @@
                 }
             }
         
+        for (int j = numero_paredes_defensivas - 1; j >= 0; j--)
+            if (colidiram(&paredes_defensiva[j].rect, &rect))
+                return true;
+        
+        
         // if (strcmp(item, "player") != 0)
         // {
         //     if (colidiram(&player.rect ,&rect))
@@ -85,6 +90,10 @@
 
         if (colidiram(&inimigos[i].Rect, &player.rect))
             return true;
+        
+        for (int j = numero_paredes_defensivas - 1; j >= 0; j--)
+            if (colidiram(&paredes_defensiva[j].rect, &inimigos[i].Rect))
+                return true;
 
         return false;
     }
@@ -353,6 +362,18 @@
                         destroir_meteoro(&i);
                     break;
                 }
+            
+            for (int i = numero_paredes_defensivas -1; i >= 0; i--)
+            {
+                if(colidiram(&balas[j].rect, &paredes_defensiva[i].rect)){
+                    retirar_bala(&j, true);
+                    if (paredes_defensiva[i].vida - balas[j].arma->danos > 0)
+                        paredes_defensiva[i].vida -= balas[j].arma->danos;
+                    else
+                        destroir_parede_defensiva(i);
+                    break;
+                }
+            } 
         }
 
         for (int j = numero_meteoros - 1; j >= 0; j--)
@@ -398,6 +419,20 @@
                             destroir_meteoro(&j);
                         break;
                     }
+
+                for (int i = numero_paredes_defensivas -1; i >= 0; i--)
+                {
+                    if(colidiram(&meteoros[j].rect, &paredes_defensiva[i].rect)){
+                        meteoros[j].vida -= (paredes_defensiva[i].vida);
+                        if (meteoros[j].vida <= 0)
+                        {
+                            destroir_meteoro(&j);
+                        }else{
+                            destroir_parede_defensiva(i);
+                        }
+                        break;
+                    }
+                } 
             }    
         }
     }
@@ -476,7 +511,7 @@
                     explosoes[i] = explosoes[numero_explosoes]; 
     }
 
-    void retirar_parede_defensiva(int i){
+    void destroir_parede_defensiva(int i){
         int j = --numero_paredes_defensivas;
         paredes_defensiva[i] = paredes_defensiva[j];
     }
@@ -485,7 +520,7 @@
         for (int i = numero_paredes_defensivas - 1; i >= 0; i--) {
             if (paredes_defensiva[i].vida <= 0 || 
                 paredes_defensiva[i].tempo_posto + TEMPO_DE_PAREDE_DEFENSIVA <= segundos) {
-                retirar_parede_defensiva(i);
+                destroir_parede_defensiva(i);
             }
         }
     }

@@ -92,6 +92,7 @@ typedef struct
     SDL_Rect rect;
     SDL_Texture *textura;
     scudo scudo;
+    bool modo_construtivo;
 } nave_player;
 
 typedef struct
