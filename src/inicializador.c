@@ -14,7 +14,8 @@ void Inicializar_player(){
     player.arma = malloc(player.numero_armas * sizeof(armas));
     player.arma[0] = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
-    player.vida = 20000; 
+    player.modo_construtivo = false;
+    player.vida = 200; 
     player.scudo.vida = 2000;
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 }

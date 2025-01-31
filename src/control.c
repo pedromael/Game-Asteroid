@@ -1,15 +1,27 @@
 #include "../header/control.h"
 
 bool control(){
-    const Uint8* state = SDL_GetKeyboardState(NULL);
     SDL_Event evento;
-
     while (SDL_PollEvent(&evento)) {
         if (evento.type == SDL_QUIT) {
             return false;
+        } else if (evento.type == SDL_KEYDOWN) {
+            if (!player.modo_construtivo) {  // Verifica antes de entrar no switch
+                switch (evento.key.keysym.sym) {
+                    case SDLK_v:
+                        criar_parede_defensiva();
+                        break;
+                }
+            }
+            switch (evento.key.keysym.sym) {
+                case SDLK_b:
+                    player.modo_construtivo = player.modo_construtivo ? false : true;
+                    break;
+            }
         }
-    }       
+    }
 
+    const Uint8* state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_UP]) {
         player.dx = 0;
         player.dy = -1;
@@ -38,7 +50,8 @@ bool control(){
         disparar(NULL);
     }
     
-    if (state[SDL_SCANCODE_V])
+    if (state[SDL_SCANCODE_V] &&
+        player.modo_construtivo)
         criar_parede_defensiva();
     
     if (state[SDL_SCANCODE_C])
@@ -53,16 +66,19 @@ bool control_perdeu(){
     while (1)
     {
         SDL_Event evento;
-        while (SDL_PollEvent(&evento)){
-            if (evento.type == SDL_QUIT)
+        while (SDL_PollEvent(&evento)) {
+            if (evento.type == SDL_QUIT) {
                 return 0;
+            }
             
-            if (evento.type == SDL_KEYDOWN)
-                if (evento.key.keysym.sym == SDLK_SPACE){
+            if (evento.type == SDL_KEYDOWN) {
+                if (evento.key.keysym.sym == SDLK_SPACE) {
                     player_status = true;
                     player.vida = 200;
-                    break;
+                    return true;
                 }
+            }
         }
+
     }
 }

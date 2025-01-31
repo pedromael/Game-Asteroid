@@ -251,23 +251,24 @@
                     int buffer_dx = inimigos[i].dx;
                     inimigos[i].dx = 0;
                     inimigos[i].dy = inimigos[i].Rect.y - player.rect.y > 0 ? -1 : 1;
-                    disparar(&inimigos[i]);
+                    if(calcular_probabilidade(10))
+                        disparar(&inimigos[i]);
                     inimigos[i].dy = 0;
                     inimigos[i].dx = buffer_dx;
                 }else{
                     int buffer_dy = inimigos[i].dy;
                     inimigos[i].dy = 0;
                     inimigos[i].dx = inimigos[i].Rect.x - player.rect.x > 0 ? -1 : 1;
-                    disparar(&inimigos[i]);
+                    if(calcular_probabilidade(10))
+                        disparar(&inimigos[i]);
                     inimigos[i].dx = 0;
                     inimigos[i].dy = buffer_dy; 
                 }
             }
 
             bool mover = true;
-            if (area_de_impacto_mira(&i) < 15)
-                mover = calcular_probabilidade(50);
-            
+            if (area_de_impacto_mira(&i) < TAMANHO_NAVE)
+                mover = calcular_probabilidade(25); // chance de se mover se estiver na rea de impacto
 
             if(mover){
                 if (inimigos[i].dx != 0)
