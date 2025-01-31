@@ -83,6 +83,7 @@ typedef struct
 typedef struct
 {
     int dx,dy;
+    int olddx,olddy;
     int numero_armas;
     int arma_select;
     armas *arma;

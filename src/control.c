@@ -22,6 +22,10 @@ bool control(){
     }
 
     const Uint8* state = SDL_GetKeyboardState(NULL);
+    int bufferx,buffery;
+    bufferx = player.dx;
+    buffery = player.dy;
+    
     if (state[SDL_SCANCODE_UP]) {
         player.dx = 0;
         player.dy = -1;
@@ -49,6 +53,14 @@ bool control(){
     }if (state[SDL_SCANCODE_SPACE]){
         disparar(NULL);
     }
+
+    if (bufferx != player.dx
+        || buffery != player.dy)
+    {
+        player.olddx = bufferx;
+        player.olddy = buffery;
+    }
+    
     
     if (state[SDL_SCANCODE_V] &&
         player.modo_construtivo)
