@@ -64,8 +64,7 @@ int main(int argc, char* argv[]){
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
 
-    bool run = true;
-    while (run)
+    while (true)
     {
         segundos = SDL_GetTicks() / 1000;
 

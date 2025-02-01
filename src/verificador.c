@@ -24,7 +24,7 @@
         return false;
     }
 
-    int colidiram(SDL_Rect *rect1, SDL_Rect *rect2){
+    bool colidiram(SDL_Rect *rect1, SDL_Rect *rect2){
         bool coliX = (rect1->x < rect2->x + rect2->w) && (rect1->x + rect1->w > rect2->x);
         bool coliY = (rect1->y < rect2->y + rect2->h) && (rect1->y + rect1->h > rect2->y);
         if (coliX && coliY)
@@ -32,7 +32,7 @@
         return false;
     }
 
-    int item_colidiu(SDL_Rect rect, char *item){
+    bool item_colidiu(SDL_Rect rect, char *item){
         if (strcmp(item, "meteoro") != 0){
             if(colidiu_nas_bordas(rect))
                 return 1;
@@ -525,7 +525,6 @@
             }
         }
     }
-
 
     void actualizar_jogo(){
         if (segundos_corrente + 1 <= segundos){

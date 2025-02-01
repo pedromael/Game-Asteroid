@@ -194,10 +194,11 @@ bool criar_parede_defensiva() {
         paredes_defensiva[i].rect.y = player.rect.y + (DISTANCIA_PAREDE_PLAYER * dy);
         paredes_defensiva[i].rect.w = (dx != 0) ? PAREDE_H : PAREDE_W;
         paredes_defensiva[i].rect.h = (dx != 0) ? PAREDE_W : PAREDE_H;
-    } else {
+    } else
         return false;
-    }
 
+    if (item_colidiu(paredes_defensiva[i].rect, ""))
+        return false;
     numero_paredes_defensivas++;
     return true;
 }

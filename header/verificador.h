@@ -8,7 +8,8 @@
 void actualizar_jogo();
 bool calcular_probabilidade(int perc);
 bool colidiu_nas_bordas(SDL_Rect rect);
-int item_colidiu(SDL_Rect rect, char *item);
+bool colidiram(SDL_Rect *rect1, SDL_Rect *rect2);
+bool item_colidiu(SDL_Rect rect, char *item);
 bool disparar(nave_inimiga *inimigos);
 void ativar_scudo();
 void desativar_scudo();

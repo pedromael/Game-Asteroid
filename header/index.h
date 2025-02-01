@@ -14,6 +14,7 @@
 
 #define PI 3.141592653589793
 
+//dimensoes da tela
 #define LARGURA 1300
 #define ALTURA 850
 
@@ -25,11 +26,11 @@
 #define TAMANHO_PACOTE 15 // pixel
 #define TEMPO_PARA_APAGAR_METEORO 3 // segundo
 
-#define TEMPO_DE_PAREDE_DEFENSIVA 15 // segundo 
+#define TEMPO_DE_PAREDE_DEFENSIVA 90 // segundo 
 #define DISTANCIA_PAREDE_PLAYER 30 // 
 #define TAMANHO_ESCUDO 20 // pixel
 #define VIDA_PAREDE 350
-#define PAREDE_W 35
+#define PAREDE_W 45
 #define PAREDE_H 8
 
 #define VELOCIDADE_INICIAL 6 // pixel por quadro

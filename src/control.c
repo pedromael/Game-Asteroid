@@ -1,21 +1,30 @@
 #include "../header/control.h"
 
+void trocar_arma(){
+    if (player.numero_armas > 1)
+        if (++player.arma_select >= player.numero_armas)
+            player.arma_select = 0;
+}
+
 bool control(){
     SDL_Event evento;
     while (SDL_PollEvent(&evento)) {
         if (evento.type == SDL_QUIT) {
             return false;
         } else if (evento.type == SDL_KEYDOWN) {
-            if (!player.modo_construtivo) {  // Verifica antes de entrar no switch
+            if (!player.modo_construtivo)  // Verifica antes de entrar no switch
                 switch (evento.key.keysym.sym) {
                     case SDLK_v:
                         criar_parede_defensiva();
                         break;
                 }
-            }
+
             switch (evento.key.keysym.sym) {
                 case SDLK_b:
                     player.modo_construtivo = player.modo_construtivo ? false : true;
+                    break;
+                case SDLK_TAB:
+                    trocar_arma();
                     break;
             }
         }
@@ -39,7 +48,7 @@ bool control(){
         if(item_colidiu(player.rect, "player"))
             player.rect.y -= player.velocidade;
     }if (state[SDL_SCANCODE_LEFT]) {
-        player.dy = 0;
+        player.dy = 0; 
         player.dx = -1;
         player.rect.x -= player.velocidade;
         if(item_colidiu(player.rect, "player"))
