@@ -29,9 +29,9 @@
 #define TEMPO_DE_PAREDE_DEFENSIVA 90 // segundo 
 #define DISTANCIA_PAREDE_PLAYER 30 // 
 #define TAMANHO_ESCUDO 20 // pixel
-#define VIDA_PAREDE 350
+#define VIDA_PAREDE 450
 #define PAREDE_W 45
-#define PAREDE_H 8
+#define PAREDE_H 10
 
 #define VELOCIDADE_INICIAL 6 // pixel por quadro
 #define VELOCIDADE_INIMIGA 3 // pixel por quadro
@@ -39,6 +39,11 @@
 
 #define NUMERO_DE_ARMAS 5
 #define TIPOS_DE_INIMIGOS 3
+
+typedef struct
+{
+    int dx,dy;    
+} direcao;
 
 typedef struct
 {
@@ -83,7 +88,7 @@ typedef struct
 
 typedef struct
 {
-    int dx,dy;
+    direcao dir;
     int olddx,olddy;
     int numero_armas;
     int arma_select;
@@ -118,7 +123,7 @@ typedef struct
 typedef struct
 {
     SDL_Rect Rect;
-    int dx,dy;
+    direcao dir;
     //int nivel;
     int vida;
     SDL_Texture *textura;
@@ -143,6 +148,15 @@ typedef struct
     int milissegundo_inicio;
     SDL_Texture *textura;
 } explosao;
+
+typedef struct
+{
+    int vida;
+    int angulo;
+    int dx,dy;
+    SDL_Rect rect;
+    armas *arma;
+} robo_metralhadora;
 
 extern bool player_status;
 extern nave_player player;

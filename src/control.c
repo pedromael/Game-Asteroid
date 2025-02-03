@@ -32,39 +32,39 @@ bool control(){
 
     const Uint8* state = SDL_GetKeyboardState(NULL);
     int bufferx,buffery;
-    bufferx = player.dx;
-    buffery = player.dy;
+    bufferx = player.dir.dx;
+    buffery = player.dir.dy;
     
     if (state[SDL_SCANCODE_UP]) {
-        player.dx = 0;
-        player.dy = -1;
+        player.dir.dx = 0;
+        player.dir.dy = -1;
         player.rect.y -= player.velocidade;
         if(item_colidiu(player.rect, "player"))
             player.rect.y += player.velocidade;
     }if (state[SDL_SCANCODE_DOWN]) {
-        player.dx = 0;
-        player.dy = 1;
+        player.dir.dx = 0;
+        player.dir.dy = 1;
         player.rect.y += player.velocidade;
         if(item_colidiu(player.rect, "player"))
             player.rect.y -= player.velocidade;
     }if (state[SDL_SCANCODE_LEFT]) {
-        player.dy = 0; 
-        player.dx = -1;
+        player.dir.dy = 0; 
+        player.dir.dx = -1;
         player.rect.x -= player.velocidade;
         if(item_colidiu(player.rect, "player"))
             player.rect.x += player.velocidade;
     }if (state[SDL_SCANCODE_RIGHT]) {
-        player.dy = 0;
-        player.dx = 1;
+        player.dir.dy = 0;
+        player.dir.dx = 1;
         player.rect.x += player.velocidade; 
         if(item_colidiu(player.rect, "player"))
             player.rect.x -= player.velocidade;
     }if (state[SDL_SCANCODE_SPACE]){
-        disparar(NULL);
+        disparar(player.rect,player.dir,player.arma,false);
     }
 
-    if (bufferx != player.dx
-        || buffery != player.dy)
+    if (bufferx != player.dir.dx
+        || buffery != player.dir.dy)
     {
         player.olddx = bufferx;
         player.olddy = buffery;

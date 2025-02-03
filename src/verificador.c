@@ -98,23 +98,12 @@
         return false;
     }
 
-    bool disparar(nave_inimiga *inimigos){
+    bool disparar(SDL_Rect rect, direcao dir, armas *arma, bool de_inimigo){    
         int x,y,dx,dy;
-        armas *arma;
-
-        if(inimigos != NULL){
-            x = inimigos->Rect.x;
-            y = inimigos->Rect.y;
-            dx = inimigos->dx;
-            dy = inimigos->dy;
-            arma = &inimigos->arma;
-        }else{
-            x = player.rect.x;
-            y = player.rect.y;
-            dx = player.dx;
-            dy = player.dy;
-            arma = &player.arma[player.arma_select];
-        }
+        x = rect.x;
+        y = rect.y;
+        dx = dir.dx;
+        dy = dir.dy;
 
         if (!arma->no_pente)
         {
@@ -147,7 +136,7 @@
         balas[numero_balas].dy = dy;
 
         balas[numero_balas].arma = arma;
-        if (inimigos != NULL)
+        if (de_inimigo)
             balas[numero_balas].inimigo = true;
         else
             balas[numero_balas].inimigo = false;
@@ -203,33 +192,33 @@
 
             if (abs(x) < abs(y))
             {
-                inimigos[*i].dy = 0;
-                inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
+                inimigos[*i].dir.dy = 0;
+                inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
                 if(calcular_probabilidade(20)){
-                    inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
-                    inimigos[*i].dx = 0;
+                    inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
+                    inimigos[*i].dir.dx = 0;
                     return abs(y);
                 }
                 return abs(x);
             }else{
-                inimigos[*i].dx = 0;
-                inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
+                inimigos[*i].dir.dx = 0;
+                inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
                 if(calcular_probabilidade(20)){
-                    inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
-                    inimigos[*i].dy = 0;
+                    inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
+                    inimigos[*i].dir.dy = 0;
                     return abs(x);
                 }
                 return abs(y);
             }
         }else{
-            if (inimigos[*i].dx != 0)
+            if (inimigos[*i].dir.dx != 0)
             {
-                inimigos[*i].dy = 0;
-                inimigos[*i].dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
+                inimigos[*i].dir.dy = 0;
+                inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
                 return abs(x);
             }else{
-                inimigos[*i].dx = 0;
-                inimigos[*i].dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
+                inimigos[*i].dir.dx = 0;
+                inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
                 return abs(y);
             }
         }
@@ -246,23 +235,23 @@
         for (int i = numero_inimigos - 1; i >= 0; i--)
         {
             if (area_de_impacto_mira(&i) < 150){
-                if (inimigos[i].dx != 0)
+                if (inimigos[i].dir.dx != 0)
                 {
-                    int buffer_dx = inimigos[i].dx;
-                    inimigos[i].dx = 0;
-                    inimigos[i].dy = inimigos[i].Rect.y - player.rect.y > 0 ? -1 : 1;
+                    int buffer_dx = inimigos[i].dir.dx;
+                    inimigos[i].dir.dx = 0;
+                    inimigos[i].dir.dy = inimigos[i].Rect.y - player.rect.y > 0 ? -1 : 1;
                     if(calcular_probabilidade(10))
-                        disparar(&inimigos[i]);
-                    inimigos[i].dy = 0;
-                    inimigos[i].dx = buffer_dx;
+                        disparar(inimigos[i].Rect, inimigos[i].dir, &inimigos[i].arma, true);
+                    inimigos[i].dir.dy = 0;
+                    inimigos[i].dir.dx = buffer_dx;
                 }else{
-                    int buffer_dy = inimigos[i].dy;
-                    inimigos[i].dy = 0;
-                    inimigos[i].dx = inimigos[i].Rect.x - player.rect.x > 0 ? -1 : 1;
+                    int buffer_dy = inimigos[i].dir.dy;
+                    inimigos[i].dir.dy = 0;
+                    inimigos[i].dir.dx = inimigos[i].Rect.x - player.rect.x > 0 ? -1 : 1;
                     if(calcular_probabilidade(10))
-                        disparar(&inimigos[i]);
-                    inimigos[i].dx = 0;
-                    inimigos[i].dy = buffer_dy; 
+                        disparar(inimigos[i].Rect, inimigos[i].dir, &inimigos[i].arma, true);
+                    inimigos[i].dir.dx = 0;
+                    inimigos[i].dir.dy = buffer_dy; 
                 }
             }
 
@@ -271,18 +260,18 @@
                 mover = calcular_probabilidade(25); // chance de se mover se estiver na rea de impacto
 
             if(mover){
-                if (inimigos[i].dx != 0)
+                if (inimigos[i].dir.dx != 0)
                 {
-                    inimigos[i].Rect.x += VELOCIDADE_INIMIGA * inimigos[i].dx;
+                    inimigos[i].Rect.x += VELOCIDADE_INIMIGA * inimigos[i].dir.dx;
                     if (inimigo_colidiu(i)){
-                        inimigos[i].Rect.x -= VELOCIDADE_INIMIGA * inimigos[i].dx;
+                        inimigos[i].Rect.x -= VELOCIDADE_INIMIGA * inimigos[i].dir.dx;
                     }
 
                 }else{
-                    inimigos[i].Rect.y += VELOCIDADE_INIMIGA * inimigos[i].dy;
+                    inimigos[i].Rect.y += VELOCIDADE_INIMIGA * inimigos[i].dir.dy;
                     if (inimigo_colidiu(i))
                     {
-                        inimigos[i].Rect.y -= VELOCIDADE_INIMIGA * inimigos[i].dy;
+                        inimigos[i].Rect.y -= VELOCIDADE_INIMIGA * inimigos[i].dir.dy;
                     }
                 }
             }

@@ -7,8 +7,8 @@ void Inicializar_player(){
     player.rect.y = ALTURA/2;
     player.rect.w = TAMANHO_NAVE;
     player.rect.h = TAMANHO_NAVE;
-    player.dx = 0;
-    player.dy = -1;
+    player.dir.dx = 0;
+    player.dir.dy = -1;
     player.numero_armas = 1;
     player.arma_select = 0;
     player.arma = malloc(player.numero_armas * sizeof(armas));

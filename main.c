@@ -58,8 +58,7 @@ int main(int argc, char* argv[]){
     
     inicializar(); // inicializar jogo
 
-    for (size_t i = 0; i <= numero_inimigos_inicial; i++)
-        criar_inimigo(render,&inimigos[i],1);
+    for (size_t i = 0; i <= numero_inimigos_inicial; i++) criar_inimigo(render,&inimigos[i],1);
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
@@ -68,8 +67,7 @@ int main(int argc, char* argv[]){
     {
         segundos = SDL_GetTicks() / 1000;
 
-        if(!control()) return false;
-
+        if(!control()) return false; // detecao de entrada do jogador
         actualizar_jogo(); // actualizar jogo 
         desenhar(font,fundo,rect_fundo); // desenhar jogo
 

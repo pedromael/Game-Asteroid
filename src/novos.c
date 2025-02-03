@@ -44,8 +44,8 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     inimigo->Rect.y = i;
     inimigo->Rect.h = TAMANHO_NAVE + 10 * nivel;
     inimigo->Rect.w = TAMANHO_NAVE + 10 * nivel;
-    inimigo->dx = 1;
-    inimigo->dy = 0;
+    inimigo->dir.dx = 1;
+    inimigo->dir.dy = 0;
     inimigo->vida = 50*nivel;
     inimigo->velocidade = VELOCIDADE_INIMIGA;
     inimigo->ultima_ronda = false;
@@ -186,8 +186,8 @@ bool criar_parede_defensiva() {
     paredes_defensiva[i].vida = VIDA_PAREDE;
     paredes_defensiva[i].tempo_posto = segundos;
 
-    int dx = player.modo_construtivo ? player.olddx : player.dx;
-    int dy = player.modo_construtivo ? player.olddy : player.dy;
+    int dx = player.modo_construtivo ? player.olddx : player.dir.dx;
+    int dy = player.modo_construtivo ? player.olddy : player.dir.dy;
 
     if (dx || dy) {
         paredes_defensiva[i].rect.x = player.rect.x + (DISTANCIA_PAREDE_PLAYER * dx);
