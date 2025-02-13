@@ -202,3 +202,21 @@ bool criar_parede_defensiva() {
     numero_paredes_defensivas++;
     return true;
 }
+
+void criar_robo_metralhadora(){
+    if (numero_robos_metralhadora >= capacidade_robos_metralhadora){
+        capacidade_robos_metralhadora += 5;
+        robos_metralhadora = realloc(robos_metralhadora, capacidade_robos_metralhadora * sizeof(robo_metralhadora));
+    }
+    int i = numero_robos_metralhadora;
+    robos_metralhadora[i].vida = 100;
+    robos_metralhadora[i].rect.x = player.rect.x + (player.dir.dx * 50);
+    robos_metralhadora[i].rect.y = player.rect.y + (player.dir.dy * 50);
+    robos_metralhadora[i].rect.w = TAMANHO_NAVE;
+    robos_metralhadora[i].rect.h = TAMANHO_NAVE;
+    robos_metralhadora[i].angulo = 0;
+    robos_metralhadora[i].velocidade_giro = 1;
+    robos_metralhadora[i].arma = &arsenal[4];
+
+    numero_robos_metralhadora++;
+}

@@ -45,7 +45,6 @@ bool inicializar_texturas(SDL_Renderer *render) {
 
 void inicializar_variaveis_globais(){
     textura_inimigos = malloc(TIPOS_DE_INIMIGOS * sizeof(SDL_Texture*));
-
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     paredes_defensiva = malloc(capacidade_paredes_defensivas * sizeof(parede_defensiva));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
@@ -54,6 +53,7 @@ void inicializar_variaveis_globais(){
     meteoros = malloc(capacidade_meteoros * sizeof(meteoro));
     pacotes = malloc(MAXIMO_PACOTES * sizeof(pacote));
     explosoes = malloc(capacidades_explosoes * sizeof(meteoro));
+    robos_metralhadora = malloc(capacidade_robos_metralhadora * sizeof(robo_metralhadora));
 }
 
 void inicializar_arsenal(){

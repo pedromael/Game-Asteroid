@@ -44,6 +44,11 @@ void desenhar_pacote(pacote *pacote){
     SDL_RenderDrawRect(render, &pacote->rect);
 }
 
+void desenhar_robo_metralhadora(robo_metralhadora *robo){
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    SDL_RenderDrawRect(render, &robo->rect);
+}
+
 void desenhar_scudo(){
     SDL_RenderDrawRect(render, &player.scudo.rect);
 }
@@ -103,6 +108,9 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
 
     for (size_t i = 0; i < numero_pacotes; i++)
         desenhar_pacote(&pacotes[i]);
+
+    for(size_t i = 0; i < numero_robos_metralhadora; i++)
+        desenhar_robo_metralhadora(&robos_metralhadora[i]);
     
     if (player.scudo.ativo)
         desenhar_scudo();

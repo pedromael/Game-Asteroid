@@ -6,6 +6,23 @@ void trocar_arma(){
             player.arma_select = 0;
 }
 
+void ativar_scudo(){
+    if (!player.scudo.ativo)
+        if(player.scudo.vida <= 0)
+            return;
+    player.scudo.ativo = true;
+
+    player.scudo.rect.x = player.rect.x - TAMANHO_ESCUDO;
+    player.scudo.rect.y = player.rect.y - TAMANHO_ESCUDO;
+    player.scudo.rect.w = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
+    player.scudo.rect.h = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
+}
+
+void desativar_scudo(){
+    if (player.scudo.ativo)
+        player.scudo.ativo = false;
+}
+
 bool control(){
     SDL_Event evento;
     while (SDL_PollEvent(&evento)) {
@@ -26,6 +43,8 @@ bool control(){
                 case SDLK_TAB:
                     trocar_arma();
                     break;
+                case SDLK_n:
+                    criar_robo_metralhadora();
             }
         }
     }
@@ -90,9 +109,7 @@ bool control_perdeu(){
         while (SDL_PollEvent(&evento)) {
             if (evento.type == SDL_QUIT) {
                 return 0;
-            }
-            
-            if (evento.type == SDL_KEYDOWN) {
+            }else if (evento.type == SDL_KEYDOWN) {
                 if (evento.key.keysym.sym == SDLK_SPACE) {
                     player_status = true;
                     player.vida = 200;
@@ -100,6 +117,5 @@ bool control_perdeu(){
                 }
             }
         }
-
     }
 }

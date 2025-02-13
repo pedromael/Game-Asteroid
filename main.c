@@ -23,6 +23,9 @@ explosao *explosoes;
 int numero_paredes_defensivas = 0;
 int capacidade_paredes_defensivas = 15;
 parede_defensiva *paredes_defensiva;
+int numero_robos_metralhadora = 0;
+int capacidade_robos_metralhadora = 5;
+robo_metralhadora *robos_metralhadora;
 
 SDL_Texture *textura_explosao_bala;
 SDL_Texture *textura_explosao_parede;

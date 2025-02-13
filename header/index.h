@@ -153,7 +153,7 @@ typedef struct
 {
     int vida;
     int angulo;
-    int dx,dy;
+    int velocidade_giro;
     SDL_Rect rect;
     armas *arma;
 } robo_metralhadora;
@@ -181,6 +181,9 @@ extern explosao *explosoes;
 extern int numero_paredes_defensivas;
 extern int capacidade_paredes_defensivas;
 extern parede_defensiva *paredes_defensiva;
+extern int numero_robos_metralhadora;
+extern int capacidade_robos_metralhadora;
+extern robo_metralhadora *robos_metralhadora;
 
 extern SDL_Renderer *render;
 extern int segundos;

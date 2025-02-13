@@ -149,23 +149,6 @@
         return true;
     }
 
-    void ativar_scudo(){
-        if (!player.scudo.ativo)
-            if(player.scudo.vida <= 0)
-                return;
-        player.scudo.ativo = true;
-
-        player.scudo.rect.x = player.rect.x - TAMANHO_ESCUDO;
-        player.scudo.rect.y = player.rect.y - TAMANHO_ESCUDO;
-        player.scudo.rect.w = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
-        player.scudo.rect.h = TAMANHO_NAVE + TAMANHO_ESCUDO * 2;
-    }
-
-    void desativar_scudo(){
-        if (player.scudo.ativo)
-            player.scudo.ativo = false;
-    }
-
     void retirar_bala(int *i, bool explosao){
         if (explosao)
         {
@@ -515,6 +498,29 @@
         }
     }
 
+    void actualizar_robos_metralhadora(){
+        for (int i = numero_robos_metralhadora - 1; i >= 0; i--)
+        {
+            if (robos_metralhadora[i].vida <= 0)
+            {
+                if (i != --numero_robos_metralhadora)
+                    robos_metralhadora[i] = robos_metralhadora[numero_robos_metralhadora];
+            }else{
+                if (robos_metralhadora[i].angulo + robos_metralhadora[i].velocidade_giro <= 360)
+                    robos_metralhadora[i].angulo += robos_metralhadora[i].velocidade_giro;
+                else
+                    robos_metralhadora[i].angulo = 0;
+                
+                direcao dir;
+                double angulo_radianos = robos_metralhadora[i].angulo * (PI / 180.0);
+                dir.dx = cos(angulo_radianos) * 5;
+                dir.dy = sin(angulo_radianos) * 5;
+
+                disparar(robos_metralhadora[i].rect, dir,robos_metralhadora[i].arma, false);
+            }
+        }
+    }
+
     void actualizar_jogo(){
         if (segundos_corrente + 1 <= segundos){
             segundos_corrente = segundos;
@@ -557,6 +563,7 @@
         actualizar_balas();
         verificar_atingidos();
         actualizar_inimigos();
+        actualizar_robos_metralhadora();
         actualizar_meteoros();
         actualizar_explosoes();
         actualizar_pacotes();
