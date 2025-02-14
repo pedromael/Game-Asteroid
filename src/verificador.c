@@ -479,9 +479,19 @@
 
     void actualizar_explosoes(){
         for (int i = numero_explosoes - 1; i >= 0; i--)
-            if ((SDL_GetTicks() - explosoes[i].milissegundo_inicio) > explosoes[i].tempo)
+            if ((SDL_GetTicks() - explosoes[i].milissegundo_inicio) > explosoes[i].tempo){
                 if (i != --numero_explosoes)    
                     explosoes[i] = explosoes[numero_explosoes]; 
+            }else{
+                int tempoDecorrido = SDL_GetTicks() - explosoes[i].milissegundo_inicio;
+                int tempoParaCadaStep = explosoes[i].tempo / explosoes[i].lastStep;
+
+                explosoes[i].step = tempoDecorrido / tempoParaCadaStep;
+
+                if (explosoes[i].step >= explosoes[i].lastStep) {
+                    explosoes[i].step = explosoes[i].lastStep - 1; // Último frame válido
+                }
+            }
     }
 
     void destroir_parede_defensiva(int i){
@@ -498,6 +508,19 @@
         }
     }
 
+    bool na_mira(direcao dir, SDL_Rect rectIndex, SDL_Rect rectRec, int errorMarge){
+        int deltaX = rectRec.x - rectIndex.x;
+        int deltaY = rectRec.y - rectIndex.y;
+        int produtoEscalar = deltaX * dir.dx + deltaY * dir.dy;
+        int magnitudeDir = dir.dx * dir.dx + dir.dy * dir.dy;
+        int magnitudeDelta = deltaX * deltaX + deltaY * deltaY;
+
+        if (produtoEscalar > 0 && abs(produtoEscalar * produtoEscalar - magnitudeDir * magnitudeDelta) <= errorMarge * errorMarge) {
+            return true;
+        }
+        return false;
+    }
+
     void actualizar_robos_metralhadora(){
         for (int i = numero_robos_metralhadora - 1; i >= 0; i--)
         {
@@ -506,17 +529,34 @@
                 if (i != --numero_robos_metralhadora)
                     robos_metralhadora[i] = robos_metralhadora[numero_robos_metralhadora];
             }else{
-                if (robos_metralhadora[i].angulo + robos_metralhadora[i].velocidade_giro <= 360)
-                    robos_metralhadora[i].angulo += robos_metralhadora[i].velocidade_giro;
-                else
-                    robos_metralhadora[i].angulo = 0;
-                
                 direcao dir;
                 double angulo_radianos = robos_metralhadora[i].angulo * (PI / 180.0);
                 dir.dx = cos(angulo_radianos) * 5;
                 dir.dy = sin(angulo_radianos) * 5;
 
-                disparar(robos_metralhadora[i].rect, dir,robos_metralhadora[i].arma, false);
+                bool encontrou_alvo = false;
+
+                for (int j = numero_inimigos - 1; j >= 0; j--)
+                    if (na_mira(dir, robos_metralhadora[i].rect, inimigos[j].Rect, 75)) {
+                        disparar(robos_metralhadora[i].rect, dir, robos_metralhadora[i].arma, false);
+                        encontrou_alvo = true;
+                        break;  // Sai do loop, pois já encontrou um alvo
+                    }
+
+                if(!encontrou_alvo)    
+                    for (int j = numero_meteoros - 1; j >= 0; j--)
+                        if (na_mira(dir, robos_metralhadora[i].rect, meteoros[j].rect, 50)) {
+                            disparar(robos_metralhadora[i].rect, dir, robos_metralhadora[i].arma, false);
+                            encontrou_alvo = true;
+                            break;  // Sai do loop, pois já encontrou um alvo
+                        }
+
+                if (!encontrou_alvo) {
+                    if (robos_metralhadora[i].angulo + robos_metralhadora[i].velocidade_giro <= 360)
+                        robos_metralhadora[i].angulo += robos_metralhadora[i].velocidade_giro;
+                    else
+                        robos_metralhadora[i].angulo = 0;
+                }
             }
         }
     }

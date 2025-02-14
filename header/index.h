@@ -144,6 +144,8 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
+    int step;
+    int lastStep;
     int tempo; // milisegundo
     int milissegundo_inicio;
     SDL_Texture *textura;

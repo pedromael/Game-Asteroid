@@ -17,9 +17,27 @@ void desenhar_player(){
     SDL_RenderCopyEx(render, player.textura, NULL, &player.rect, angulo, &centro, SDL_FLIP_NONE);
 }
 
-void desenhar_explosao(explosao *item){
-    SDL_RenderCopy(render, item->textura, NULL, &item->rect);
+void desenhar_explosao(explosao *item) {
+    int total_colunas = 8;
+    float proporcao = 1.0f / total_colunas;  // Cada frame ocupa 12.5% da textura
+
+    int linha = item->step / total_colunas;
+    int coluna = item->step % total_colunas;
+
+    int textura_largura, textura_altura;
+    SDL_QueryTexture(item->textura, NULL, NULL, &textura_largura, &textura_altura);
+    // Calcula a posição e tamanho do frame baseado em percentagens
+    SDL_Rect src_rect = {
+        (int)(coluna * proporcao * textura_largura),  // X
+        (int)(linha * proporcao * textura_altura),    // Y
+        (int)(proporcao * textura_largura),           // Largura
+        (int)(proporcao * textura_altura)             // Altura
+    };
+
+    SDL_RenderCopy(render, item->textura, &src_rect, &item->rect);
 }
+
+
 
 void desenhar_bala(bala *balas){
     SDL_RenderCopy(render, balas->arma->textura, NULL, &balas->rect);

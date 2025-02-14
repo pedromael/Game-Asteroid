@@ -21,13 +21,13 @@ void Inicializar_player(){
 }
 
 bool inicializar_texturas(SDL_Renderer *render) {
-    textura_explosao_bala = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    textura_explosao_bala = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion1.png"));
     if (!textura_explosao_bala) return false;
 
     textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
     if (!textura_explosao_parede) return false;
 
-    textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion4.png"));
     if (!textura_explosao_inimigo) return false;
 
     textura_meteoro = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/meteoro/castanho1.png"));

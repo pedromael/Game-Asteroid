@@ -131,6 +131,12 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     }
     
     explosoes[i].rect = rect;
+    explosoes[i].rect.w += 50;
+    explosoes[i].rect.h += 50;
+    explosoes[i].rect.x -= 25;
+    explosoes[i].rect.y -= 25;
+    explosoes[i].step = 1;
+    explosoes[i].lastStep = 16; // 16 estados
     explosoes[i].milissegundo_inicio = SDL_GetTicks();
 
     if (tipo == 1) // para um bala
@@ -209,7 +215,7 @@ void criar_robo_metralhadora(){
         robos_metralhadora = realloc(robos_metralhadora, capacidade_robos_metralhadora * sizeof(robo_metralhadora));
     }
     int i = numero_robos_metralhadora;
-    robos_metralhadora[i].vida = 100;
+    robos_metralhadora[i].vida = 150;
     robos_metralhadora[i].rect.x = player.rect.x + (player.dir.dx * 50);
     robos_metralhadora[i].rect.y = player.rect.y + (player.dir.dy * 50);
     robos_metralhadora[i].rect.w = TAMANHO_NAVE;
