@@ -262,19 +262,36 @@
         return 1;
     }
 
-    void actualizar_balas(){
-        for (int i = numero_balas - 1; i >= 0; i--)
-            if (!item_colidiu(balas[i].rect,"bala"))
-            {
-                if(balas[i].distancia_percorrida + balas[i].arma->bala_velocidade <= balas[i].arma->alcance){
-                    balas[i].rect.x += balas[i].dx * balas[i].arma->bala_velocidade;
-                    balas[i].rect.y += balas[i].dy * balas[i].arma->bala_velocidade;
-                    balas[i].distancia_percorrida += balas[i].arma->bala_velocidade; // distancia percorrida pela bala
-                }else
-                    retirar_bala(&i, false);    
-            }else
+    void actualizar_balas() {
+        for (int i = numero_balas - 1; i >= 0; i--) {
+            if (!item_colidiu(balas[i].rect, "bala")) {
+                int passos = balas[i].arma->bala_velocidade; // Número de passos pequenos (1 pixel cada)
+                
+                int p;
+                for (p = 0; p < passos; p++) {
+                    balas[i].rect.x += balas[i].dx;
+                    balas[i].rect.y += balas[i].dy;
+                    balas[i].distancia_percorrida += 1;
+                    // Se colidir no meio do caminho, para imediatamente
+                    if (item_colidiu(balas[i].rect, "bala")) {
+                        retirar_bala(&i, true);
+                        break;
+                    }
+                }
+    
+                // Se chegou até aqui, significa que não colidiu
+                if (p == passos) {
+                    // Se ultrapassou o alcance, remove a bala
+                    if (balas[i].distancia_percorrida >= balas[i].arma->alcance) {
+                        retirar_bala(&i, false);
+                    }
+                }
+            } else {
                 retirar_bala(&i, true);
+            }
+        }
     }
+    
 
     void destroir_meteoro(int *i)
     {
