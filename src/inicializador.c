@@ -15,7 +15,8 @@ void Inicializar_player(){
     player.arma[0] = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
     player.modo_construtivo = false;
-    player.vida = 200; 
+    player.robos_metralhadora = NUMERO_ROBO_METRALHADORA_INICIAL;
+    player.vida = VIDA_INICIAL_PLAYER; 
     player.scudo.vida = 2000;
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 }

@@ -75,11 +75,17 @@ void desenhar_status(SDL_Renderer *render, TTF_Font *font){
     SDL_Color color = {0, 0, 0};
 
     char buffer[25];
-    sprintf(buffer,"%d",player.arma[player.arma_select].no_pente);
+    sprintf(buffer,"No Pente: %d",player.arma[player.arma_select].no_pente);
     SDL_Surface* surface = TTF_RenderText_Solid(font, buffer, color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
     SDL_Rect destRect = {LARGURA - surface->w - 17, ALTURA - surface->h - 9, surface->w, surface->h};
     SDL_RenderCopy(render, texture, NULL, &destRect);
+
+    sprintf(buffer,"robos: %d",player.robos_metralhadora);
+    surface = TTF_RenderText_Solid(font, buffer, color);
+    texture = SDL_CreateTextureFromSurface(render, surface);
+    SDL_Rect RRect = {LARGURA - surface->w - 17, ALTURA - surface->h - 22, surface->w, surface->h};
+    SDL_RenderCopy(render, texture, NULL, &RRect);
 
     sprintf(buffer,"HP : %d",player.vida);
     surface = TTF_RenderText_Solid(font, buffer, color);

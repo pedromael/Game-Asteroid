@@ -3,17 +3,22 @@
 bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
     //return false;
     if(numero_inimigos >= MAXIMO_INIMIGOS)
-    return false;
+        return false;
     
-    int i,size = TAMANHO_NAVE;
-    for (i = 0; i < 500; i++){
-        SDL_Rect rect = {i,i,size,size};
+    nivel = (rand() % 3) + 1;
+    
+    int tamanho = TAMANHO_NAVE + 10 * nivel;
+    SDL_Rect rect;
+    int tentativas = 0;
+    while(true){
+        rect.y = 0;
+        rect.x = rand() % (LARGURA - tamanho); 
+        rect.w = rect.h = tamanho;
         if(!item_colidiu(rect,"inimigo"))
             break;
+        if (++tentativas >= 150)
+            return false;
     }
-
-    if (i == 500)
-        return false;
 
     if(numero_inimigos >= capacidade_inimigos){
         if (capacidade_inimigos + 5 >= MAXIMO_INIMIGOS)
@@ -24,7 +29,6 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
         inimigos = realloc(inimigos,  capacidade_inimigos * sizeof(inimigos));
     }
 
-    nivel = (rand() % 3) + 1;
     inimigo->textura = textura_inimigos[nivel-1];
     if (nivel == 1){
         inimigo->arma = arsenal[0];
@@ -38,12 +42,8 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
 
     if (!inimigo->textura)
         return false; // nao foi possivel carregar a textura.
-    
 
-    inimigo->Rect.x = i;
-    inimigo->Rect.y = i;
-    inimigo->Rect.h = TAMANHO_NAVE + 10 * nivel;
-    inimigo->Rect.w = TAMANHO_NAVE + 10 * nivel;
+    inimigo->Rect = rect;
     inimigo->dir.dx = 1;
     inimigo->dir.dy = 0;
     inimigo->vida = 50*nivel;
@@ -171,7 +171,7 @@ bool criar_pacote(meteoro *met){
     if (colidiu_nas_bordas(pacotes[numero_pacotes].rect))
         return false;
 
-    pacotes[numero_pacotes].tipo = rand()%3;
+    pacotes[numero_pacotes].tipo = rand()%4;
 
     if(pacotes[numero_pacotes].tipo == 0){ // para vida
         pacotes[numero_pacotes].valor = (rand()%70) + 20;
@@ -181,6 +181,12 @@ bool criar_pacote(meteoro *met){
     }
     if(pacotes[numero_pacotes].tipo == 2){ // para scudo
         pacotes[numero_pacotes].valor = (rand()%200) + 100;
+    }
+    if(pacotes[numero_pacotes].tipo == 3){
+        if(calcular_probabilidade(65))
+            pacotes[numero_pacotes].valor = 1;
+        else
+            pacotes[numero_pacotes].valor = (rand()%3) + 1;
     }
     numero_pacotes++;
     return true;
@@ -213,7 +219,10 @@ bool criar_parede_defensiva() {
     return true;
 }
 
-void criar_robo_metralhadora(){
+bool criar_robo_metralhadora(){
+    if(player.robos_metralhadora <= 0)
+        return false;
+
     if (numero_robos_metralhadora >= capacidade_robos_metralhadora){
         capacidade_robos_metralhadora += 5;
         robos_metralhadora = realloc(robos_metralhadora, capacidade_robos_metralhadora * sizeof(robo_metralhadora));
@@ -229,4 +238,6 @@ void criar_robo_metralhadora(){
     robos_metralhadora[i].arma = &arsenal[4];
 
     numero_robos_metralhadora++;
+    player.robos_metralhadora--;
+    return true;
 }

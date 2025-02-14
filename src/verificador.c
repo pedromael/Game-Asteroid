@@ -266,7 +266,6 @@
         for (int i = numero_balas - 1; i >= 0; i--) {
             if (!item_colidiu(balas[i].rect, "bala")) {
                 int passos = balas[i].arma->bala_velocidade; // Número de passos pequenos (1 pixel cada)
-                
                 int p;
                 for (p = 0; p < passos; p++) {
                     balas[i].rect.x += balas[i].dx;
@@ -274,7 +273,6 @@
                     balas[i].distancia_percorrida += 1;
                     // Se colidir no meio do caminho, para imediatamente
                     if (item_colidiu(balas[i].rect, "bala")) {
-                        retirar_bala(&i, true);
                         break;
                     }
                 }
@@ -286,13 +284,10 @@
                         retirar_bala(&i, false);
                     }
                 }
-            } else {
-                retirar_bala(&i, true);
             }
         }
     }
     
-
     void destroir_meteoro(int *i)
     {
         if (calcular_probabilidade(10))
@@ -309,9 +304,11 @@
 
     void verificar_atingidos(){
         for (int j = numero_balas - 1; j >= 0; j--)
-        {
+        {   
+            bool balaRetirada = false;
             for (int i = numero_inimigos - 1; i >= 0; i--)
                 if (colidiram(&balas[j].rect, &inimigos[i].Rect) && !balas[j].inimigo){
+                    balaRetirada = true;
                     retirar_bala(&j, true);
                     if (inimigos[i].vida - balas[j].arma->danos > 0)
                         inimigos[i].vida -= balas[j].arma->danos;
@@ -321,6 +318,7 @@
                 }
 
             if (colidiram(&balas[j].rect, &player.rect) && balas[j].inimigo){
+                balaRetirada = true;
                 retirar_bala(&j, true);
                 if (player.vida - balas[j].arma->danos > 0)
                     player.vida -= balas[j].arma->danos;
@@ -332,6 +330,7 @@
 
             for (int i = numero_obstaculos - 1; i >= 0; i--)
                 if (colidiram(&balas[j].rect, &obstaculos[j].rect)){
+                    balaRetirada = true;
                     retirar_bala(&j, true);
                     if (obstaculos[i].vida - balas[j].arma->danos > 0)
                         obstaculos[i].vida -= balas[j].arma->danos;
@@ -345,6 +344,7 @@
 
             for (int i = numero_meteoros - 1; i >= 0; i--)
                 if (colidiram(&balas[j].rect, &meteoros[i].rect) && meteoros[i].status){
+                    balaRetirada = true;
                     retirar_bala(&j, true);
                     if (meteoros[i].vida - balas[j].arma->danos > 0)
                         meteoros[i].vida -= balas[j].arma->danos;
@@ -356,6 +356,7 @@
             for (int i = numero_paredes_defensivas -1; i >= 0; i--)
             {
                 if(colidiram(&balas[j].rect, &paredes_defensiva[i].rect)){
+                    balaRetirada = true;
                     retirar_bala(&j, true);
                     if (paredes_defensiva[i].vida - balas[j].arma->danos > 0)
                         paredes_defensiva[i].vida -= balas[j].arma->danos;
@@ -364,6 +365,8 @@
                     break;
                 }
             } 
+            if(item_colidiu(balas[j].rect, "bala") && !balaRetirada)
+                retirar_bala(&j, true);
         }
 
         for (int j = numero_meteoros - 1; j >= 0; j--)
@@ -478,7 +481,8 @@
             
         }else if(pacotes[*i].tipo == 2){ // para scudos
             player.scudo.vida += pacotes[*i].valor;
-        }
+        }else if(pacotes[*i].tipo == 3)
+            player.robos_metralhadora += pacotes[*i].valor;
         
         remover_pacote(i);
     }

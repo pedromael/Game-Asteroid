@@ -3,8 +3,8 @@
 bool player_status = true;
 nave_player player;
 int numero_inimigos = 0;
-int numero_inimigos_inicial = 5;
-int capacidade_inimigos = 10;
+int numero_inimigos_inicial = 1;
+int capacidade_inimigos = MAXIMO_INIMIGOS;
 nave_inimiga *inimigos;
 int numero_obstaculos = 2;
 obstaculo *obstaculos;

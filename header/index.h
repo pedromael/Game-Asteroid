@@ -18,9 +18,11 @@
 #define LARGURA 1300
 #define ALTURA 850
 
-#define MAXIMO_PACOTES 5
-#define MAXIMO_INIMIGOS 5
+#define MAXIMO_PACOTES 10
+#define MAXIMO_INIMIGOS 15
 #define MAXIMO_SCUDO 2000
+#define NUMERO_ROBO_METRALHADORA_INICIAL 5
+#define VIDA_INICIAL_PLAYER 300
 
 #define TAMANHO_NAVE 25 // pixel
 #define TAMANHO_PACOTE 15 // pixel
@@ -100,6 +102,7 @@ typedef struct
     SDL_Texture *textura;
     scudo scudo;
     bool modo_construtivo;
+    int robos_metralhadora;
 } nave_player;
 
 typedef struct
