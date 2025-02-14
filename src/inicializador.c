@@ -20,7 +20,7 @@ void Inicializar_player(){
     player.scudo.textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/scudo1.png"));
 }
 
-bool inicializar_texturas(SDL_Renderer *render) {
+bool inicializar_texturas() {
     textura_explosao_bala = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion1.png"));
     if (!textura_explosao_bala) return false;
 
@@ -57,14 +57,15 @@ void inicializar_variaveis_globais(){
 }
 
 void inicializar_arsenal(){
+    int distanciaBase = 500;
     //danos - bps - bala_velocidade - pente_max - tempo_carga - bala_size - alcance
 
     int conf_armas[NUMERO_DE_ARMAS][7] = {
-        { 3,  8, 13, 30,  3,  3, 580},
-        {7,  8, 11, 20,  1,  3, 470},
-        {12,   5, 13, 15,  3,  4, 470},
-        {70,   3,  9, 8,  5,  7, 450},
-        {25,  18, 10, 30,  1,  5, 500}
+        { 3,  8, 13, 30,  3,  3, 180 + distanciaBase},
+        {7,  8, 11, 20,  1,  3, 10 + distanciaBase},
+        {12,   5, 13, 15,  3,  4, 10 + distanciaBase},
+        {70,   3,  9, 8,  5,  7, distanciaBase},
+        {25,  18, 10, 30,  1,  5, 100 + distanciaBase}
     };
 
     char img_som_armas[NUMERO_DE_ARMAS][2][12] = {
@@ -114,5 +115,5 @@ void inicializar(){
     inicializar_arsenal();
     inicializar_obstaculos();
     Inicializar_player();
-    inicializar_texturas(render);
+    inicializar_texturas();
 }

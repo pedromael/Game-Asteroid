@@ -131,10 +131,10 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     }
     
     explosoes[i].rect = rect;
-    explosoes[i].rect.w += 50;
-    explosoes[i].rect.h += 50;
-    explosoes[i].rect.x -= 25;
-    explosoes[i].rect.y -= 25;
+    explosoes[i].rect.w += 40;
+    explosoes[i].rect.h += 40;
+    explosoes[i].rect.x -= 20;
+    explosoes[i].rect.y -= 20;
     explosoes[i].step = 1;
     explosoes[i].lastStep = 16; // 16 estados
     explosoes[i].milissegundo_inicio = SDL_GetTicks();
@@ -149,6 +149,10 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     }else if(tipo == 3){ // para um inimigo
         explosoes[i].tempo = 2*1000;
         explosoes[i].textura = textura_explosao_inimigo;
+        explosoes[i].rect.w += 60;
+        explosoes[i].rect.h += 60;
+        explosoes[i].rect.x -= 30;
+        explosoes[i].rect.y -= 30;
     }
     
     numero_explosoes++;

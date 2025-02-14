@@ -162,51 +162,52 @@
             balas[*i] = balas[numero_balas];
     }
 
-    int area_de_impacto_mira(int *i){
-        int margen_de_erro = 20;
-        margen_de_erro = (rand() % margen_de_erro) - (rand() % margen_de_erro);
-
+    int area_de_impacto_mira(int *i) {
+        int margen_de_erro = (rand() % 41) - 20;
+    
+        // Calcula a distância do inimigo até o jogador
         int x = inimigos[*i].Rect.x - (player.rect.x + margen_de_erro);
         int y = inimigos[*i].Rect.y - (player.rect.y + margen_de_erro);
-
-        if (inimigos[*i].ultima_ronda + inimigos[*i].tempo_ronda*1000 <= SDL_GetTicks() || inimigos[*i].ultima_ronda == 0)
-        {
+    
+        // Verifica se é hora de recalcular a direção
+        if (inimigos[*i].ultima_ronda == 0 || 
+            inimigos[*i].ultima_ronda + (inimigos[*i].tempo_ronda * 1000) <= SDL_GetTicks()) {
+            
             inimigos[*i].ultima_ronda = SDL_GetTicks();
-
-            if (abs(x) < abs(y))
-            {
+    
+            // Prioriza o movimento na direção de maior distância
+            if (abs(x) > abs(y)) {
+                inimigos[*i].dir.dx = (x > 0) ? -1 : 1;
                 inimigos[*i].dir.dy = 0;
-                inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
-                if(calcular_probabilidade(20)){
-                    inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
+    
+                // 20% de chance de inverter a prioridade para o eixo Y
+                if (calcular_probabilidade(20)) {
                     inimigos[*i].dir.dx = 0;
+                    inimigos[*i].dir.dy = (y > 0) ? -1 : 1;
                     return abs(y);
                 }
                 return abs(x);
-            }else{
+            } else {
+                inimigos[*i].dir.dy = (y > 0) ? -1 : 1;
                 inimigos[*i].dir.dx = 0;
-                inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
-                if(calcular_probabilidade(20)){
-                    inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
+    
+                if (calcular_probabilidade(20)) {
                     inimigos[*i].dir.dy = 0;
+                    inimigos[*i].dir.dx = (x > 0) ? -1 : 1;
                     return abs(x);
                 }
                 return abs(y);
             }
-        }else{
-            if (inimigos[*i].dir.dx != 0)
-            {
-                inimigos[*i].dir.dy = 0;
-                inimigos[*i].dir.dx = inimigos[*i].Rect.x - player.rect.x > 0 ? -1 : 1;
-                return abs(x);
-            }else{
-                inimigos[*i].dir.dx = 0;
-                inimigos[*i].dir.dy = inimigos[*i].Rect.y - player.rect.y > 0 ? -1 : 1;
-                return abs(y);
-            }
+        }
+    
+        // Mantém a direção caso não seja hora de recalcular
+        if (inimigos[*i].dir.dx != 0) {
+            return abs(x);
+        } else {
+            return abs(y);
         }
     }
-
+    
     void remover_inimigo(int i){
         if (i != --numero_inimigos){
             criar_explosao(render, 3, inimigos[i].Rect);
@@ -214,7 +215,7 @@
         }
     }
 
-    int actualizar_inimigos(){
+    void actualizar_inimigos(){
         for (int i = numero_inimigos - 1; i >= 0; i--)
         {
             if (area_de_impacto_mira(&i) < 150){
@@ -259,7 +260,6 @@
                 }
             }
         }
-        return 1;
     }
 
     void actualizar_balas() {
