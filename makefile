@@ -8,7 +8,7 @@ TARGET = Asteroid
 
 HEADERS =  
 
-SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c src/inicializador.c
+SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c src/inicializador.c src/conectar.c
 
 OBJS = $(SRCS:.c=.o)
 

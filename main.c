@@ -46,6 +46,7 @@ int tentar_criar_meteoro = 0;
 
 #include "header/verificador.h"
 #include "header/novos.h"
+#include "header/conectar.h"
 
 int main(int argc, char* argv[]){
     srand(time(NULL));
@@ -66,8 +67,21 @@ int main(int argc, char* argv[]){
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
 
+    int sock;
+    struct sockaddr_in serv_addr;
+
+    if (!conectar(&sock, &serv_addr)) {
+        printf("Falha ao conectar!\n");
+        return true;
+    }
+
     while (true)
     {
+        if(!mandar_dados(sock, &player)){
+            printf("falha ao mandar dados");
+            return true;
+        }
+
         segundos = SDL_GetTicks() / 1000;
 
         if(!control()) return false; // detecao de entrada do jogador
@@ -87,6 +101,7 @@ int main(int argc, char* argv[]){
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    close(sock);
 
     return 0;
 }
