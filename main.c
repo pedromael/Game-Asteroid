@@ -3,7 +3,6 @@
 bool player_status = true;
 nave_player player;
 int numero_inimigos = 0;
-int numero_inimigos_inicial = 1;
 int capacidade_inimigos = MAXIMO_INIMIGOS;
 nave_inimiga *inimigos;
 int numero_obstaculos = 2;
@@ -61,7 +60,7 @@ int main(int argc, char* argv[]){
     
     inicializar(); // inicializar jogo
 
-    for (size_t i = 0; i <= numero_inimigos_inicial; i++) criar_inimigo(render,&inimigos[i],1);
+    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(render,&inimigos[i],1);
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};
@@ -78,6 +77,7 @@ int main(int argc, char* argv[]){
         {
             printf("vc perdeu, aperte SPACO para reiniciar jogo\n");
             if(!control_perdeu()) return false;
+            else reiniciar();
         }
 
         SDL_RenderPresent(render);

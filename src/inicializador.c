@@ -1,6 +1,6 @@
 #include "../header/inicializador.h"
 
-void Inicializar_player(){
+void inicializar_player(){
     SDL_Surface* surface = IMG_Load("files/img/navePlayer.png");
     player.textura = SDL_CreateTextureFromSurface(render,surface);
     player.rect.x = LARGURA/2;
@@ -115,6 +115,22 @@ void inicializar(){
     inicializar_variaveis_globais();
     inicializar_arsenal();
     inicializar_obstaculos();
-    Inicializar_player();
+    inicializar_player();
     inicializar_texturas();
+}
+
+void reiniciar(){
+    player_status = true;
+    
+    numero_inimigos =           0;
+    numero_balas =              0;
+    numero_explosoes =          0;
+    numero_pacotes =            0;
+    numero_paredes_defensivas = 0;
+    numero_robos_metralhadora = 0;
+
+    inicializar_obstaculos();
+    inicializar_player();
+
+    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(render,&inimigos[i],1);
 }

@@ -4,8 +4,7 @@
 #include "index.h"
 #include "verificador.h"
 #include "novos.h"
-
-extern nave_player player;
+#include "inicializador.h"
 
 bool control();
 bool control_perdeu();

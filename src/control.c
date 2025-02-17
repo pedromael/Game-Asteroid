@@ -111,8 +111,6 @@ bool control_perdeu(){
                 return 0;
             }else if (evento.type == SDL_KEYDOWN) {
                 if (evento.key.keysym.sym == SDLK_SPACE) {
-                    player_status = true;
-                    player.vida = VIDA_INICIAL_PLAYER;
                     return true;
                 }
             }
