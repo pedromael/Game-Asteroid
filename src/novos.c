@@ -1,6 +1,6 @@
 #include "../header/novos.h"
 
-bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
+bool criar_inimigo(int nivel){
     //return false;
     if(numero_inimigos >= MAXIMO_INIMIGOS)
         return false;
@@ -29,6 +29,7 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
         inimigos = realloc(inimigos,  capacidade_inimigos * sizeof(inimigos));
     }
 
+    nave_inimiga *inimigo = &inimigos[numero_inimigos];
     inimigo->textura = textura_inimigos[nivel-1];
     if (nivel == 1){
         inimigo->arma = arsenal[0];
@@ -40,8 +41,10 @@ bool criar_inimigo(SDL_Renderer *render ,nave_inimiga *inimigo, int nivel){
         inimigo->arma = arsenal[4];
     }
 
-    if (!inimigo->textura)
+    if (!inimigo->textura){
+        printf("falha ao carregar textura");
         return false; // nao foi possivel carregar a textura.
+    }
 
     inimigo->Rect = rect;
     inimigo->dir.dx = 1;
@@ -147,12 +150,14 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
         explosoes[i].tempo = 2*1000;
         explosoes[i].textura = textura_explosao_parede;
     }else if(tipo == 3){ // para um inimigo
-        explosoes[i].tempo = 2*1000;
+        explosoes[i].tempo = 2*800;
         explosoes[i].textura = textura_explosao_inimigo;
         explosoes[i].rect.w += 60;
         explosoes[i].rect.h += 60;
         explosoes[i].rect.x -= 30;
         explosoes[i].rect.y -= 30;
+
+        Mix_PlayChannel(-1, som_explosao_inimigo, 0);
     }
     
     numero_explosoes++;

@@ -15,11 +15,11 @@
 #define PI 3.141592653589793
 
 //dimensoes da tela
-#define LARGURA 1300
-#define ALTURA 850
+#define LARGURA 1800
+#define ALTURA 950
 
 #define MAXIMO_PACOTES 10
-#define MAXIMO_INIMIGOS 15
+#define MAXIMO_INIMIGOS 20
 #define INIMIGOS_INICIAL 2
 #define MAXIMO_SCUDO 2000
 #define NUMERO_ROBO_METRALHADORA_INICIAL 5
@@ -199,5 +199,7 @@ extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
 extern SDL_Texture *textura_meteoro;
 extern SDL_Texture **textura_inimigos;
+
+extern Mix_Chunk *som_explosao_inimigo;
 
 #endif

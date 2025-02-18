@@ -32,6 +32,8 @@ SDL_Texture *textura_explosao_inimigo;
 SDL_Texture *textura_meteoro;
 SDL_Texture **textura_inimigos;
 
+Mix_Chunk *som_explosao_inimigo;
+
 SDL_Renderer *render;
 int segundos,quadros;
 
@@ -58,9 +60,10 @@ int main(int argc, char* argv[]){
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Font* font = TTF_OpenFont("files/Roboto-Light.ttf", 14); 
     
-    inicializar(); // inicializar jogo
+    if(!inicializar()) // inicializar jogo
+        return true; 
 
-    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(render,&inimigos[i],1);
+    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(1);
 
     SDL_Texture *fundo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/fundo/blue.png"));
     SDL_Rect rect_fundo = {0,0,LARGURA,ALTURA};

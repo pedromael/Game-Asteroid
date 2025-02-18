@@ -9,7 +9,7 @@
 // void inicializar_arsenal();
 // void inicializar_obstaculos();
 // void Inicializar_player();
-void inicializar();
+bool inicializar();
 void reiniciar();
 
 #endif

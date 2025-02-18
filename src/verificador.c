@@ -163,7 +163,7 @@
     }
 
     int area_de_impacto_mira(int *i) {
-        int margen_de_erro = (rand() % 41) - 20;
+        int margen_de_erro = (rand() % 31) - 15;
     
         // Calcula a distância do inimigo até o jogador
         int x = inimigos[*i].Rect.x - (player.rect.x + margen_de_erro);
@@ -604,21 +604,21 @@
             {
                 if(numero_inimigos < 10){
                     if(calcular_probabilidade(30)){
-                        criar_inimigo(render,&inimigos[numero_inimigos],1);
+                        criar_inimigo(1);
                     }
                 }else
                     if(calcular_probabilidade(20)){
-                        criar_inimigo(render,&inimigos[numero_inimigos],1);
+                        criar_inimigo(1);
                     }
                 tentar_criar_inimigo = 0;
             }else
                 if(calcular_probabilidade(10)){
                         
-                    criar_inimigo(render,&inimigos[numero_inimigos],1);
+                    criar_inimigo(1);
                     tentar_criar_inimigo = 0;
                 }
         }else if(numero_inimigos == 0)
-            criar_inimigo(render,&inimigos[numero_inimigos],1);
+            criar_inimigo(1);
 
         actualizar_paredes_defensivas();
         actualizar_balas();

@@ -37,8 +37,6 @@ void desenhar_explosao(explosao *item) {
     SDL_RenderCopy(render, item->textura, &src_rect, &item->rect);
 }
 
-
-
 void desenhar_bala(bala *balas){
     SDL_RenderCopy(render, balas->arma->textura, NULL, &balas->rect);
 }

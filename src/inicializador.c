@@ -25,7 +25,7 @@ bool inicializar_texturas() {
     textura_explosao_bala = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion1.png"));
     if (!textura_explosao_bala) return false;
 
-    textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao0.png"));
+    textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion1.png"));
     if (!textura_explosao_parede) return false;
 
     textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion4.png"));
@@ -42,6 +42,10 @@ bool inicializar_texturas() {
     }
 
     return true;
+}
+
+void inicializar_sons() {
+    som_explosao_inimigo = Mix_LoadWAV("files/DeathFlash.flac");
 }
 
 void inicializar_variaveis_globais(){
@@ -111,12 +115,16 @@ void inicializar_obstaculos(){
     obstaculos[1].vida = 5890;
 }
 
-void inicializar(){
+bool inicializar(){
     inicializar_variaveis_globais();
     inicializar_arsenal();
     inicializar_obstaculos();
     inicializar_player();
-    inicializar_texturas();
+    if(!inicializar_texturas())
+        return false;
+    inicializar_sons();
+
+    return true;
 }
 
 void reiniciar(){
@@ -132,5 +140,5 @@ void reiniciar(){
     inicializar_obstaculos();
     inicializar_player();
 
-    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(render,&inimigos[i],1);
+    for (size_t i = 0; i <= INIMIGOS_INICIAL; i++) criar_inimigo(1);
 }
