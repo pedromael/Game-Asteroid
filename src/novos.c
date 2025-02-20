@@ -1,63 +1,5 @@
 #include "../header/novos.h"
 
-bool criar_inimigo(int nivel){
-    //return false;
-    if(numero_inimigos >= MAXIMO_INIMIGOS)
-        return false;
-    
-    nivel = (rand() % 3) + 1;
-    
-    int tamanho = TAMANHO_NAVE + 10 * nivel;
-    SDL_Rect rect;
-    int tentativas = 0;
-    while(true){
-        rect.y = 0;
-        rect.x = rand() % (LARGURA - tamanho); 
-        rect.w = rect.h = tamanho;
-        if(!item_colidiu(rect,"inimigo"))
-            break;
-        if (++tentativas >= 150)
-            return false;
-    }
-
-    if(numero_inimigos >= capacidade_inimigos){
-        if (capacidade_inimigos + 5 >= MAXIMO_INIMIGOS)
-            capacidade_inimigos = MAXIMO_INIMIGOS;
-        else
-            capacidade_inimigos += 5;
-        
-        inimigos = realloc(inimigos,  capacidade_inimigos * sizeof(inimigos));
-    }
-
-    nave_inimiga *inimigo = &inimigos[numero_inimigos];
-    inimigo->textura = textura_inimigos[nivel-1];
-    if (nivel == 1){
-        inimigo->arma = arsenal[0];
-    }
-    else if (nivel == 2){
-        inimigo->arma = arsenal[1];
-    }
-    else if (nivel == 3){
-        inimigo->arma = arsenal[4];
-    }
-
-    if (!inimigo->textura){
-        printf("falha ao carregar textura");
-        return false; // nao foi possivel carregar a textura.
-    }
-
-    inimigo->Rect = rect;
-    inimigo->dir.dx = 1;
-    inimigo->dir.dy = 0;
-    inimigo->vida = 50*nivel;
-    inimigo->velocidade = VELOCIDADE_INIMIGA;
-    inimigo->ultima_ronda = false;
-    inimigo->tempo_ronda = TEMPO_REFLEXO_INIMIGO;
-
-    numero_inimigos++;
-    return true;
-}
-
 bool criar_meteoro(SDL_Renderer *render)
 {
     if(numero_meteoros >= capacidade_meteoros)
@@ -96,9 +38,9 @@ bool criar_meteoro(SDL_Renderer *render)
     
     meteoros[numero_meteoros].rect.w = size;
     meteoros[numero_meteoros].rect.h = size;
-    meteoros[numero_meteoros].danos = size + 30;
+    meteoros[numero_meteoros].danos = size + 50;
     meteoros[numero_meteoros].vida = (rand() % size) + 75;
-    meteoros[numero_meteoros].velocidade = (rand() % 6) + 2;
+    meteoros[numero_meteoros].velocidade = (rand() % 8) + 2;
     meteoros[numero_meteoros].status = true;
 
     meteoros[numero_meteoros].textura = textura_meteoro;
@@ -152,12 +94,12 @@ bool criar_explosao(SDL_Renderer *render,int tipo, SDL_Rect rect){
     }else if(tipo == 3){ // para um inimigo
         explosoes[i].tempo = 2*800;
         explosoes[i].textura = textura_explosao_inimigo;
-        explosoes[i].rect.w += 60;
-        explosoes[i].rect.h += 60;
-        explosoes[i].rect.x -= 30;
-        explosoes[i].rect.y -= 30;
+        explosoes[i].rect.w += 100;
+        explosoes[i].rect.h += 100;
+        explosoes[i].rect.x -= 50;
+        explosoes[i].rect.y -= 50;
 
-        Mix_PlayChannel(-1, som_explosao_inimigo, 0);
+        Mix_PlayChannel(2, som_explosao_inimigo, 0);
     }
     
     numero_explosoes++;

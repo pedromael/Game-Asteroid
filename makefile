@@ -1,27 +1,21 @@
 CC = gcc
-
 CFLAGS = -Wall -g
-
 LIBS = `sdl2-config --cflags --libs` -lm -lSDL2_ttf -lSDL2main -lSDL2_image -lSDL2_mixer
 
 TARGET = Asteroid
 
-HEADERS =  
-
-SRCS = main.c src/desenhar.c src/control.c src/verificador.c src/novos.c src/inicializador.c
-
-OBJS = $(SRCS:.c=.o)
+SRCDIR = src
+SRC = $(wildcard $(SRCDIR)/*.c) main.c
+OBJS = $(SRC:.c=.o)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
 
-# Regra para compilar arquivos .c em arquivos .o
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(LIBS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Regra para limpar arquivos temporários
 clean:
 	rm -f $(TARGET) $(OBJS)
 

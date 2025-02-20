@@ -11,7 +11,7 @@ bool colidiu_nas_bordas(SDL_Rect rect);
 bool colidiram(SDL_Rect *rect1, SDL_Rect *rect2);
 bool item_colidiu(SDL_Rect rect, char *item);
 bool disparar(SDL_Rect rect, direcao dir, armas *arma, bool de_inimigo);
-
+void actualizar_inimigos();
 void destroir_parede_defensiva(int i);
 
 extern int segundos_corrente;
