@@ -13,6 +13,7 @@ bool item_colidiu(SDL_Rect rect, char *item);
 bool disparar(SDL_Rect rect, direcao dir, armas *arma, bool de_inimigo);
 void actualizar_inimigos();
 void destroir_parede_defensiva(int i);
+bool na_mira(direcao dir, SDL_Rect rectIndex, SDL_Rect rectRec, int errorMarge);
 
 extern int segundos_corrente;
 extern int tentar_criar_inimigo;

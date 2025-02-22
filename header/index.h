@@ -45,6 +45,8 @@
 
 bool criar_inimigo(int nivel);
 void remover_inimigo(int i);
+bool criar_robo_metralhadora();
+void actualizar_robos_metralhadora();
 
 typedef struct
 {

@@ -55,7 +55,7 @@ void inicializar_sons() {
 
 void inicializar_variaveis_globais(){
     textura_inimigos = malloc(TIPOS_DE_INIMIGOS * sizeof(SDL_Texture*));
-    textura_pacotes = malloc(4 * sizeof(SDL_Texture));
+    textura_pacotes = malloc(4 * sizeof(SDL_Texture*));
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     paredes_defensiva = malloc(capacidade_paredes_defensivas * sizeof(parede_defensiva));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));

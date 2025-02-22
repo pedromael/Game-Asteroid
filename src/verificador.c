@@ -418,46 +418,6 @@
         return false;
     }
 
-    void actualizar_robos_metralhadora(){
-        for (int i = numero_robos_metralhadora - 1; i >= 0; i--)
-        {
-            if (robos_metralhadora[i].vida <= 0)
-            {
-                if (i != --numero_robos_metralhadora)
-                    robos_metralhadora[i] = robos_metralhadora[numero_robos_metralhadora];
-            }else{
-                direcao dir;
-                double angulo_radianos = robos_metralhadora[i].angulo * (PI / 180.0);
-                dir.dx = cos(angulo_radianos) * 5;
-                dir.dy = sin(angulo_radianos) * 5;
-
-                bool encontrou_alvo = false;
-
-                for (int j = numero_inimigos - 1; j >= 0; j--)
-                    if (na_mira(dir, robos_metralhadora[i].rect, inimigos[j].Rect, 75)) {
-                        disparar(robos_metralhadora[i].rect, dir, robos_metralhadora[i].arma, false);
-                        encontrou_alvo = true;
-                        break;  // Sai do loop, pois já encontrou um alvo
-                    }
-
-                if(!encontrou_alvo)    
-                    for (int j = numero_meteoros - 1; j >= 0; j--)
-                        if (na_mira(dir, robos_metralhadora[i].rect, meteoros[j].rect, 50)) {
-                            disparar(robos_metralhadora[i].rect, dir, robos_metralhadora[i].arma, false);
-                            encontrou_alvo = true;
-                            break;  // Sai do loop, pois já encontrou um alvo
-                        }
-
-                if (!encontrou_alvo) {
-                    if (robos_metralhadora[i].angulo + robos_metralhadora[i].velocidade_giro <= 360)
-                        robos_metralhadora[i].angulo += robos_metralhadora[i].velocidade_giro;
-                    else
-                        robos_metralhadora[i].angulo = 0;
-                }
-            }
-        }
-    }
-
     void actualizar_jogo(){
         if (segundos_corrente + 1 <= segundos){
             segundos_corrente = segundos;
