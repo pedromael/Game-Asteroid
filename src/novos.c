@@ -122,18 +122,22 @@ bool criar_pacote(meteoro *met){
 
     if(pacotes[numero_pacotes].tipo == 0){ // para vida
         pacotes[numero_pacotes].valor = (rand()%70) + 20;
+        pacotes[numero_pacotes].textura = textura_pacotes[0];
     }
     if(pacotes[numero_pacotes].tipo == 1){ // para armas
         pacotes[numero_pacotes].valor = (rand()%(NUMERO_DE_ARMAS-1)) + 1;
+        pacotes[numero_pacotes].textura = textura_pacotes[1];
     }
     if(pacotes[numero_pacotes].tipo == 2){ // para scudo
         pacotes[numero_pacotes].valor = (rand()%200) + 100;
+        pacotes[numero_pacotes].textura = textura_pacotes[2];
     }
     if(pacotes[numero_pacotes].tipo == 3){
         if(calcular_probabilidade(65))
             pacotes[numero_pacotes].valor = 1;
         else
             pacotes[numero_pacotes].valor = (rand()%3) + 1;
+        pacotes[numero_pacotes].textura = textura_pacotes[3];
     }
     numero_pacotes++;
     return true;

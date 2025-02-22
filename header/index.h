@@ -202,6 +202,7 @@ extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
 extern SDL_Texture *textura_meteoro;
 extern SDL_Texture **textura_inimigos;
+extern SDL_Texture **textura_pacotes;
 
 extern Mix_Chunk *som_explosao_inimigo;
 

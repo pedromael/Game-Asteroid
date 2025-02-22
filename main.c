@@ -31,6 +31,7 @@ SDL_Texture *textura_explosao_parede;
 SDL_Texture *textura_explosao_inimigo;
 SDL_Texture *textura_meteoro;
 SDL_Texture **textura_inimigos;
+SDL_Texture **textura_pacotes;
 
 Mix_Chunk *som_explosao_inimigo;
 

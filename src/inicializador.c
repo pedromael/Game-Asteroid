@@ -41,6 +41,11 @@ bool inicializar_texturas() {
         if (!textura_inimigos[i]) return false;
     }
 
+    textura_pacotes[0] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-red.png"));
+    textura_pacotes[1] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-gold.png"));
+    textura_pacotes[2] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-green.png"));
+    textura_pacotes[3] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-blue.png"));
+
     return true;
 }
 
@@ -50,6 +55,7 @@ void inicializar_sons() {
 
 void inicializar_variaveis_globais(){
     textura_inimigos = malloc(TIPOS_DE_INIMIGOS * sizeof(SDL_Texture*));
+    textura_pacotes = malloc(4 * sizeof(SDL_Texture));
     inimigos = malloc(capacidade_inimigos * sizeof(nave_inimiga));
     paredes_defensiva = malloc(capacidade_paredes_defensivas * sizeof(parede_defensiva));
     obstaculos = malloc(numero_obstaculos * sizeof(obstaculo));
