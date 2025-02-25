@@ -124,8 +124,6 @@ typedef struct
     int tempo_partiu;
 } meteoro;
 
-bool criar_pacote(meteoro *met);
-
 typedef struct
 {
     SDL_Rect Rect;
