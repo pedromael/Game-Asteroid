@@ -163,20 +163,6 @@
             }
         }
     }
-    
-    void destroir_meteoro(int *i)
-    {
-        if (calcular_probabilidade(10))
-            criar_pacote(&meteoros[*i]);
-        
-        if (meteoros[*i].status)
-        {
-            meteoros[*i].status = false;
-            meteoros[*i].tempo_partiu = segundos;
-            meteoros[*i].velocidade = 1;
-            meteoros[*i].textura = SDL_CreateTextureFromSurface(render,IMG_Load("files/img/meteoro/castanho_d1.png"));
-        }
-    }
 
     void verificar_atingidos(){
         for (int j = numero_balas - 1; j >= 0; j--)
@@ -303,27 +289,6 @@
                     }
                 } 
             }    
-        }
-    }
-
-    void actualizar_meteoros()
-    {
-        for (int i = numero_meteoros - 1; i >= 0; i--)
-        {
-            meteoros[i].rect.x += meteoros[i].dx * meteoros[i].velocidade;
-            meteoros[i].rect.y += meteoros[i].dy * meteoros[i].velocidade;
-            if (item_colidiu(meteoros[i].rect,"meteoro"))
-            {
-                meteoros[i].rect.x -= meteoros[i].dx * meteoros[i].velocidade;
-                meteoros[i].rect.y -= meteoros[i].dy * meteoros[i].velocidade;
-                if(meteoros[i].status)
-                    destroir_meteoro(&i);
-            }
-            if(!meteoros[i].status){
-                if (meteoros[i].tempo_partiu + TEMPO_PARA_APAGAR_METEORO <= segundos)
-                    if(i != --numero_meteoros)            
-                        meteoros[i] = meteoros[numero_meteoros];
-            }
         }
     }
 

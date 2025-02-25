@@ -7,6 +7,7 @@
 
 void actualizar_jogo();
 void actualizar_pacotes();
+void actualizar_meteoros();
 void actualizar_inimigos();
 bool calcular_probabilidade(int perc);
 bool colidiu_nas_bordas(SDL_Rect rect);

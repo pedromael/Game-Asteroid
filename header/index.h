@@ -43,10 +43,14 @@
 #define NUMERO_DE_ARMAS 5
 #define TIPOS_DE_INIMIGOS 3
 
+bool criar_meteoro(SDL_Renderer *render);
 bool criar_inimigo(int nivel);
-void remover_inimigo(int i);
 bool criar_robo_metralhadora();
+
 void actualizar_robos_metralhadora();
+
+void destroir_meteoro(int *i);
+void remover_inimigo(int i);
 
 typedef struct
 {
