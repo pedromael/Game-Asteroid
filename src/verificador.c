@@ -327,53 +327,6 @@
         }
     }
 
-    void remover_pacote(int *i)
-    {
-        numero_pacotes--;
-        if (*i != numero_pacotes)
-            pacotes[*i] = pacotes[numero_pacotes];
-        
-    }
-
-    void obter_pacote(int *i)
-    {
-        if (pacotes[*i].tipo == 0)       // para vida 
-        {
-            player.vida += pacotes[*i].valor;
-        }else if(pacotes[*i].tipo == 1){ // para armas
-            int ja_tem = false;
-            for (size_t j = 0; j < player.numero_armas; j++)
-                if (player.arma[j].indice == arsenal[pacotes[*i].valor].indice)
-                    ja_tem = true;
-
-            if (!ja_tem)
-            {
-                if (player.numero_armas <= 1){
-                    player.arma = realloc(player.arma, ++player.numero_armas * sizeof(armas));
-                    player.arma_select = 1;
-                }
-                player.arma[player.arma_select] = arsenal[pacotes[*i].valor];
-            }
-            
-        }else if(pacotes[*i].tipo == 2){ // para scudos
-            player.scudo.vida += pacotes[*i].valor;
-        }else if(pacotes[*i].tipo == 3)
-            player.robos_metralhadora += pacotes[*i].valor;
-        
-        remover_pacote(i);
-    }
-
-    void actualizar_pacotes(){
-        for (int i = numero_pacotes - 1; i >= 0; i--)
-        {
-            if (colidiram(&pacotes[i].rect, &player.rect))
-            {
-                obter_pacote(&i);
-                break;        
-            }
-        }
-    }
-
     void actualizar_explosoes(){
         for (int i = numero_explosoes - 1; i >= 0; i--)
             if ((SDL_GetTicks() - explosoes[i].milissegundo_inicio) > explosoes[i].tempo){
