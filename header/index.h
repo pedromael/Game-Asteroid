@@ -46,8 +46,10 @@
 bool criar_meteoro(SDL_Renderer *render);
 bool criar_inimigo(int nivel);
 bool criar_robo_metralhadora();
+bool criar_parede_defensiva();
 
 void actualizar_robos_metralhadora();
+void actualizar_paredes_defensivas();
 
 void destroir_meteoro(int *i);
 void remover_inimigo(int i);

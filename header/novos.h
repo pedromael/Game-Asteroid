@@ -5,6 +5,5 @@
 #include "verificador.h"
 
 bool criar_explosao(SDL_Renderer *render, int tipo, SDL_Rect rect);
-bool criar_parede_defensiva();
 
 #endif 

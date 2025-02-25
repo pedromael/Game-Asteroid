@@ -309,20 +309,6 @@
             }
     }
 
-    void destroir_parede_defensiva(int i){
-        int j = --numero_paredes_defensivas;
-        paredes_defensiva[i] = paredes_defensiva[j];
-    }
-
-    void actualizar_paredes_defensivas() {
-        for (int i = numero_paredes_defensivas - 1; i >= 0; i--) {
-            if (paredes_defensiva[i].vida <= 0 || 
-                paredes_defensiva[i].tempo_posto + TEMPO_DE_PAREDE_DEFENSIVA <= segundos) {
-                destroir_parede_defensiva(i);
-            }
-        }
-    }
-
     bool na_mira(direcao dir, SDL_Rect rectIndex, SDL_Rect rectRec, int errorMarge){
         int deltaX = rectRec.x - rectIndex.x;
         int deltaY = rectRec.y - rectIndex.y;
