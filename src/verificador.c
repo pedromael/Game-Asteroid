@@ -292,23 +292,6 @@
         }
     }
 
-    void actualizar_explosoes(){
-        for (int i = numero_explosoes - 1; i >= 0; i--)
-            if ((SDL_GetTicks() - explosoes[i].milissegundo_inicio) > explosoes[i].tempo){
-                if (i != --numero_explosoes)    
-                    explosoes[i] = explosoes[numero_explosoes]; 
-            }else{
-                int tempoDecorrido = SDL_GetTicks() - explosoes[i].milissegundo_inicio;
-                int tempoParaCadaStep = explosoes[i].tempo / explosoes[i].lastStep;
-
-                explosoes[i].step = tempoDecorrido / tempoParaCadaStep;
-
-                if (explosoes[i].step >= explosoes[i].lastStep) {
-                    explosoes[i].step = explosoes[i].lastStep - 1; // Último frame válido
-                }
-            }
-    }
-
     bool na_mira(direcao dir, SDL_Rect rectIndex, SDL_Rect rectRec, int errorMarge){
         int deltaX = rectRec.x - rectIndex.x;
         int deltaY = rectRec.y - rectIndex.y;

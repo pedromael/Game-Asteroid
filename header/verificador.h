@@ -9,6 +9,9 @@ void actualizar_jogo();
 void actualizar_pacotes();
 void actualizar_meteoros();
 void actualizar_inimigos();
+void actualizar_robos_metralhadora();
+void actualizar_paredes_defensivas();
+
 bool calcular_probabilidade(int perc);
 bool colidiu_nas_bordas(SDL_Rect rect);
 bool colidiram(SDL_Rect *rect1, SDL_Rect *rect2);
