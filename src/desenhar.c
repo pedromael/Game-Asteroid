@@ -57,7 +57,7 @@ void desenhar_parede_defensiva(parede_defensiva *parede){
 
 void desenhar_pacote(pacote *pacote){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-    SDL_RenderDrawRect(render, &pacote->rect);
+    SDL_RenderCopy(render, pacote->textura, NULL, &pacote->rect);
 }
 
 void desenhar_robo_metralhadora(robo_metralhadora *robo){

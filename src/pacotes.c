@@ -27,13 +27,16 @@ bool criar_pacote(meteoro *met){
         pacotes[numero_pacotes].textura = textura_pacotes[2];
     }
     if(pacotes[numero_pacotes].tipo == 3){
-        if(calcular_probabilidade(65))
+        if(calcular_probabilidade(75))
             pacotes[numero_pacotes].valor = 1;
         else
             pacotes[numero_pacotes].valor = (rand()%3) + 1;
         pacotes[numero_pacotes].textura = textura_pacotes[3];
     }
     numero_pacotes++;
+
+    printf("pacote criado: \n");
+
     return true;
 }
 

@@ -41,10 +41,10 @@ bool inicializar_texturas() {
         if (!textura_inimigos[i]) return false;
     }
 
-    textura_pacotes[0] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-red.png"));
-    textura_pacotes[1] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-gold.png"));
-    textura_pacotes[2] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-green.png"));
-    textura_pacotes[3] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill-blue.png"));
+    textura_pacotes[0] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill_red.png"));
+    textura_pacotes[1] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill_gold.png"));
+    textura_pacotes[2] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill_green.png"));
+    textura_pacotes[3] = SDL_CreateTextureFromSurface(render, IMG_Load("files/Power-ups/pill_blue.png"));
 
     return true;
 }

@@ -138,7 +138,7 @@ void remover_inimigo(int i){
 void actualizar_inimigos(){
     for (int i = numero_inimigos - 1; i >= 0; i--)
     {
-        if (area_de_impacto_mira(&i) < 150){
+        if (area_de_impacto_mira(&i) < 100){
             if (inimigos[i].dir.dx != 0)
             {
                 int buffer_dx = inimigos[i].dir.dx;

@@ -7,34 +7,30 @@ bool criar_meteoro(SDL_Renderer *render)
     
     int size = (rand() % 180) + 20;
     char pos[8];
-    int bufferX,bufferY;
 
-    if (calcular_probabilidade(50))
-    {
-        if (calcular_probabilidade(50)){
+    const char* direcoes[] = {"left", "up", "right", "down"};
+    int direcao = rand() % 4;
+
+    switch (direcao) {
+        case 0: // Esquerda
             meteoros[numero_meteoros].rect.x = -size;
-            bufferY = rand() % ALTURA;
-            meteoros[numero_meteoros].rect.y = bufferY;
-            sprintf(pos,"left");
-        }else{
+            meteoros[numero_meteoros].rect.y = rand() % ALTURA;
+            break;
+        case 1: // Cima
             meteoros[numero_meteoros].rect.y = -size;
-            bufferX = rand() % LARGURA;
-            meteoros[numero_meteoros].rect.x = bufferX;
-            sprintf(pos,"up");
-        }
-    }else{
-        if (calcular_probabilidade(50)){
+            meteoros[numero_meteoros].rect.x = rand() % LARGURA;
+            break;
+        case 2: // Direita
             meteoros[numero_meteoros].rect.x = LARGURA;
-            bufferY = rand() % ALTURA;
-            meteoros[numero_meteoros].rect.y = bufferY;
-            sprintf(pos,"rigth");
-        }else{
+            meteoros[numero_meteoros].rect.y = rand() % ALTURA;
+            break;
+        case 3: // Baixo
             meteoros[numero_meteoros].rect.y = ALTURA;
-            bufferX = rand() % LARGURA;
-            meteoros[numero_meteoros].rect.x = bufferX;
-            sprintf(pos,"down");
-        }
+            meteoros[numero_meteoros].rect.x = rand() % LARGURA;
+            break;
     }
+
+    sprintf(pos, "%s", direcoes[direcao]);
     
     meteoros[numero_meteoros].rect.w = size;
     meteoros[numero_meteoros].rect.h = size;
@@ -67,9 +63,19 @@ bool criar_meteoro(SDL_Renderer *render)
     return true;
 }
 
+bool meteoro_colidio_nas_borda(SDL_Rect rect){
+    int folga = 10;
+    if (rect.x < -(rect.w + folga) || rect.y < -(rect.h + folga))
+        return true;
+    
+    if (rect.x > LARGURA + folga || rect.y > ALTURA + folga)
+        return true;
+    return false;
+}
+
 void destroir_meteoro(int *i)
 {
-    if (calcular_probabilidade(10))
+    if (calcular_probabilidade(15))
         criar_pacote(&meteoros[*i]);
     
     if (meteoros[*i].status)

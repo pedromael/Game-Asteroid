@@ -15,15 +15,6 @@
         return false;
     }
 
-    bool meteoro_colidio_nas_borda(SDL_Rect rect){
-        if (rect.x < -(rect.w + 2) || rect.y < -(rect.h + 2))
-            return true;
-        
-        if (rect.x > LARGURA + 2 || rect.y > ALTURA + 2)
-            return true;
-        return false;
-    }
-
     bool colidiram(SDL_Rect *rect1, SDL_Rect *rect2){
         bool coliX = (rect1->x < rect2->x + rect2->w) && (rect1->x + rect1->w > rect2->x);
         bool coliY = (rect1->y < rect2->y + rect2->h) && (rect1->y + rect1->h > rect2->y);
@@ -41,24 +32,21 @@
                 return 1;
 
         for (int j = numero_obstaculos - 1; j >= 0; j--) // verificar se a colisao com obstaculos
-        {
+
             if (colidiram(&obstaculos[j].rect ,&rect))
                 return 1;
-        }
+
         if (strcmp(item, "bala") != 0)
             for (int j = numero_inimigos - 1; j >= 0; j--) // verificar se a colisao com nave inimiga
-            {
                 if (colidiram(&inimigos[j].Rect ,&rect))
                     return 2;
-            }
+
         if (strcmp(item, "meteoro") != 0)
             for (int j = numero_meteoros - 1; j >= 0; j--)
-            {
                 if(meteoros[j].status){
                     if (colidiram(&meteoros[j].rect ,&rect))
                         return 1;
                 }
-            }
         
         for (int j = numero_paredes_defensivas - 1; j >= 0; j--)
             if (colidiram(&paredes_defensiva[j].rect, &rect))
