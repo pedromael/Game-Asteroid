@@ -243,6 +243,7 @@
 
         actualizar_paredes_defensivas();
         actualizar_balas();
+        actualizar_bolas_raio();
         verificar_atingidos();
         actualizar_inimigos();
         actualizar_robos_metralhadora();

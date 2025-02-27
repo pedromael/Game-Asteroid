@@ -45,6 +45,10 @@ bool control(){
                     break;
                 case SDLK_n:
                     criar_robo_metralhadora();
+                    break;
+                case SDLK_m:
+                    disparar_bola_raio();
+                    break;
             }
         }
     }

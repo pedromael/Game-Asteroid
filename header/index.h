@@ -29,7 +29,11 @@
 #define TAMANHO_PACOTE 15 // pixel
 #define TEMPO_PARA_APAGAR_METEORO 3 // segundo
 
-#define TEMPO_DE_PAREDE_DEFENSIVA 90 // segundo 
+#define DANOS_BALA_RAIO 2 // por frame
+#define TOTAL_DANOS_BALA_RAIO 500
+#define VELOCIDADE_BALA_RAIO 7
+#define MAXIMO_RAIO_BALA_RAIO 60 // pixel
+#define TEMPO_DE_PAREDE_DEFENSIVA 120 // segundo 
 #define DISTANCIA_PAREDE_PLAYER 30 // 
 #define TAMANHO_ESCUDO 20 // pixel
 #define VIDA_PAREDE 450
@@ -104,6 +108,7 @@ typedef struct
     scudo scudo;
     bool modo_construtivo;
     int robos_metralhadora;
+    int bolas_raio;
 } nave_player;
 
 typedef struct
@@ -135,6 +140,7 @@ typedef struct
     armas arma;
     int tempo_ronda;
     int ultima_ronda;
+    bool bala_raio;
 } nave_inimiga;
 
 typedef struct
@@ -164,6 +170,13 @@ typedef struct
     armas *arma;
 } robo_metralhadora;
 
+typedef struct
+{
+    int x,y;
+    float raio;
+    int danos;
+} bala_raio;
+
 extern bool player_status;
 extern nave_player player;
 extern armas *arsenal;
@@ -190,6 +203,9 @@ extern parede_defensiva *paredes_defensiva;
 extern int numero_robos_metralhadora;
 extern int capacidade_robos_metralhadora;
 extern robo_metralhadora *robos_metralhadora;
+extern int numero_balas_raio;
+extern int capacidade_bala_raio;
+extern bala_raio *balas_raio;
 
 extern SDL_Renderer *render;
 extern int segundos;

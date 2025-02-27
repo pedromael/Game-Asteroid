@@ -53,6 +53,7 @@ bool criar_inimigo(int nivel){
     inimigo->velocidade = VELOCIDADE_INIMIGA;
     inimigo->ultima_ronda = false;
     inimigo->tempo_ronda = TEMPO_REFLEXO_INIMIGO;
+    inimigo->bala_raio = false;
 
     numero_inimigos++;
     return true;
@@ -138,6 +139,13 @@ void remover_inimigo(int i){
 void actualizar_inimigos(){
     for (int i = numero_inimigos - 1; i >= 0; i--)
     {
+        if(inimigos[i].bala_raio){
+            inimigos[i].vida =- DANOS_BALA_RAIO;
+            if(inimigos[i].vida <= 0)
+                remover_inimigo(i);
+            continue;
+        }
+
         if (area_de_impacto_mira(&i) < 100){
             if (inimigos[i].dir.dx != 0)
             {

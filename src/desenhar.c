@@ -1,5 +1,38 @@
 #include "../header/desenhar.h"
 
+#include <SDL2/SDL.h>
+
+// Função para desenhar um círculo
+void draw_circle(SDL_Renderer *renderer, int centerX, int centerY, int radius) {
+    int x = radius;
+    int y = 0;
+    int decision = 1 - x;  // Critério de decisão inicial
+
+    // Enquanto y não ultrapassar x (cobrindo 1/8 do círculo)
+    while (y <= x) {
+        // Desenha os 8 pontos simétricos
+        SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+        SDL_RenderDrawPoint(renderer, centerX - x, centerY + y);
+        SDL_RenderDrawPoint(renderer, centerX + x, centerY - y);
+        SDL_RenderDrawPoint(renderer, centerX - x, centerY - y);
+        SDL_RenderDrawPoint(renderer, centerX + y, centerY + x);
+        SDL_RenderDrawPoint(renderer, centerX - y, centerY + x);
+        SDL_RenderDrawPoint(renderer, centerX + y, centerY - x);
+        SDL_RenderDrawPoint(renderer, centerX - y, centerY - x);
+
+        y++;
+
+        // Atualiza o critério de decisão
+        if (decision < 0) {
+            decision += 2 * y + 1;
+        } else {
+            x--;
+            decision += 2 * (y - x) + 1;
+        }
+    }
+}
+
+
 void desenhar_inimigo(nave_inimiga *nave){
     float angulo = atan2(nave->dir.dy, nave->dir.dx) * 180 / PI;
     angulo += 90;
@@ -63,6 +96,11 @@ void desenhar_pacote(pacote *pacote){
 void desenhar_robo_metralhadora(robo_metralhadora *robo){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderDrawRect(render, &robo->rect);
+}
+
+void desenhar_bala_raio(bala_raio *bala){
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    draw_circle(render, bala->x, bala->y, bala->raio);
 }
 
 void desenhar_scudo(){
@@ -134,6 +172,9 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
     for(size_t i = 0; i < numero_robos_metralhadora; i++)
         desenhar_robo_metralhadora(&robos_metralhadora[i]);
     
+    for(size_t i = 0; i < numero_balas_raio; i++)
+        desenhar_bala_raio(&balas_raio[i]);  
+
     if (player.scudo.ativo)
         desenhar_scudo();
 
