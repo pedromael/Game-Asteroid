@@ -1,4 +1,4 @@
-src/*.o
+obj/*.o
 /*.o
 Asteroid.exe
 Asteroid
