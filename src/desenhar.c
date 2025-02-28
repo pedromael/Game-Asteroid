@@ -103,6 +103,11 @@ void desenhar_bala_raio(bala_raio *bala){
     draw_circle(render, bala->x, bala->y, bala->raio);
 }
 
+void desenhar_raio_danos(SDL_Rect rect){
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    SDL_RenderDrawRect(render, &rect);
+}
+
 void desenhar_scudo(){
     SDL_RenderDrawRect(render, &player.scudo.rect);
 }
@@ -148,8 +153,10 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
 
     desenhar_player();
 
-    for (size_t i = 0; i < numero_inimigos; i++)
+    for (size_t i = 0; i < numero_inimigos; i++){
         desenhar_inimigo(&inimigos[i]);
+        if(inimigos[i].bala_raio) desenhar_raio_danos(inimigos[i].Rect);
+    }
 
     for (size_t i = 0; i < numero_obstaculos; i++)
         desenhar_obstaculo(&obstaculos[i]);

@@ -35,7 +35,7 @@ bool criar_pacote(meteoro *met){
     }
     numero_pacotes++;
 
-    printf("pacote criado: \n");
+    //printf("pacote criado: \n");
 
     return true;
 }

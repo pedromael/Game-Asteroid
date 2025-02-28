@@ -14,7 +14,7 @@ void inicializar_player(){
     player.arma = malloc(player.numero_armas * sizeof(armas));
     player.arma[0] = arsenal[4];
     player.velocidade = VELOCIDADE_INICIAL;
-    player.bolas_raio = 5;
+    player.bolas_raio = NUMERO_DE_BALAS_RAIOS;
     player.modo_construtivo = false;
     player.robos_metralhadora = NUMERO_ROBO_METRALHADORA_INICIAL;
     player.vida = VIDA_INICIAL_PLAYER; 

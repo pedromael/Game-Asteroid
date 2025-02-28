@@ -5,22 +5,26 @@ void disparar_bola_raio(){
         return;
 
     if(numero_balas_raio >= capacidade_bala_raio){
-        capacidade_bala_raio =+ 2;
+        capacidade_bala_raio =+ 10;
         balas_raio = realloc(balas_raio, capacidade_bala_raio * sizeof(bala_raio));
     }
 
     int i = numero_balas_raio;
 
-    balas_raio[i].x = player.rect.x;
-    balas_raio[i].y = player.rect.y;
-    balas_raio[i].raio = 0;
+    balas_raio[i].x = player.rect.x + (player.rect.w / 2);
+    balas_raio[i].y = player.rect.y + (player.rect.h / 2);
+    balas_raio[i].raio = 15;
     balas_raio[i].danos = TOTAL_DANOS_BALA_RAIO;
     
     player.bolas_raio--;
+
+    numero_balas_raio++;
 }
 
 void remover_bala_raio(int i){
-
+    if (i != --numero_balas_raio){
+        balas_raio[i] = balas_raio[numero_balas_raio];
+    }
 }
 
 // Função para limitar um valor entre um mínimo e um máximo.
@@ -54,7 +58,7 @@ void verificar_atingidos_por_bala_raio(int i) {
         float dy = cy - closestY;
         float distance = sqrtf(dx * dx + dy * dy);
 
-        if (distance >= (raio - 10) && distance <= raio) {
+        if (distance >= (raio - 20) && distance <= raio) {
             inimigos[i].bala_raio = true;
         }
     }
@@ -65,7 +69,7 @@ void actualizar_bolas_raio(){
         balas_raio[i].raio += VELOCIDADE_BALA_RAIO;
 
         verificar_atingidos_por_bala_raio(i);
-        printf("Bala raio %d: x = %d, y = %d, raio = %f\n", i, balas_raio[i].x, balas_raio[i].y, balas_raio[i].raio);
+        //printf("Bala raio %d: x = %d, y = %d, raio = %f\n", i, balas_raio[i].x, balas_raio[i].y, balas_raio[i].raio);
         if(balas_raio[i].raio > MAXIMO_RAIO_BALA_RAIO){
             remover_bala_raio(i);
         }
