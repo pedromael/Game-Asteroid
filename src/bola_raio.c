@@ -17,7 +17,6 @@ void disparar_bola_raio(){
     balas_raio[i].danos = TOTAL_DANOS_BALA_RAIO;
     
     player.bolas_raio--;
-
     numero_balas_raio++;
 }
 
