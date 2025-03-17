@@ -51,13 +51,6 @@
         for (int j = numero_paredes_defensivas - 1; j >= 0; j--)
             if (colidiram(&paredes_defensiva[j].rect, &rect))
                 return true;
-        
-        
-        // if (strcmp(item, "player") != 0)
-        // {
-        //     if (colidiram(&player.rect ,&rect))
-        //         return 1;
-        // }
 
         return 0;
     }
