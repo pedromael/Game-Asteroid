@@ -6,24 +6,26 @@ TARGET = Asteroid
 SRCDIR = src
 OBJDIR = obj
 SRC = $(wildcard $(SRCDIR)/*.c) main.c
-OBJS = $(patsubst %.c, $(OBJDIR)/%.o, $(notdir $(SRC)))
+OBJS = $(SRC:.c=.o)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/main.o: main.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(MAKE) clean
+	clear
+	./Asteroid
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
+	rm -f $(OBJS)
+
+fclean:
 	rm -f $(TARGET) $(OBJS)
+
+re: clean all
 
 check:
 	@sdl2-config --version > /dev/null || (echo "SDL2 não encontrado. Instale a biblioteca SDL2." && exit 1)

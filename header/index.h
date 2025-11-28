@@ -23,14 +23,14 @@
 #define INIMIGOS_INICIAL 2
 #define MAXIMO_SCUDO 2000
 #define NUMERO_ROBO_METRALHADORA_INICIAL 5
-#define NUMERO_DE_BALAS_RAIOS 10
+#define NUMERO_DE_BALAS_RAIOS 10000
 #define VIDA_INICIAL_PLAYER 400
 
-#define TAMANHO_NAVE 25 // pixel
+#define TAMANHO_NAVE 40 // pixel
 #define TAMANHO_PACOTE 15 // pixel
 #define TEMPO_PARA_APAGAR_METEORO 3 // segundo
 
-#define DANOS_BALA_RAIO 2 // por frame
+#define DANOS_BALA_RAIO 1 // por frame
 #define TOTAL_DANOS_BALA_RAIO 500
 #define VELOCIDADE_BALA_RAIO 7
 #define MAXIMO_RAIO_BALA_RAIO 400 // pixel
@@ -141,7 +141,7 @@ typedef struct
     armas arma;
     int tempo_ronda;
     int ultima_ronda;
-    bool bala_raio;
+    int bala_raio;
 } nave_inimiga;
 
 typedef struct
@@ -214,9 +214,12 @@ extern int segundos;
 extern SDL_Texture *textura_explosao_bala;
 extern SDL_Texture *textura_explosao_parede;
 extern SDL_Texture *textura_explosao_inimigo;
+extern SDL_Texture *textura_robo_metralhadora;
 extern SDL_Texture *textura_meteoro;
+extern SDL_Texture *textura_bola_raio;
 extern SDL_Texture **textura_inimigos;
 extern SDL_Texture **textura_pacotes;
+extern SDL_Texture **textura_danos_bola_raio;
 
 extern Mix_Chunk *som_explosao_inimigo;
 

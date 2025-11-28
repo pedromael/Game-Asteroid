@@ -29,6 +29,23 @@ bool inicializar_texturas() {
     textura_explosao_parede = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion1.png"));
     if (!textura_explosao_parede) return false;
 
+    textura_bola_raio = SDL_CreateTextureFromSurface(render, IMG_Load("files/auras-001/001/001_blue/001_FX_0000.png"));
+    if (!textura_bola_raio) return false;
+
+    textura_robo_metralhadora = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/tanker.png"));
+    if (!textura_robo_metralhadora) return false;
+
+    textura_danos_bola_raio = malloc(32 * sizeof(SDL_Texture*));
+    for (int i = 1; i < 32; i++)
+    {
+        char path[128];
+        snprintf(path, sizeof(path), "files/FX/fx7_energyBall/aura_test_1_32_%d.png", i);
+
+        SDL_Surface *img = IMG_Load(path);
+        textura_danos_bola_raio[i] = SDL_CreateTextureFromSurface(render, img);
+        SDL_FreeSurface(img);
+    }
+
     textura_explosao_inimigo = SDL_CreateTextureFromSurface(render, IMG_Load("files/img/explosao/explosion4.png"));
     if (!textura_explosao_inimigo) return false;
 

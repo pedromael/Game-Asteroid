@@ -140,7 +140,7 @@ void actualizar_inimigos(){
     for (int i = numero_inimigos - 1; i >= 0; i--)
     {
         if(inimigos[i].bala_raio){
-            inimigos[i].vida =- DANOS_BALA_RAIO;
+            inimigos[i].vida -= DANOS_BALA_RAIO;
             if(inimigos[i].vida <= 0)
                 remover_inimigo(i);
             continue;

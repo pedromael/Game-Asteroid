@@ -95,17 +95,44 @@ void desenhar_pacote(pacote *pacote){
 
 void desenhar_robo_metralhadora(robo_metralhadora *robo){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-    SDL_RenderDrawRect(render, &robo->rect);
+    //SDL_RenderDrawRect(render, &robo->rect);
+    SDL_Point centro = { robo->rect.w / 2, robo->rect.h / 2 };
+    SDL_RenderCopyEx(render, textura_robo_metralhadora, NULL, &robo->rect, robo->angulo, &centro, SDL_FLIP_NONE);
 }
 
 void desenhar_bala_raio(bala_raio *bala){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-    draw_circle(render, bala->x, bala->y, bala->raio);
+    //draw_circle(render, bala->x, bala->y, bala->raio);
+    SDL_Rect rect = {
+        (int)(bala->x - bala->raio),    // X
+        (int)(bala->y - bala->raio),    // Y
+        (int)(bala->raio * 2),          // Largura
+        (int)(bala->raio * 2) ,
+    };
+
+    SDL_Rect corte = {
+        (int)(125),    // X
+        (int)(125),    // Y
+        (int)(250),    // Largura
+        (int)(250),
+    };
+
+    SDL_RenderCopy(render, textura_bola_raio, &corte, &rect);
 }
 
-void desenhar_raio_danos(SDL_Rect rect){
+void desenhar_raio_danos(int i){
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-    SDL_RenderDrawRect(render, &rect);
+    //SDL_RenderDrawRect(render, &inimigos[i].Rect);
+    if (inimigos[i].bala_raio > 32)
+        inimigos[i].bala_raio = 1;
+    SDL_Rect rect = {
+        (int)(inimigos[i].Rect.x - 3),
+        (int)(inimigos[i].Rect.y - 3),
+        (int)(inimigos[i].Rect.w + 6),
+        (int)(inimigos[i].Rect.h + 6),
+    };
+    SDL_RenderCopy(render, textura_danos_bola_raio[inimigos[i].bala_raio], NULL, &rect);
+    inimigos[i].bala_raio++;
 }
 
 void desenhar_scudo(){
@@ -155,7 +182,7 @@ void desenhar(TTF_Font* font, SDL_Texture *fundo, SDL_Rect rect_fundo){
 
     for (size_t i = 0; i < numero_inimigos; i++){
         desenhar_inimigo(&inimigos[i]);
-        if(inimigos[i].bala_raio) desenhar_raio_danos(inimigos[i].Rect);
+        if(inimigos[i].bala_raio) desenhar_raio_danos(i);
     }
 
     for (size_t i = 0; i < numero_obstaculos; i++)

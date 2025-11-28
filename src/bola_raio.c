@@ -58,7 +58,7 @@ void verificar_atingidos_por_bala_raio(int i) {
         float distance = sqrtf(dx * dx + dy * dy);
 
         if (distance >= (raio - 20) && distance <= raio) {
-            inimigos[i].bala_raio = true;
+                inimigos[i].bala_raio = true;
         }
     }
 }
